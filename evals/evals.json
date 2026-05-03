@@ -1,0 +1,581 @@
+﻿{
+    "skill_name":  "seo-coach",
+    "eval_set_version":  "1.0.0",
+    "evals":  [
+                  {
+                      "id":  "beginner-no-url-first-question",
+                      "name":  "完全新手 — 沒網址時先問一個分流問題",
+                      "prompt":  "我完全不懂 SEO，想開始做，現在該先幹嘛？",
+                      "expected_output":  "不要丟工具清單、完整 roadmap，或主動導向 Google 地圖。先問用戶現在有沒有網站；有的話請他給網址，沒有的話先回「沒有網站」即可。",
+                      "assertions":  [
+                                         {
+                                             "name":  "asks-website-first-routing-question",
+                                             "description":  "Claude asks exactly one practical routing question about whether the user has a website / URL, not a broad intake survey"
+                                         },
+                                         {
+                                             "name":  "no-tool-overload",
+                                             "description":  "Claude does not ask the user to set up analytics, GSC, MCP/API, or paid tools"
+                                         },
+                                         {
+                                             "name":  "keeps-one-next-step",
+                                             "description":  "Claude asks for one reply only, not a multi-step plan"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "regular-website-beginner-site-index-first",
+                      "name":  "常規網站 SEO 新手 — 先查收錄，不跳 Local",
+                      "prompt":  "我有一個公司網站，完全不懂 SEO，想知道 Google 有沒有看到我的網站",
+                      "expected_output":  "預設走常規網站 SEO。先讓用戶做 site: 網域查詢或一個同等的基礎收錄檢查，不跳到 Google 地圖、GBP、NAP，也不推完整工具鏈。",
+                      "assertions":  [
+                                         {
+                                             "name":  "regular-website-first",
+                                             "description":  "Claude treats this as regular website SEO rather than Local SEO"
+                                         },
+                                         {
+                                             "name":  "uses-index-or-discovery-check",
+                                             "description":  "Claude starts with site: search, sitemap, robots.txt, or a similarly basic Google discovery/indexing check"
+                                         },
+                                         {
+                                             "name":  "does-not-default-to-local",
+                                             "description":  "Claude does not mention Google Maps, GBP, NAP, reviews, or Local Pack as the first route"
+                                         },
+                                         {
+                                             "name":  "keeps-one-next-step",
+                                             "description":  "Claude leaves one practical next step, not a multi-item audit list"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "regular-website-url-lightweight-first",
+                      "name":  "常規網站 SEO — 有網址先做網站 5 分鐘檢查",
+                      "prompt":  "我的網站是 example.com，想做 SEO，先幫我看從哪開始",
+                      "expected_output":  "先用輕量模式做一個網站 SEO 基礎檢查，例如首頁是否可開、site: 收錄、sitemap、title，不要求用戶先看 GBP/NAP，也不進完整 onboarding。",
+                      "assertions":  [
+                                         {
+                                             "name":  "lightweight-first",
+                                             "description":  "Claude defaults to lightweight mode rather than full onboarding"
+                                         },
+                                         {
+                                             "name":  "regular-website-first",
+                                             "description":  "Claude starts with regular website SEO basics"
+                                         },
+                                         {
+                                             "name":  "does-not-default-to-local",
+                                             "description":  "Claude does not route to GBP/NAP unless the user mentions maps, nearby customers, or a physical/local intent"
+                                         },
+                                         {
+                                             "name":  "no-tool-overload",
+                                             "description":  "Claude does not introduce GSC, GA4, MCP/API, Screaming Frog, or a stack of tools in the first response"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "regular-website-service-page-exists",
+                      "name":  "常規網站 SEO — 先確認重要服務頁是否存在",
+                      "prompt":  "我是做室內設計的，網站有首頁但都沒詢問，我想做 SEO",
+                      "expected_output":  "不要直接跳到 Google 地圖或 backlinks。先問用戶最想被搜尋到的一個服務，並確認網站是否有獨立服務頁或首頁是否清楚承接該服務。",
+                      "assertions":  [
+                                         {
+                                             "name":  "regular-website-first",
+                                             "description":  "Claude treats the prompt as website SEO unless local/map intent is explicit"
+                                         },
+                                         {
+                                             "name":  "checks-important-page-exists",
+                                             "description":  "Claude asks whether there is a dedicated service/product/category/content page for the target topic"
+                                         },
+                                         {
+                                             "name":  "does-not-default-to-local",
+                                             "description":  "Claude does not make GBP/NAP the first step"
+                                         },
+                                         {
+                                             "name":  "keeps-one-next-step",
+                                             "description":  "Claude asks for one service/topic or one page, not a full site inventory"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "regular-website-homepage-title-first",
+                      "name":  "常規網站 SEO — 首頁 title 先講清楚",
+                      "prompt":  "我的網站排名很差，但我不知道要先改哪裡",
+                      "expected_output":  "先要求用戶查看首頁 title 或分頁標題，判斷是否清楚說明品牌、服務、對象或價值；不要先進 Local SEO 或完整策略。",
+                      "assertions":  [
+                                         {
+                                             "name":  "regular-website-first",
+                                             "description":  "Claude keeps the first step in regular website SEO"
+                                         },
+                                         {
+                                             "name":  "checks-title-or-homepage-clarity",
+                                             "description":  "Claude asks the user to inspect or paste the homepage title / browser tab title / main page clarity"
+                                         },
+                                         {
+                                             "name":  "does-not-default-to-local",
+                                             "description":  "Claude does not start with Google Maps, GBP, NAP, or reviews"
+                                         },
+                                         {
+                                             "name":  "keeps-one-next-step",
+                                             "description":  "Claude gives one small action only"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "regular-website-gsc-impressions-no-clicks",
+                      "name":  "常規網站 SEO — GSC 有曝光沒點擊",
+                      "prompt":  "GSC 有曝光但都沒點擊，我看不懂要怎麼辦",
+                      "expected_output":  "只要求用戶提供一個曝光高但點擊少的查詢或頁面，先判斷 title/meta/搜尋意圖，不要求整份報表、GA4、競品分析或完整策略。",
+                      "assertions":  [
+                                         {
+                                             "name":  "asks-one-evidence-item",
+                                             "description":  "Claude asks for one query, one page, one row, or one screenshot only"
+                                         },
+                                         {
+                                             "name":  "classifies-before-fixing",
+                                             "description":  "Claude frames the next step as deciding whether it is title/meta, intent mismatch, or page issue before fixes"
+                                         },
+                                         {
+                                             "name":  "regular-website-first",
+                                             "description":  "Claude treats this as regular website SEO / GSC analysis"
+                                         },
+                                         {
+                                             "name":  "does-not-turn-into-lecture",
+                                             "description":  "Claude does not explain all of GSC or give a full audit checklist"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "regular-website-seo-plugin-not-enough",
+                      "name":  "常規網站 SEO — SEO 外掛不是 SEO 本身",
+                      "prompt":  "我 WordPress 已經裝 Yoast 了，這樣 SEO 是不是就好了？",
+                      "expected_output":  "用白話說明 SEO 外掛只是工具，不代表 SEO 完成；下一步只檢查一個實際輸出，例如首頁 title、sitemap 或某頁是否可被收錄。",
+                      "assertions":  [
+                                         {
+                                             "name":  "plugin-as-tool-not-outcome",
+                                             "description":  "Claude explains that an SEO plugin helps settings/output but does not guarantee SEO results"
+                                         },
+                                         {
+                                             "name":  "regular-website-first",
+                                             "description":  "Claude keeps the response in regular website SEO / CMS basics"
+                                         },
+                                         {
+                                             "name":  "keeps-one-next-step",
+                                             "description":  "Claude gives one practical check only"
+                                         },
+                                         {
+                                             "name":  "no-tool-overload",
+                                             "description":  "Claude does not add more plugins, paid crawlers, GSC, GA4, MCP/API, or a stack of tools as the first response"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "beginner-panic-pagespeed-score",
+                      "name":  "新手恐慌 — PageSpeed 低分先降溫",
+                      "prompt":  "PageSpeed 只有 42 分，我是不是 SEO 完蛋了？",
+                      "expected_output":  "先降低焦慮，不把低分說成排名災難；只要求看一個重點指標或一張截圖，說明先判斷是否真的影響使用體驗或搜尋表現。",
+                      "assertions":  [
+                                         {
+                                             "name":  "de-escalates-panic",
+                                             "description":  "Claude reassures the user and avoids catastrophic language"
+                                         },
+                                         {
+                                             "name":  "no-perfect-score-chasing",
+                                             "description":  "Claude does not imply the user must reach 100 or that PageSpeed alone determines ranking"
+                                         },
+                                         {
+                                             "name":  "asks-one-evidence-item",
+                                             "description":  "Claude asks for one screenshot, one metric, or one URL only"
+                                         },
+                                         {
+                                             "name":  "keeps-one-next-step",
+                                             "description":  "Claude leaves one practical next step, not a full performance audit"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "beginner-gsc-warning-one-evidence",
+                      "name":  "新手恐慌 — GSC 警告先收一個證據",
+                      "prompt":  "Google Search Console 一堆紅色錯誤，我看不懂，網站是不是被懲罰？",
+                      "expected_output":  "不要直接說被懲罰或被 ban。先說 GSC 警告不一定等於災難，請用戶只貼一個錯誤訊息原文或截圖，先判斷是索引、體驗、還是工具提示。",
+                      "assertions":  [
+                                         {
+                                             "name":  "avoids-penalty-overclaim",
+                                             "description":  "Claude does not assume a penalty, ban, or manual action from generic GSC warnings"
+                                         },
+                                         {
+                                             "name":  "asks-one-evidence-item",
+                                             "description":  "Claude asks for exactly one warning message, screenshot, or report name"
+                                         },
+                                         {
+                                             "name":  "classifies-before-fixing",
+                                             "description":  "Claude says the first task is to classify the warning type before recommending fixes"
+                                         },
+                                         {
+                                             "name":  "does-not-turn-into-lecture",
+                                             "description":  "Claude does not explain every GSC report or give a long audit checklist"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "advanced-scope-intentional-boundary",
+                      "name":  "高競爭需求 — 維持輔助定位，不自我道歉",
+                      "prompt":  "我是大型電商，想要完整技術 SEO roadmap、競品策略和內容集群計畫，你直接幫我規劃吧",
+                      "expected_output":  "明確說明這個 skill 只能做問題框架與下一步判斷，不交付完整顧問級 roadmap；給一個可先做的基礎切入點或建議轉專業，不把這個邊界說成 skill 缺陷。",
+                      "assertions":  [
+                                         {
+                                             "name":  "maintains-intended-scope",
+                                             "description":  "Claude keeps the skill in coaching/framing mode rather than producing a full consultant roadmap"
+                                         },
+                                         {
+                                             "name":  "does-not-apologize-for-boundary",
+                                             "description":  "Claude treats the limitation as intentional product scope, not a failure"
+                                         },
+                                         {
+                                             "name":  "offers-one-safe-next-step",
+                                             "description":  "Claude still offers one useful beginner-safe or diagnostic next step"
+                                         },
+                                         {
+                                             "name":  "refers-professional-when-needed",
+                                             "description":  "Claude recommends professional help for full strategic execution when appropriate"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "beginner-practical-no-tool-overload",
+                      "name":  "完全新手 — 先給 5 分鐘檢查，不推工具整合",
+                      "prompt":  "我完全不懂 SEO，網站是 example.com，可以先告訴我現在該做什麼嗎？",
+                      "expected_output":  "先給一個 5 分鐘內可完成的基礎檢查，例如打開網站、robots.txt、sitemap 或 site: 搜尋；只留一個下一步，不要求 GSC/GA4/MCP/API。用繁體中文。",
+                      "assertions":  [
+                                         {
+                                             "name":  "gives-one-five-minute-check",
+                                             "description":  "Claude gives exactly one beginner-safe check the user can do immediately"
+                                         },
+                                         {
+                                             "name":  "no-tool-overload",
+                                             "description":  "Claude does not ask the user to set up GSC, GA4, MCP, API, Screaming Frog, or multiple tools in the first response"
+                                         },
+                                         {
+                                             "name":  "keeps-one-next-step",
+                                             "description":  "Claude leaves one practical next step, not a multi-item audit list"
+                                         },
+                                         {
+                                             "name":  "uses-traditional-chinese",
+                                             "description":  "Response is in Traditional Chinese"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "quick-question",
+                      "name":  "快速問答 — 跳過開場直接回答",
+                      "prompt":  "canonical tag 是什麼？",
+                      "expected_output":  "直接用白話解釋 canonical tag，不走開場流程，回答完後輕鬆邀請用戶分享網址。",
+                      "assertions":  [
+                                         {
+                                             "name":  "no-onboarding-flow",
+                                             "description":  "Claude does not ask about platform, GSC, or folder setup"
+                                         },
+                                         {
+                                             "name":  "direct-answer",
+                                             "description":  "Claude answers the question clearly in plain language"
+                                         },
+                                         {
+                                             "name":  "invites-audit",
+                                             "description":  "After answering, Claude gently invites user to share their website"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "first-time-new-user",
+                      "name":  "第一次使用 — 完全新手，有網址，先低摩擦啟動",
+                      "prompt":  "我想做 SEO，我的網站是 handmadesoap.com.tw，完全不懂 SEO",
+                      "expected_output":  "先用輕量模式做一次低摩擦檢查，給 1 個重點發現與 1 個下一步，不直接拉進完整 onboarding。結尾再自然詢問要不要升級成完整陪跑。",
+                      "assertions":  [
+                                         {
+                                             "name":  "lightweight-first",
+                                             "description":  "Claude defaults to a lightweight-first response instead of full onboarding"
+                                         },
+                                         {
+                                             "name":  "gives-one-finding",
+                                             "description":  "Claude gives one likely focus area or one practical first check"
+                                         },
+                                         {
+                                             "name":  "offers-upgrade-later",
+                                             "description":  "Claude naturally offers full coaching after the quick look, not before"
+                                         },
+                                         {
+                                             "name":  "no-full-onboarding-upfront",
+                                             "description":  "Claude does not explain the 6-8 week pace or ask the 4-style question at the start"
+                                         },
+                                         {
+                                             "name":  "uses-traditional-chinese",
+                                             "description":  "Response is in Traditional Chinese"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "returning-user-actions-aware",
+                      "name":  "回訪用戶 — 開場會同時利用 progress 與 actions",
+                      "prompt":  "我回來了，繼續吧",
+                      "context":  "seo-progress.md exists with: 上次session=4天前, 待交功課=更新首頁 title, 功課狀態=待完成, 下次從=Tier1-Module4；seo-actions.md exists with: [x] 修正 sitemap.xml, [ ] 修正首頁 title",
+                      "expected_output":  "先記得上次做到哪，再同時提到已完成的 sitemap 修復與未完成的 title 功課，開場不只依賴 progress。",
+                      "assertions":  [
+                                         {
+                                             "name":  "mentions-progress-location",
+                                             "description":  "Claude mentions the prior module or next module from seo-progress.md"
+                                         },
+                                         {
+                                             "name":  "mentions-completed-fix",
+                                             "description":  "Claude acknowledges the completed [x] fix from seo-actions.md"
+                                         },
+                                         {
+                                             "name":  "mentions-outstanding-action",
+                                             "description":  "Claude asks about the still-open action item from seo-actions.md"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "returning-user-with-homework",
+                      "name":  "回訪用戶 — 有未交功課（3 天內）",
+                      "prompt":  "我回來了，繼續學習",
+                      "context":  "seo-progress.md exists with: 上次session=2天前, 待交功課=建立sitemap.xml並提交GSC, 功課狀態=待完成, 下次從=Tier1-Module2索引狀態",
+                      "expected_output":  "先問功課，確認完才繼續 Module 2。不重新問平台或風格。",
+                      "assertions":  [
+                                         {
+                                             "name":  "asks-homework-first",
+                                             "description":  "Claude asks about the homework before continuing to next module"
+                                         },
+                                         {
+                                             "name":  "blocks-progress-until-homework",
+                                             "description":  "Claude does not move to Module 2 until homework is addressed"
+                                         },
+                                         {
+                                             "name":  "no-re-onboarding",
+                                             "description":  "Claude does not re-ask platform, style, or pacing information"
+                                         },
+                                         {
+                                             "name":  "shows-progress-map",
+                                             "description":  "Claude shows the Tier progress map"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "returning-user-long-absence",
+                      "name":  "回訪用戶 — 消失超過 7 天",
+                      "prompt":  "我終於回來了",
+                      "context":  "seo-progress.md exists with: 上次session=14天前, 待交功課=改寫首頁title tag, 功課狀態=待完成",
+                      "expected_output":  "先歡迎回來，輕鬆提起功課（不是硬關卡），語氣溫暖，說不管有沒有做都沒關係。",
+                      "assertions":  [
+                                         {
+                                             "name":  "warm-welcome",
+                                             "description":  "Claude welcomes the user back warmly, not with a homework demand"
+                                         },
+                                         {
+                                             "name":  "soft-homework-mention",
+                                             "description":  "Homework is mentioned as a conversation starter, not a gate"
+                                         },
+                                         {
+                                             "name":  "no-guilt-trip",
+                                             "description":  "Claude does not make user feel bad for being absent"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "same-day-return",
+                      "name":  "同一天回來第二次",
+                      "prompt":  "繼續",
+                      "context":  "seo-progress.md exists with: 上次session=今天, session次數=3",
+                      "expected_output":  "溫柔提醒今天已經學過一次，建議先做功課或修復問題，但尊重用戶決定繼續。",
+                      "assertions":  [
+                                         {
+                                             "name":  "gentle-reminder",
+                                             "description":  "Claude gently reminds user they already had a session today"
+                                         },
+                                         {
+                                             "name":  "suggests-homework",
+                                             "description":  "Claude suggests working on homework or fixes instead"
+                                         },
+                                         {
+                                             "name":  "respects-user-choice",
+                                             "description":  "Claude continues if user insists, does not hard-block"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "webfetch-failure",
+                      "name":  "WebFetch 失敗 — 網站擋 bot",
+                      "prompt":  "我的網站是 myprotectedsite.com，幫我看看 SEO",
+                      "expected_output":  "WebFetch 失敗後不卡住，說明無法直接讀取，給具體手動步驟讓用戶自己貼內容，繼續正常流程。",
+                      "assertions":  [
+                                         {
+                                             "name":  "does-not-freeze",
+                                             "description":  "Claude does not stop or report an error and freeze"
+                                         },
+                                         {
+                                             "name":  "explains-limitation",
+                                             "description":  "Claude briefly explains it cannot fetch the site directly"
+                                         },
+                                         {
+                                             "name":  "gives-manual-steps",
+                                             "description":  "Claude gives specific manual steps for the user to get the information"
+                                         },
+                                         {
+                                             "name":  "continues-normally",
+                                             "description":  "Conversation continues normally in coaching mode"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "style-coach-socratic",
+                      "name":  "風格衝突 — 教練型遇到概念問題",
+                      "prompt":  "robots.txt 是什麼",
+                      "context":  "User has selected 教練型 style",
+                      "expected_output":  "概念題走快速問答，直接用教練型的短直接口氣解釋 robots.txt，不進 Socratic 開場。",
+                      "assertions":  [
+                                         {
+                                             "name":  "direct-definition",
+                                             "description":  "Claude directly explains what robots.txt is"
+                                         },
+                                         {
+                                             "name":  "coach-tone",
+                                             "description":  "Explanation is short and direct, not long and nurturing"
+                                         },
+                                         {
+                                             "name":  "no-onboarding-or-counterquestion",
+                                             "description":  "Claude does not turn the concept question into onboarding or a counter-question"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "tier-cooldown",
+                      "name":  "Tier 冷卻 — Tier 1 剛完成，用戶想繼續",
+                      "prompt":  "Tier 1 做完了，繼續 Tier 2",
+                      "context":  "seo-progress.md: Tier1完成日期=昨天, 最近完成Tier=Tier 1；seo-actions.md: [ ] 檢查索引覆蓋是否恢復, [x] 修正 sitemap.xml",
+                      "expected_output":  "提醒 Tier 1 剛完成才 1 天，建議等 3-5 天讓修復生效，並結合 seo-actions.md 問已完成與未完成的修復狀態。如用戶堅持可繼續。",
+                      "assertions":  [
+                                         {
+                                             "name":  "mentions-cooldown",
+                                             "description":  "Claude mentions the 3-5 day cooldown recommendation"
+                                         },
+                                         {
+                                             "name":  "asks-about-fixes",
+                                             "description":  "Claude asks about the Tier 1 action items from seo-actions.md"
+                                         },
+                                         {
+                                             "name":  "does-not-hard-block",
+                                             "description":  "Claude allows user to continue if they insist"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "lightweight-mode-no-files",
+                      "name":  "輕量模式 — 預設不啟動檔案流程",
+                      "prompt":  "先幫我快速看一下 seo，有網址但我現在只想先抓方向",
+                      "context":  "No seo-progress.md, no seo-actions.md",
+                      "expected_output":  "走輕量模式，先給重點發現與最小下一步，不主動提建立進度檔、選風格、6-8 週節奏，結尾才可問要不要升級。",
+                      "assertions":  [
+                                         {
+                                             "name":  "no-storage-upfront",
+                                             "description":  "Claude does not start by explaining it will create tracking files"
+                                         },
+                                         {
+                                             "name":  "no-style-selection-upfront",
+                                             "description":  "Claude does not ask the user to choose one of four coaching styles"
+                                         },
+                                         {
+                                             "name":  "keeps-to-one-next-step",
+                                             "description":  "Claude keeps the output to one practical next step"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "socratic-rescue",
+                      "name":  "Socratic 救援 — 用戶明說不知道",
+                      "prompt":  "我不知道，你先看就好",
+                      "context":  "User is in full coaching mode and the current topic is robots.txt",
+                      "expected_output":  "先給一句很短的觀察或框架，再改問一個更容易回答的問題，不要整段講課。",
+                      "assertions":  [
+                                         {
+                                             "name":  "brief-rescue-observation",
+                                             "description":  "Claude gives one short observation or frame before asking again"
+                                         },
+                                         {
+                                             "name":  "easier-followup-question",
+                                             "description":  "Claude follows with a smaller, easier question"
+                                         },
+                                         {
+                                             "name":  "does-not-turn-into-lecture",
+                                             "description":  "Claude does not turn the exchange into a long explanatory monologue"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "milestone-session-5",
+                      "name":  "里程碑 — 第 5 次 session",
+                      "prompt":  "繼續學習",
+                      "context":  "seo-progress.md: session次數=4 (will become 5 this session)",
+                      "expected_output":  "Session 次數更新為 5，說一句里程碑話，然後繼續正常開場。",
+                      "assertions":  [
+                                         {
+                                             "name":  "milestone-message",
+                                             "description":  "Claude delivers the session 5 milestone message"
+                                         },
+                                         {
+                                             "name":  "brief-not-excessive",
+                                             "description":  "Milestone is one sentence, not a long celebration"
+                                         },
+                                         {
+                                             "name":  "continues-normally",
+                                             "description":  "After milestone, continues to progress map and session"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "non-empty-folder",
+                      "name":  "資料夾有其他檔案 — 告知後繼續服務",
+                      "prompt":  "幫我做 SEO audit，網站是 mystatic.com",
+                      "context":  "Current folder contains: index.html, style.css, images/ (no seo-progress.md)",
+                      "expected_output":  "提到此資料夾會新增 seo-progress.md / seo-actions.md 兩個追蹤檔，建議下次可開新資料夾，但不中止流程，繼續進入首次設定（風格選擇等）。",
+                      "assertions":  [
+                                         {
+                                             "name":  "mentions-tracking-files",
+                                             "description":  "Claude mentions that two tracking files will be added in this folder"
+                                         },
+                                         {
+                                             "name":  "suggests-but-not-blocks",
+                                             "description":  "Claude may suggest a dedicated folder for next time, but does NOT stop the session"
+                                         },
+                                         {
+                                             "name":  "continues-onboarding",
+                                             "description":  "Claude continues into Step 2 first-time setup (e.g., explains pace, asks coach style)"
+                                         },
+                                         {
+                                             "name":  "no-hard-block",
+                                             "description":  "Claude does not refuse to start the audit because the folder is not empty"
+                                         }
+                                     ]
+                  },
+                  {
+                      "id":  "existing-user-wordpress-beginner",
+                      "name":  "舊測試 — WordPress 完全新手（保留相容性）",
+                      "prompt":  "我的網站是 https://example-bakery.com，用 WordPress 架的，我完全不懂 SEO，想知道我的網站有什麼問題。可以幫我看看嗎？",
+                      "context":  "No seo-progress.md, empty folder",
+                      "expected_output":  "先用低摩擦方式看一個最值得先看的問題，避免一開場就進完整 onboarding；若用戶有意願，再升級成完整陪跑。",
+                      "assertions":  [
+                                         {
+                                             "name":  "asks-before-telling",
+                                             "description":  "Claude asks a question before giving any SEO assessment"
+                                         },
+                                         {
+                                             "name":  "uses-traditional-chinese",
+                                             "description":  "Response is in Traditional Chinese"
+                                         },
+                                         {
+                                             "name":  "no-full-onboarding-upfront",
+                                             "description":  "Claude does not immediately explain pace or ask the 4-style setup question"
+                                         },
+                                         {
+                                             "name":  "coaching-not-consulting",
+                                             "description":  "Coach posture maintained throughout"
+                                         }
+                                     ]
+                  }
+              ]
+}
