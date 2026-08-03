@@ -30,7 +30,7 @@ AK 把廠商通常包成「月費 NT$1.8 萬～3 萬」的服務拆開來，**�
 | #2  | 文章怎麼寫？        | https://www.threads.com/@darkseoking/post/DRMlJRPE9Ax               | —                                                                         |
 | #2-1| 大綱生成器          | https://www.threads.com/@darkseoking/post/DSZ7O7vk-fK               | **GitHub: akseolabs-seo/Anti-Low-End-SEO-Planner**（完整 prompt 已收入）  |
 | #3  | 舊文優化            | https://www.threads.com/@darkseoking/post/DRg3Ot1kyMt               | AK 已在貼文 carousel 寫完整 SOP，遇到時直接導用戶讀貼文                   |
-| #4  | 內部連結            | https://www.threads.com/@darkseoking/post/DR3qRkvEwC-               | AI Studio app（需 Google 登入；prompt 暫未公開，請參考貼文邏輯）          |
+| #4  | 內部連結            | https://www.threads.com/@darkseoking/post/DR3qRkvEwC-               | 公開 AI Studio app（需 Google 登入；本 Skill 不收錄其內部指令）          |
 
 ---
 
@@ -187,53 +187,9 @@ GitHub: https://github.com/akseolabs-seo/Anti-Low-End-SEO-Planner
 
 **App URL**：https://aistudio.google.com/apps/drive/1sCDjVOXOGiy8SvoYgHaOg0lEWf1_G-qh?fullscreenApplet=true（需 Google 登入）
 
-### App SYSTEM_INSTRUCTION（AK 提供原文）
+### 公開範圍
 
-```
-你是一位世界級的 SEO 專家與內容策略師。
-你的任務是分析提供的文章草稿與網站地圖 (Sitemap) URL 列表，並進行內部連結優化。
-
-連結數量規則 (根據文章長度):
-- < 1200 字: 建議 2-3 個連結 (適用資訊型短文)
-- 1200-2000 字: 建議 3-5 個連結 (主流建議)
-- 2000-3000 字: 建議 5-7 個連結 (語意圖譜型內容)
-- > 3000 字: 建議 6-10 個連結 (深度主題或支柱頁 Pillar Page)
-
-執行步驟與規則：
-1. 分析內容與長度：先估算文章字數，根據上述規則決定需要插入的連結數量範圍。
-2. 配對連結：掃描提供的 URL 列表，尋找與文章內容高度相關的舊文章。
-3. 根據上下文優化：
-   - 絕對不要生硬地插入連結（例如不要只是把關鍵字加上連結）。
-   - 必須微調或重寫連結周圍的句子/段落，使其能自然地引導讀者點擊，並建立強大的上下文關聯。
-   - 上下文應該解釋「為什麼讀者應該點擊這個連結」或「這個連結提供了什麼額外價值」。
-4. 輸出格式：
-   - 返回「修訂後的完整 Markdown 文章」，包含新加入的連結。
-   - 連結語法使用 Markdown：[錨點文字](url)。
-   - 保持原有的 H1, H2, H3 標題結構與圖片格式不變。
-5. 解釋原因：為每個連結提供繁體中文的推薦原因。
-
-請展現深度推理能力，確保內部連結能提升 SEO 權重與使用者體驗。所有輸出的解釋與原因必須使用「繁體中文」。
-```
-
-### AK 內鏈規則的重點精煉（教練可直接用來教學）
-
-| 文章長度 | 內鏈建議數 | 用途定位 |
-|----------|-----------|----------|
-| < 1200 字 | 2-3 條 | 資訊型短文 |
-| 1200-2000 字 | 3-5 條 | 主流標準 |
-| 2000-3000 字 | 5-7 條 | 語意圖譜型內容 |
-| > 3000 字 | 6-10 條 | 深度主題 / Pillar Page |
-
-**內鏈三原則**（AK 立場）：
-1. **不要關鍵字直接加連結就丟了** — 周圍文字必須改寫，讓「為什麼點」自然浮現
-2. **錨點要 transactional / 解釋型，不是純關鍵字塞** — 讀者點擊有理由
-3. **鎖定相關舊文** — 用 sitemap 對照，不是隨便挑
-
-**教練怎麼用這段邏輯**：
-- 用戶問「內部連結要怎麼設？」→ 不要一次倒整套教學。先問：「你目前發新文時，有沒有從舊文連過去？舊文有沒有反過來連到新文？」
-- 用戶有 5 篇以上文章 → 教 hub-and-spoke 模型（pillar + cluster）
-- 用戶說「我有幾百篇要重新整理」→ 這就是工具化的場景，直接推 AK 的 app，不要叫他手動一篇篇做
-- 對應模組：Module 11 → `references/07-internal-links.md`
+這裡只保留公開貼文與公開 App 的存在及用途。App 的未公開 system instruction、由它反推的規則表與內部設計不屬於可發布教材，不重製、不摘要。教學內鏈時改用 Google 官方文件與一般公開基礎原則。
 
 ---
 
@@ -262,4 +218,4 @@ GitHub: https://github.com/akseolabs-seo/Anti-Low-End-SEO-Planner
 ## 待補
 
 - [ ] AK 還沒寫的 #5、#6、#7（如果有，直接貼新貼文連結 + GitHub repo）
-- [ ] #1、#2、#3、#4 貼文 carousel 圖片裡的詳細條列內容（WebFetch 只能讀貼文 lead 文字 + 留言區，讀不到 carousel 圖片）。目前已收：#3 的完整 SOP 用「直接導讀貼文」處理，不需重寫；其他三篇已從 lead 文字 + AK 提供的 prompt / repo 萃取核心立場。
+- [ ] #1、#2、#3、#4 貼文 carousel 圖片裡的詳細條列內容。只有公開可讀內容能補入；未公開 prompt、repo、私訊或口述素材一律不使用。

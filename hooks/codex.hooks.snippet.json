@@ -1,24 +1,26 @@
 {
-  "_comment": "seo-coach auto-summon router for Codex CLI (hooks engine present since ~0.13x). Merge into $CODEX_HOME/hooks.json (default C:/Users/you/.codex/hooks.json or ~/.codex/hooks.json). Event keys are kebab-case here; the wire payload uses PascalCase — the router handles both. Replace <SKILL_DIR> with the folder containing seo_coach_router.py. Codex requires hook trust: the first run prompts you to approve the hook. See README.md in this folder for the verification command.",
+  "_comment": "seo-coach auto-summon router for Codex CLI. Merge into $CODEX_HOME/hooks.json (default C:/Users/you/.codex/hooks.json or ~/.codex/hooks.json). Keep the PascalCase event names exactly as shown. Replace <SKILL_DIR> with the folder containing seo_coach_router.py. Codex requires hook trust: use /hooks to review and trust it after installation.",
   "hooks": {
-    "session-start": [
+    "SessionStart": [
       {
         "hooks": [
           {
             "type": "command",
             "command": "python \"<SKILL_DIR>/seo_coach_router.py\"",
-            "timeout": 10
+            "timeout": 10,
+            "statusMessage": "seo-coach session router"
           }
         ]
       }
     ],
-    "user-prompt-submit": [
+    "UserPromptSubmit": [
       {
         "hooks": [
           {
             "type": "command",
             "command": "python \"<SKILL_DIR>/seo_coach_router.py\"",
-            "timeout": 10
+            "timeout": 10,
+            "statusMessage": "seo-coach router"
           }
         ]
       }

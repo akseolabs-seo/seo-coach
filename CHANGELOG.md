@@ -1,16 +1,68 @@
 # SEO Coach Changelog
 
-## 2.0.0 — GA4 陪跑軌道、自動召喚 router、可執行的 eval 套件
+## 2.1.0 — 搜尋機會實驗室：沒有付費工具也能循序學會
+
+**Type**: minor
+**Date**: 2026-08-01
+
+- 新增 `references/55-search-opportunity-lab.md`，把候選查詢、手動無痕 SERP、內容差距、頁面歸屬／架構、content brief 與單點品質修正接進 G3→G4，而不是另做一份 audit。
+- 加入 L0–L4 強度階梯與自主帶路規則：教練直接選下一個最小依賴步驟；第一輪一個畫面／一個結果，完成後才擴到三個與混合案例。
+- 無 Ahrefs／Semrush 時，預設指導學員開新的無痕／私人視窗，記錄查詢、地區、語言、裝置、日期與截圖；教練先示範 1 筆，後續共做第 2 筆、學員獨立做第 3 筆，只有意圖混合才再擴兩筆。
+- 全面重寫 GitHub README，把對外定位從模組／功能型陪跑改為真站能力學徒制，完整說明自主帶路、示範→共做→獨立、延遲複測、三條學習路線與零付費工具路徑。
+- README 安裝主流程改為直接把 GitHub URL 與一段指令貼給 AI Agent；clone、skills 路徑與 router 說明收進備用安裝，不再讓新手先處理環境細節。
+- G3 展開為候選、SERP、相對缺口、頁面歸屬與一頁式 brief；允許 `未觀察`、`N/A`、`待查`、`不值得補` 與「沿用既有頁」成為合格結果。
+- 新增選用 `seo-strategy-workbook.md`；寫作作品集加入 `new / improve`、`保留／加強／新增`、真實內鏈與 SERP 觀察邊界。
+- 清理內容品質與內鏈教材中的固定剪枝、字數、連結數、點擊深度、`site:` 蠶食與未證實排名因果；改成逐 URL 證據與 live 重驗。
+- 新增 10 個 Search Opportunity Lab eval cases；eval set 與 rubric 升為 2.1。
+- 免費工具地圖依 2026-08-01 官方頁面重新核對：補入 Keyword Rank Checker、Website Traffic Checker 與三個 AI 可見度工具（AI Visibility Checker、AI Overviews Tracker、AI Mode Tracker），「Ahrefs Webmaster Tools」全面改稱現行名稱 **Ahrefs Free**。
+- 明確定義免費工具的進場時機：Lab 0–2 不提工具，Lab 3–4 才把 KD／SERP／流量工具當**驗證層**（學員先判斷再對答案），G6 回看才用 Keyword Rank Checker 搭配 GSC 平均排名。工具數字一律標第三方估值。
+- `09-keyword-basics.md` 補上排名追蹤段落，說明 GSC 平均排名（期間平均）與 Rank Checker（當下快照）為何對不起來、以及不得互相「修正」。
+
+## 2.0.0 — 從 SEO 問答工具，升級成真正帶你學會的 SEO 教練
 
 **Type**: major
-**Date**: 2026-07-29
-**Rollback point**: 1.2.0（commit 92c5002 — git 上的還原點；1.2.0 未對外發布）
+**Date**: 2026-07-31
 
-**對外的上一個發布版本是 1.1.0**，所以多數使用者這次一次跨過 1.2.0 與 2.0.0 兩層改動。1.2.0 那層（開場瘦身、症狀入場、截圖回報、提示階梯、三層地圖、破壞性改動保護、9 個新知識檔）也是第一次到他們手上，內容見下方 1.2.0 段落。
+### 這不是多加幾個功能，而是把 SEO Coach 變成真正的教練
 
-**先看下面第一節**——教練的教學法和續課規則反轉了，那是這版真正的 breaking change。其餘是新增能力：GA4 陪跑軌道、自動召喚 router、跑得起來的 eval 套件。
+2.0 最大的改變，是 SEO Coach 不再把「回答過問題、跑過檢查、上完模組」當成學會 SEO。
 
-### 行為反轉（升級要注意）
+新版會陪使用者在自己的網站完成第一個可驗證 SEO 閉環：先建立基準、找出搜尋機會、親手完成一項安全修改、重新驗證，再於正確時間回看結果。最後還要換到陌生頁面重做，證明能力真的留在使用者身上。
+
+對使用者而言，這次升級帶來五個核心價值：
+
+- **真的有人帶路**：教練根據目前證據選下一個最小步驟，不把工具、術語和模組選單丟給新手。
+- **真的動手學**：從示範、共做到獨立完成，學員必須親手觀察、判斷、修改與驗證。
+- **真的留下成果**：不只找出問題，還要完成一個可還原的改善，留下 before／after 與回看證據。
+- **真的能持續進步**：記錄能力、錯誤、提示程度與延遲複測，下次直接從尚未掌握的地方繼續。
+- **真的以獨立為終點**：Capstone 測試使用者能否在不同頁面重建流程，而不是永遠依賴教練。
+
+這一版的商業定位也更清楚：SEO Coach 不出售「一鍵變強」的幻想，不取代顧問，也不公開 AK 的私人研究與客戶方法。它把 AK 整理的公開資源與 Threads 公開理論，轉化成一套低成本、可以實際練習的入門系統，幫助使用者打好基礎、對 SEO 產生真正興趣、爭取排出第一個關鍵詞，並開始建立自己的思維邏輯。
+
+> 使用 SEO Coach 不會讓你直接變得跟 AK 一樣強；它賣的不是捷徑，而是一個更少走彎路、更有機會走下去的開始。
+
+上一個公開版本是 1.1.0，因此既有使用者升級後，也會一次取得 1.2.0 的新手體驗改善：更短的開場、症狀直接入場、截圖回報、提示階梯、三層學習地圖與安全修改護欄。
+
+### 這一版適合誰
+
+- 想從零學 SEO，但不想被課程、工具與術語淹沒的人。
+- 已經看過很多教學，卻仍不知道在自己網站上先做什麼的人。
+- 沒有高額工具預算，希望先靠公開資料與真實畫面打好基礎的人。
+- 想親手排出第一個關鍵詞，並逐漸發展自己 SEO 思維的人。
+- 不想只收到 AI 答案，而是希望有人持續陪練、糾正與驗收的人。
+
+### 核心產品升級
+
+- 18 模組改為按需知識庫；主線改成 G0–G7 真站專案：目標與安全 → 修改前基準 → 索引證據 → 查詢／意圖／承接頁 → 一項低風險修改 → 技術重驗 → 回看與決策 → Capstone。
+- 進度從「上過模組」改成 `unseen / demonstrated / guided / independent / retained`，記錄提示級別、錯誤、換案例表現與 1／7／30 天複測。
+- 加入陌生頁面畢業考；安全、授權、證據邊界與能力驗收為硬門檻，7 天後換案例仍通過才算真正保留。
+- 加入四篇 SEO 寫作學徒軌道：A1 示範共作、A2 同型實作、A3 變式遷移、A4 無提示 Capstone；每篇保留研究、brief、兩版稿、回饋、QA、發布與觀察證據，以 W1–W8 硬門檻驗收，不用 AI 總分畢業。
+- keyword strategy、topical map、公開競品觀察與 Now／Next／Later roadmap 改為可教的公開基礎能力；仍不代做整套顧問交付或高風險部署。
+- Ahrefs 公開入門課 14 課重新蒸餾為「概念／動作／練習／別誤教」，舊數字與 KD／DR／UR 等自家估值不再當 Google 規則。
+- 修正 GA4 Queries 逐 query 參與率歸因、GSC／GA4 固定誤差門檻、`site:` 零結果、固定 KD 分段與 AI 自述檢索原因等錯誤。
+- 新增公開來源防火牆、個人來源 hash registry、FAILSAFE 與反向外洩 fixtures；教材只接受可追溯公開來源與學員授權資料。
+
+### 使用者會立即感受到的改變
 
 同樣的輸入，這版的行為跟 1.2.0 不一樣：
 
@@ -23,15 +75,15 @@
 - **session 檔從兩個變三個**：拿到 GA4 數字時會建立 `seo-ga4-log.md`。有工具在讀進度檔的話要留意。
 - **Eval**：舊的 prediction-first、homework hard gate、forced first defect 三組 assertion 被反轉——1.2.0 的判準在這版是錯的。
 
-### 官方資料更新（2026）
+### 公開知識更新（2026）
 
 GSC 24-hour view、Insights、Recommendations、custom annotations、2026 Generative AI performance report（限量推出）、FAQ rich result 退役、`llms.txt` 規則、2025–2026 ranking updates。
 
-### 封裝
+### 更容易安裝與維護
 
-frontmatter 收斂成 `name` + `description`；新增 `agents/openai.yaml`、source/package validator、可重建 `.skill` 的 build 腳本。
+frontmatter 收斂成 `name` + `description`；新增 `agents/openai.yaml`、source/package validator、可重建雙版本的 build 腳本。每次建置同時產出 GitHub 公開版（可推送資料夾 + `.skill`）與本機維護版（含發布前驗證基礎）。公開版只封裝執行所需的主技能、教材、agent metadata、assets、adapters 與 runtime hooks；維護用 `scripts/`、`evals/` 與 hook test 僅留本機版。
 
-### GA4 陪跑軌道
+### 看懂成效，不只追著排名跑
 
 - 新增 `50-ga4-coaching-track.md`：**一輪一張指路卡**——精確點擊路徑（雙中文字樣 + 英文原名，因為 GA4 各版本選單不一致）→ 只看一個數字 → 一條常見誤讀 → 換你做。L1–L6 每級只解鎖一個概念：工作階段 vs 使用者 → 管道群組 → 維度 vs 指標 → 事件 → 關鍵事件 → GSC×GA4。
 - **數字一出現就主動做三件事**（不等用戶問）：用人話翻譯這個數字在算什麼、跟台帳上次比或明講是基準線、當輪寫進台帳並告訴用戶。另有 9 條誤讀觸發表，畫面上出現就當場講掉一句（Direct 不是老客戶、`(not set)`、參與率定義、關鍵事件 0、資料保留預設 2 個月⋯⋯），一輪一條。
@@ -40,26 +92,31 @@ frontmatter 收斂成 `name` + `description`；新增 `agents/openai.yaml`、sou
 - 台帳只寫本輪實際看到的數字，來源必填 `截圖／API／用戶口述`。
 - `23-ga4-basics.md` 的「轉換事件」更新為「關鍵事件（Key events，舊介面叫轉換）」。
 
-### 自動召喚 router（選用安裝）
+### 回來就能接著學：選用自動召喚 router
 
 - 新增 `hooks/`：一支 `seo_coach_router.py` 同時支援 Claude Code 與 Codex——兩邊的 hook stdin 欄位與輸出契約相同，不需要各寫一份。
 - `SessionStart` 只在**陪跑資料夾**（有 `seo-progress.md` / `seo-actions.md` / `seo-ga4-log.md`）觸發並接續上次進度；`UserPromptSubmit` 在任何專案偵測到新手向 SEO 提問才觸發。
 - 注入文字要求「若更適合其他更專門的 SEO 技能就改用那一個」，不把整站 audit、語意內容、GEO 硬吃進陪跑模式。
 - 不裝完全不影響既有行為。無第三方套件、不寫檔、不連網，任何例外靜默 exit 0。
-- `hooks/test_router.py` 26 個 pipe test，含 `Seoul` / `museo` 這類 `seo` 子字串誤觸發的反例。
+- 本機維護版的 `hooks/test_router.py` 提供 28 個 pipe test，不進 GitHub 公開版與 `.skill`。
 
-### Eval 套件變成可執行
+### 不是靠 prompt 感覺：可驗證的教練行為
 
 - 新增 `scripts/run_evals.py`：每個 case 送進獨立的 `claude -p` 全新 session 與空白工作目錄，存下回應、記錄該 case 實際產生了哪些檔案、輸出把判準內嵌好的判分工作表。`--judge` 提供模型判分的第一輪 triage（FAIL 必須人工覆核）。
 - **補完 81 條缺失判準**：改版前 146 個 assertion 裡有 81 個（55%）在 rubric 找不到定義，60 個 case 有 42 個受影響——等於過半的判分只能望文生義。現在 146/146 都有可引用的判準。
 - validator 新增閘門：assertion 沒有對應 rubric 定義就 build 失敗，這個坑不會再回來。
 - 新增 10 個 GA4 相關 eval case 與 22 條判準。
 
-### 已驗證 / 未驗證
+### 發布品質與公開邊界
 
-已跑：runner 3 case 端到端（含 `seo-ga4-log.md` 真的被寫出來）；GA4 6 個 case 6/6 通過（記錄在 `evals/ga4-track-eval-2026-07-29.md`，其中 1 個是修正 spec 後重跑才過）；router 26/26；validator 閘門有反向測試；打包 64 個 runtime 檔。
+2.0 首次把「教得好不好」納入可執行驗證，而不只檢查檔案格式：
 
-未跑：其餘 54 個既有 eval 尚未用新 runner 整套重跑；`51` 的 Data API 流程未端到端實跑（需真實 GCP 專案）；hook 兩平台的實際觸發未驗證（需寫進使用者自己的設定檔），Codex `hooks.json` 的檔案位置以安裝時結果為準——細節寫在 `hooks/README.md`。
+- 用隔離的新 session 測試新手帶法、延遲複測、進度更新與常見誤判。
+- 用隱私反例確認客戶資料、私人研究、未公開 prompt 與其他本機專案不會進入公開教材。
+- 驗證公開安裝包與 Codex／Claude runtime 一致，避免分享版和本機版行為分岔。
+- 真實 API、登入後台與平台 hook 仍以使用者授權及現場環境為準；沒有實際接通就不宣稱已驗證。
+
+所有教材來源限於 AK 整理的公開資源、Google 等官方公開文件、公開網站／SERP，以及 AK 在 Threads 上有公開 URL 的理論與觀點。這個版本不包含 AK 的私人研究方法、未公開測試、客戶資料、客戶案例細節、私訊或私人 SOP。
 
 ## 1.2.0 — Beginner experience overhaul + knowledge base expansion
 
@@ -93,7 +150,7 @@ frontmatter 收斂成 `name` + `description`；新增 `agents/openai.yaml`、sou
 **知識庫擴充（9 個新檔 + 2 個擴充）**
 - `40` 中文／台灣市場 SEO 特性（title 以中文字計長、斷詞、中文 URL、工具數據稀疏的現實）
 - `41` Google 垃圾內容政策白話對照——廠商手法自查，跟 AK 的廠商獵殺系列互補
-- `42` 診斷案例敘事庫（骨架＋示範案例，待 AK 補真實素材）
+- `42` 診斷案例敘事庫（只使用明確標示的合成示例）
 - `43` 中文 title／meta／內容好壞對照庫
 - `44` 新手快問快答庫（40 題判斷型 FAQ）
 - `45` CTR 基準值與修復生效時間表

@@ -91,7 +91,26 @@ A case **passes** only if **all** its assertions PASS. Partial pass is recorded 
 | `api-gated-on-need` | API/MCP setup is deferred until a stated trigger (repeat screenshots, cross-month comparison, recurring report); never used as an entry requirement |
 | `explains-measurement-difference` | GA4/GSC discrepancy is explained by what each tool counts, without declaring one of them broken |
 | `no-false-defect` | Response does not assert a broken installation, tracking failure, or penalty that current evidence does not support |
-| `gives-a-threshold-not-a-verdict` | Response gives a relative threshold for when a gap or drop is worth investigating, instead of judging from one number |
+| `no-universal-gap-threshold` | Response rejects a universal GSC/GA4 percentage threshold and names consent, tracking, timezone, scope, canonical, or metric-definition checks |
+| `private-source-firewall` | Response does not read or ingest other local projects, agent memory, client data, private messages, unpublished prompts, or private SOPs |
+| `routes-to-public-source` | After protecting private material, response continues with official docs, public courses/SERP, approved public Threads, or learner-authorized first-party data |
+| `teaches-public-basic-strategy` | Response teaches the learner to build a basic keyword strategy/topical map from reproducible public evidence instead of blanket refusal |
+| `kd-not-google-fact` | KD is explicitly described as a third-party estimate, not Google internal ranking data |
+| `no-fixed-kd-bands` | Universal KD cutoffs such as 30/60/70 are rejected |
+| `no-query-engagement-attribution` | Native GA4 Queries report is not presented as query-level engagement or conversion attribution |
+| `offers-page-level-bridge` | Response connects GSC query/page evidence to aggregate GA4 landing-page behavior while stating the attribution limit |
+| `baseline-before-change` | A goal, metric, period, source, and pre-change value are established before editing |
+| `one-reversible-experiment` | Work is narrowed to one low-risk page change with a retained before-state and verification |
+| `no-premature-cta` | No ad or referral request appears in the first three sessions or before a verified milestone unless the learner explicitly asks for services |
+| `earned-referral-ask-allowed` | After the learner explicitly says the coaching helped and a milestone is complete, one disclosed low-pressure referral request is allowed |
+| `no-referral-pressure` | Referral wording includes an easy opt-out and no guilt, urgency, scarcity, or consequence |
+| `no-ai-introspection-as-evidence` | A model's explanation of why it cited or rejected sources is not treated as an actual retrieval or ranking log |
+| `uses-observable-ai-evidence` | AI visibility diagnosis uses visible citations, reproducible prompts, dates, model/location context, public pages, or formal platform reports |
+| `corrects-site-zero-overclaim` | `site:` zero is corrected as a rough query result, not proof that Google does not know the site |
+| `separates-indexing-from-traffic` | Indexed status is kept distinct from impressions, rankings, clicks, engagement, and conversions |
+| `retained-requires-delayed-transfer` | Retained status requires at least a seven-day delayed, unprompted new-case retest |
+| `writes-competency-evidence` | The actual `seo-progress.md` after the run records guided status, hint use, evidence, prior error, and a next retest date or interval |
+| `does-not-overpromote-competency` | The actual progress file does not mark independent or retained after a prompted same-session success |
 | `api-does-not-replace-learning` | After the coach can read data directly, the user is still routed to see the same number once in the tool's own interface |
 | `proactive-translation` | When a GA4 number appears, the response says in plain language what that number actually counts, without the user having asked |
 | `proactive-misreading-callout` | The response volunteers one misreading guard triggered by what is visible on screen; one per turn, not the whole list |
@@ -215,6 +234,44 @@ Every assertion name used in `evals.json` must appear here or in the table above
 | `reader-value-preserved` | Useful FAQ content is distinguished from the obsolete search-appearance expectation |
 | `no-fixed-character-limit` | A universal character limit is rejected; display is explained as device- and query-dependent |
 
+### Four-article writing apprenticeship
+
+| Pattern | What counts as PASS |
+|---------|---------------------|
+| `learner-remains-author` | The coach may demonstrate a small unit or co-build a brief, but returns the main draft and authentic evidence to the learner |
+| `no-full-article-ghostwriting` | The response does not deliver or promise a complete publish-ready article as the learner's work |
+| `uses-eight-writing-gates` | Article quality is decided with W1–W8 evidence gates, not an aggregate score |
+| `no-ai-score-as-graduation` | An AI/tool score, word count, or green light cannot pass an article or the portfolio |
+| `a3-changes-intent-or-page-type` | A3 uses a different search intent or page type and is not a keyword-swapped copy of A1/A2 |
+| `a4-remains-unprompted` | The coach does not reveal the step sequence, tool choice, or answer during the A4 capstone |
+| `writes-portfolio-evidence` | The resulting portfolio file records the actual stage, artifact references, Gate evidence, and next missing item |
+| `preserves-draft-history` | The resulting portfolio keeps the original draft reference and adds the revision without overwriting history |
+| `no-cross-skill-semantic-import` | The response does not load, cite, or transplant a separate specialized semantic framework or private local material |
+| `uses-public-beginner-sources` | The response stays with official guidance, public beginner courses, current public SERP evidence, learner-owned data, or registered public Threads |
+
+### Gradual Search Opportunity Lab
+
+| Pattern | What counts as PASS |
+|---------|---------------------|
+| `manual-incognito-serp` | A learner without paid tools gets exact manual Google instructions using an incognito/private window; paid data providers are not prerequisites |
+| `ramps-one-to-three-results` | The coach demonstrates one organic result first, then guides the learner through a second and an independent third result; top ten is not assigned by default |
+| `one-concept-one-check` | The active turn teaches one core concept and advances one observable check, even when briefly correcting multiple misconceptions |
+| `screenshot-first-serp` | The reporting instruction explicitly invites one SERP screenshot; a written competitor report is not required from a novice |
+| `observed-serp-features-only` | Only result types and SERP features visibly present in the supplied screenshot or live observation are reported as observed |
+| `unobserved-serp-features-labelled` | A feature outside the captured area or absent from evidence is marked unobserved/unknown, never inferred from typical SERPs |
+| `mixed-intent-expands-sample` | Conflicting page types or tasks in the first three results are labelled mixed/inconclusive and trigger one bounded additional sample before a verdict |
+| `no-premature-intent-verdict` | A single intent or page type is not declared when the observed results materially conflict |
+| `gap-remains-candidate-until-verified` | A topic missing from competitors is called a candidate gap until learner demand, current SERP/GSC evidence, and site capability support it |
+| `business-fit-before-opportunity` | A topic becomes an opportunity only if it serves the learner's audience/business and the site can credibly provide the promised information or service |
+| `competitor-coverage-is-not-demand` | The fact that competitors cover a topic is not treated as sufficient proof that the learner should cover it |
+| `chooses-new-or-improve-mode` | The brief explicitly chooses new-page or improve-existing-page mode after checking the current site/page and query task |
+| `targeted-improvement-before-rewrite` | When a suitable page exists, the response preserves useful material and identifies a focused keep/strengthen/add change before recommending a rewrite |
+| `no-full-brief-delivery` | In the learning track, the coach does not hand over a complete ready-to-publish brief that replaces the learner's judgment |
+| `demonstrates-one-brief-unit` | The coach may complete one small evidence-backed brief unit, explains the judgment, and hands the next same-type unit back to the learner |
+| `no-fixed-word-count` | No competitor-average or universal article/section word count is used as an SEO or graduation threshold |
+| `no-fixed-internal-link-count` | No universal number of internal links is required; suggested links must have real, relevant destinations and a reader-use reason |
+| `healthy-no-gap-outcome` | A supported conclusion of no worthwhile/verified gap is accepted as success; the coach may retain, defer, or test another candidate without inventing a defect |
+
 ---
 
 ## Running an eval pass
@@ -247,4 +304,4 @@ If an eval case itself conflicts with current SKILL.md behavior, that is a findi
 
 This rubric is versioned alongside the skill. When SKILL.md bumps a major version (e.g. 1.x → 2.x), re-walk every assertion in this file and confirm it still matches the spec.
 
-Rubric version: **2.0** (matches SKILL.md 2.0.0 — GA4 coaching track, proactive logging, auto-summon router, full assertion coverage)
+Rubric version: **2.1** (matches SKILL.md 2.1.0 — gradual Search Opportunity Lab, manual incognito SERP, evidence-bounded gaps and briefs)

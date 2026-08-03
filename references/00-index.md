@@ -13,6 +13,8 @@
 | 技術 SEO（HTTPS, schema, 行動版） | `references/03-technical-seo.md` |
 | 頁面優化（title, meta, H1, alt） | `references/04-on-page.md` |
 | 內容品質（搜尋意圖, 可讀性, 剪枝） | `references/05-content-quality.md` |
+| 四篇 SEO 寫作實作（研究到觀察） | `references/54-four-article-writing-apprenticeship.md` |
+| 搜尋機會實驗室（無痕 SERP、內容差距、頁面歸屬、brief） | `references/55-search-opportunity-lab.md` |
 | E-E-A-T（信任信號） | `references/06-eeat.md` |
 | 內部連結（anchor text, 孤兒頁面） | `references/07-internal-links.md` |
 | 頁面速度（Core Web Vitals） | `references/08-page-speed.md` |
@@ -64,7 +66,7 @@
 
 ## 三層對新手地圖
 
-對新手溝通進度時用三層講，18 模組只做內部追蹤（存檔照 Tier/Module 記錄）：
+對新手溝通概念時用三層講；學習進度以 G0–G7 與能力狀態為準，18 模組只記「接觸過的知識」，不能代表能力：
 
 | 三層 | 白話 | 對應模組 |
 |------|------|----------|
@@ -76,9 +78,9 @@ M16-18（情境、防護、衡量）維持獨立，不硬塞進三層。
 
 ---
 
-## Audit 模組架構（5 層 18 模組）
+## 知識庫架構（5 層 18 模組）
 
-按 Tier 順序推進（帶症狀的用戶走 `00-session-flow.md` 症狀入口表）。每個模組共用對話節奏（見 SKILL.md 主檔）：Hook → 用戶回答 → 檢查指令 → 診斷 → 教學 → 行動項 → 進度確認 → 過渡。
+依學徒 Gate 或症狀按需取用，不以 Tier 順序強迫上課。每個模組共用對話節奏（見 SKILL.md 主檔）：Hook → 用戶回答 → 檢查指令 → 診斷 → 教學 → 行動項 → 進度確認 → 過渡。
 
 Hook 有兩個版本：**預設 Hook**（有基礎者）與**新手辨識題**。完全新手先看 `39-beginner-coaching-protocol.md` 的示範，再用下列題目判讀下一個同型案例；不要拿空白預測題當第一份價值。
 
@@ -125,8 +127,8 @@ Reference：`04-on-page.md`（中文長度規則：`40-chinese-seo-specifics.md`
 **Module 7 — Content Quality**
 Hook：「如果你是想搜尋這個關鍵字的用戶，你的頁面有沒有完整回答他的問題？」
 新手預測題：「Google 搜你最想被找到的那個詞，你猜你的頁面 A 有出現 / B 沒出現在前三頁？——搜一次驗證。」
-工具：手動搜尋目標關鍵字，比較排名前三的頁面
-Reference：`05-content-quality.md`
+工具：新的無痕／私人視窗；先示範一筆，再逐步完成三筆初始樣本
+Reference：`05-content-quality.md`、`55-search-opportunity-lab.md`
 
 **Module 8 — E-E-A-T**
 Hook：「你聽過 E-E-A-T 嗎？你覺得它對你的行業重要嗎？」
@@ -137,14 +139,14 @@ Reference：`06-eeat.md`
 **Module 9 — Topical Map**
 Hook：「如果 Google 要評估你的網站是不是某個領域的專家，你覺得它會看什麼？」
 新手預測題：「你猜 Google 覺得你的網站『專門講什麼』？A 講得出一個主題 / B 什麼都有一點——我們看你的文章列表驗證。」
-工具：Google Autocomplete、People Also Ask、手繪主題地圖
-Reference：`14-topical-map.md`
+工具：顧客問題或 GSC 查詢、手動無痕 SERP、手繪主題地圖；Autocomplete／PAA 只作候選措辭線索
+Reference：`14-topical-map.md`、`55-search-opportunity-lab.md`
 
 **Module 10 — Keyword Basics**
 Hook：「你現在目標打的關鍵字，是你想用的詞，還是你的用戶真的在搜尋的詞？」
 新手預測題：「你猜客人搜尋時打的字，跟你網站上寫的字 A 一樣 / B 不一樣？——開 GSC 查詢報表對一次就知道。」
-工具：GSC → 查詢、Google Autocomplete、Google Trends、Ahrefs Free Keyword Generator / KD Checker / SERP Checker
-Reference：`09-keyword-basics.md`（免費工具補充：`38-continuous-coaching-free-tools.md`）
+工具：GSC → 查詢；沒有資料時，用新的無痕／私人視窗手動查一個候選詞。Google Autocomplete、Google Trends 與免費第三方工具只作補充，不是前置條件
+Reference：`09-keyword-basics.md`、`55-search-opportunity-lab.md`（免費工具補充：`38-continuous-coaching-free-tools.md`）
 
 ---
 
@@ -152,12 +154,12 @@ Reference：`09-keyword-basics.md`（免費工具補充：`38-continuous-coachin
 
 **Module 11 — Internal Links**
 Hook：「如果你把你的網站想成一個城市，你覺得內部連結是什麼？」
-工具：Screaming Frog 免費版、Ahrefs Free / Webmaster Tools
+工具：Screaming Frog 免費版、Ahrefs Free（原名 Ahrefs Webmaster Tools）
 Reference：`07-internal-links.md`
 
 **Module 12 — Backlinks 基礎**
 Hook：「你知道你的網站目前有多少其他網站連結過來嗎？」
-工具：Ahrefs Free Backlink Checker、Ahrefs Free / Webmaster Tools、GSC → 外部連結
+工具：Ahrefs Free Backlink Checker、Ahrefs Free（原名 Ahrefs Webmaster Tools）、GSC → 外部連結
 Reference：`10-links-backlinks.md`
 
 ---
@@ -176,7 +178,7 @@ Reference：`17-media-optimization.md`
 
 **Module 15 — AI Search Readiness**
 Hook：「你有沒有試過在 ChatGPT 或 Perplexity 搜尋你的品牌名稱？結果怎樣？」
-工具：直接在 ChatGPT / Perplexity 搜尋、Rich Results Test
+工具：直接在 ChatGPT / Perplexity 搜尋、Rich Results Test、Ahrefs AI Visibility Checker / AI Overviews Tracker / AI Mode Tracker（免費，第三方估值）
 Reference：`13-ai-search.md`
 
 ---
@@ -189,12 +191,12 @@ Reference：`12-scenarios.md`
 
 **Module 17 — Negative SEO 防護**
 Hook：「你有沒有監控過你的網站是否有異常的反向連結突然出現？」
-工具：Ahrefs Free Backlink Checker、Ahrefs Free / Webmaster Tools、GSC → 外部連結
+工具：Ahrefs Free Backlink Checker、Ahrefs Free（原名 Ahrefs Webmaster Tools）、GSC → 外部連結
 Reference：`20-negative-seo.md`
 
 **Module 18 — SEO 成效衡量**
 Hook：「你怎麼知道你做的 SEO 有沒有在發揮作用？你目前看什麼數字？」
-工具：GSC → 成效、GA4 → 自然搜尋、Ahrefs Free Web Analytics（可選）
+工具：GSC → 成效、GA4 → 自然搜尋、Ahrefs Keyword Rank Checker（單一查詢當下名次）、Ahrefs Free Web Analytics（可選）
 Reference：`21-seo-measurement.md`（GA4 那一段怎麼帶用戶看 → `50-ga4-coaching-track.md`）
 
 ---
@@ -220,6 +222,8 @@ Reference：`21-seo-measurement.md`（GA4 那一段怎麼帶用戶看 → `50-ga
 - **廠商手法違不違規**：用戶的廠商手法可疑、想確認某做法是否違反 Google 政策 → `41-spam-policies-plain.md`（搭配 `34-darkseoking-threads.md`）
 - **引用案例**：教學時刻有對應的診斷案例可引用一個 → `42-case-library.md`
 - **好壞對照教學**：教 title/meta/內容品質時需要中文對照範例 → `43-before-after-examples.md`（展示後讓用戶改自己的，不代寫）
+- **四篇寫作作品集**：用戶要從關鍵字、SERP、brief、初稿、多輪修改一路做到發布與觀察 → `54-four-article-writing-apprenticeship.md`
+- **搜尋機會實驗室**：用戶沒有付費工具，或要學選題、手動無痕 SERP、內容缺口、頁面歸屬／網站架構、brief → `55-search-opportunity-lab.md`；完全新手一次只看一個畫面
 - **快問快答**：新手問判斷型常見問題（要做多久、要發幾篇、要不要買網域⋯⋯）→ 先查 `44-beginner-faq.md`
 - **期待管理數據**：需要 CTR 基準、修復生效時間、正常值 → `45-benchmarks-and-timelines.md`
 - **流量掉了先對時間**：診斷排名/流量下跌，先對照 Google 更新日期 → `46-core-update-timeline.md`（注意檔內過期防護規則）

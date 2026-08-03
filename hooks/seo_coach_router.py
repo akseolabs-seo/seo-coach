@@ -12,7 +12,8 @@ truth for both:
 
 Behaviour
     SessionStart      fires only inside a coaching folder (seo-progress.md /
-                      seo-actions.md / seo-ga4-log.md present) or the skill repo.
+                      seo-actions.md / seo-ga4-log.md /
+                      seo-writing-portfolio.md present) or the skill repo.
     UserPromptSubmit  fires when the prompt looks like beginner-facing SEO
                       coaching, in any project.
 
@@ -49,25 +50,31 @@ STRONG = re.compile(
 # Weak SEO context — only fires when paired with a beginner/help signal.
 SEO_CTX = re.compile(
     rf"({SEO}|搜尋引擎|google\s*搜尋|關鍵字|關鍵詞|排名|網站流量|meta description"
-    r"|title\s*tag|外鏈|反向連結|backlink|structured data|結構化資料"
+    r"|title\s*tag|SEO\s*文章|content brief|搜尋意圖|外鏈|反向連結|backlink|structured data|結構化資料"
     r"|my (site|website).*(google|search|rank))",
     re.I,
 )
 BEGINNER = re.compile(
     r"(新手|入門|初學|不懂|不會|看不懂|怎麼看|怎麼開始|從哪(開始|下手)|第一步"
-    r"|教我|帶我|一步一步|逐步|該做什麼|要怎麼辦|幫我檢查|幫我看|健檢|自己做"
+    r"|教我|帶我|陪我|一起做|一起寫|改稿|一步一步|逐步|該做什麼|要怎麼辦|幫我檢查|幫我看|健檢|自己做"
     r"|beginner|step by step|walk me through|where do i start|how do i check)",
     re.I,
 )
 
 # Files that mark a folder as an active coaching session.
-SESSION_FILES = ("seo-progress.md", "seo-actions.md", "seo-ga4-log.md")
+SESSION_FILES = (
+    "seo-progress.md",
+    "seo-actions.md",
+    "seo-ga4-log.md",
+    "seo-writing-portfolio.md",
+)
 
 CONTEXT = (
     "[seo-coach router] 這是新手向的 SEO 陪跑任務。回答前先用 Skill tool 載入 "
     "seo-coach，並依它的規則走：一輪只教 1 個概念、只推進 1 個檢查、回應 2-4 段；"
     "先取得一項可驗證的證據再下判斷，沒有實際抓取或用戶回報就不要宣稱「我看過」；"
-    "不要一次交付完整 audit 報告、roadmap 或競品分析。"
+    "可以教學員自己做公開基礎的 keyword strategy、topical map、競品觀察與 "
+    "Now／Next／Later roadmap；不代做整套顧問級交付或高風險部署。"
     "GA4 相關問題走指路卡（references/50-ga4-coaching-track.md），一輪一張。"
     "若這個請求其實更適合另一個更專門的 SEO 技能（整站 audit、語意內容、GEO、"
     "本地 SEO 等），改用那一個，不要為了套用本規則而降級服務。"
@@ -75,7 +82,8 @@ CONTEXT = (
 
 SESSION_CONTEXT = (
     "[seo-coach router] 這個資料夾有 SEO 陪跑的進度檔。開始前先用 Skill tool 載入 "
-    "seo-coach，讀取 seo-progress.md（有的話再讀 seo-actions.md、seo-ga4-log.md），"
+    "seo-coach，讀取 seo-progress.md（有的話再按本輪需要讀 seo-actions.md、"
+    "seo-ga4-log.md、seo-writing-portfolio.md），"
     "照回訪開場繼續上次的進度，不要當成新用戶重新開場。"
 )
 

@@ -31,6 +31,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import uuid
 from datetime import datetime
 from pathlib import Path
 
@@ -40,8 +41,9 @@ RUBRIC = ROOT / "evals" / "rubric.md"
 RUNS = ROOT / "evals" / "runs"
 
 PREAMBLE = (
-    "先用 Skill 工具載入 seo-coach 技能，然後完全照該技能的行為規則回覆下面這位"
-    "使用者的訊息。直接輸出你要給使用者看的回覆，不要輸出任何分析或後設說明。"
+    f"先用 Read 完整讀取這次受測的來源副本：{(ROOT / 'SKILL.md').as_posix()}，"
+    "並依其中路由讀取需要的 references。不要載入全域已安裝的 seo-coach，"
+    "也不要使用其他專案或記憶。完全照來源副本回覆；只輸出給使用者看的內容。"
 )
 
 RESPONSE_TOOLS = "Skill,Read,Glob,Grep,Write,Edit,WebFetch"
@@ -56,9 +58,22 @@ def load_rubric() -> dict[str, str]:
     }
 
 
-def claude(prompt: str, cwd: Path, tools: str, timeout: int) -> str:
+def claude(
+    prompt: str,
+    cwd: Path,
+    tools: str,
+    timeout: int,
+    *,
+    session_id: str | None = None,
+    resume: bool = False,
+) -> str:
+    command = ["claude", "-p", prompt, "--allowedTools", tools]
+    if resume:
+        command += ["--resume", session_id]
+    elif session_id:
+        command += ["--session-id", session_id]
     proc = subprocess.run(
-        ["claude", "-p", prompt, "--allowedTools", tools],
+        command,
         cwd=cwd,
         capture_output=True,
         text=True,
@@ -68,22 +83,64 @@ def claude(prompt: str, cwd: Path, tools: str, timeout: int) -> str:
         timeout=timeout,
     )
     if proc.returncode != 0:
-        raise RuntimeError(f"claude exited {proc.returncode}: {proc.stderr[-500:]}")
+        detail = (proc.stderr or proc.stdout or "(no stdout/stderr)").strip()
+        raise RuntimeError(f"claude exited {proc.returncode}: {detail[-1000:]}")
     return proc.stdout.strip()
 
 
 def run_case(case: dict, timeout: int) -> dict:
-    parts = [PREAMBLE]
-    if case.get("context"):
-        parts.append(f"（情境設定，請當成已經發生的事實）：{case['context']}")
-    parts.append(f"使用者訊息：\n\n{case['prompt']}")
-    prompt = "\n\n".join(parts)
-
     workdir = Path(tempfile.mkdtemp(prefix=f"eval-{case['id']}-"))
     try:
-        response = claude(prompt, workdir, RESPONSE_TOOLS, timeout)
-        files = sorted(p.name for p in workdir.iterdir() if p.is_file())
-        return {"id": case["id"], "ok": True, "response": response, "files_created": files}
+        for rel, content in case.get("initial_files", {}).items():
+            target = workdir / rel
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(content, encoding="utf-8")
+
+        turns = case.get("turns") or [case["prompt"]]
+        session_id = str(uuid.uuid4())
+        responses: list[str] = []
+        for index, user_turn in enumerate(turns):
+            if index == 0:
+                parts = [PREAMBLE]
+                if case.get("context"):
+                    parts.append(f"（情境設定，請當成已經發生的事實）：{case['context']}")
+                parts.append(f"使用者訊息：\n\n{user_turn}")
+                prompt = "\n\n".join(parts)
+                response = claude(
+                    prompt,
+                    workdir,
+                    RESPONSE_TOOLS,
+                    timeout,
+                    session_id=session_id,
+                )
+            else:
+                response = claude(
+                    user_turn,
+                    workdir,
+                    RESPONSE_TOOLS,
+                    timeout,
+                    session_id=session_id,
+                    resume=True,
+                )
+            responses.append(response)
+
+        files_after = {
+            p.relative_to(workdir).as_posix(): p.read_text(encoding="utf-8", errors="replace")
+            for p in workdir.rglob("*")
+            if p.is_file()
+        }
+        combined = "\n\n".join(
+            f"## Turn {index + 1}\n\n{response}" for index, response in enumerate(responses)
+        )
+        initial_names = set(case.get("initial_files", {}))
+        return {
+            "id": case["id"],
+            "ok": True,
+            "response": combined,
+            "turn_responses": responses,
+            "files_created": sorted(set(files_after) - initial_names),
+            "files_after": files_after,
+        }
     except Exception as exc:  # noqa: BLE001 - one bad case must not kill the run
         return {"id": case["id"], "ok": False, "response": "", "error": str(exc), "files_created": []}
     finally:
@@ -96,12 +153,18 @@ def judge_case(case: dict, result: dict, rubric: dict[str, str], timeout: int) -
     lines = [
         f"- `{a['name']}`: {rubric.get(a['name'], a['description'])}" for a in case["assertions"]
     ]
+    file_evidence = ""
+    if result.get("files_after"):
+        file_evidence = "\n\n### 執行後檔案\n" + "\n\n".join(
+            f"#### {name}\n```\n{content}\n```"
+            for name, content in result["files_after"].items()
+        )
     prompt = (
         "你是 eval 判分者。依照下列判準逐條判斷回應是否 PASS。"
         "判準沒有明說的事情不要自行加碼；引不出證明那一行就算 FAIL。\n\n"
         f"### 這個 case 期望的行為\n{case['expected_output']}\n\n"
         f"### 判準\n" + "\n".join(lines) + "\n\n"
-        f"### 待判回應\n{result['response']}\n\n"
+        f"### 待判回應\n{result['response']}{file_evidence}\n\n"
         "只輸出 JSON，不要有其他文字："
         '{"verdicts":[{"name":"...","pass":true,"evidence":"引用回應中的一句話"}]}'
     )
@@ -133,6 +196,11 @@ def write_outputs(outdir: Path, cases: list[dict], results: dict, rubric: dict[s
             continue
         if res["files_created"]:
             sheet.append(f"_files written: {', '.join(res['files_created'])}_\n")
+        if res.get("files_after"):
+            sheet += ["<details><summary>files after run</summary>", ""]
+            for name, content in res["files_after"].items():
+                sheet += [f"### {name}", "", "```", content, "```", ""]
+            sheet += ["</details>", ""]
         sheet += ["| ? | assertion | 判準 | verdict |", "|---|---|---|---|"]
         for a in case["assertions"]:
             verdict = ""

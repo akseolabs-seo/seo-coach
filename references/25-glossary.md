@@ -84,7 +84,7 @@
 | 主題地圖 | Topical Map | 系統性規劃網站要涵蓋哪些主題的架構圖 |
 | 支柱頁面 | Pillar Page | 廣泛涵蓋某個大主題的核心頁面 |
 | 群組頁面 | Cluster Page | 深入探討支柱主題下某個子主題的頁面 |
-| 主題權威 | Topical Authority | Google 認定你的網站是某個領域的專家程度 |
+| 主題權威 | Topical Authority | SEO 業界用來描述網站在某主題累積深度、相關內容與聲譽的概念；不是 Google 公開分數 |
 | 長青內容 | Evergreen Content | 不受時間影響、長期有效的內容（vs 時效性內容）|
 | 內容剪枝 | Content Pruning | 刪除或整合低品質、無流量的頁面 |
 | 關鍵字蠶食 | Keyword Cannibalization | 自己的多個頁面互相競爭同一個關鍵字 |

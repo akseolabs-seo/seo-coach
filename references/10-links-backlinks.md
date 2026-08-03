@@ -39,7 +39,7 @@ Moz 的 DA 和 Ahrefs 的 DR 是衡量網站整體連結權威的指標（0-100�
 
 ## 用免費工具分析你的反向連結
 
-### Ahrefs Webmaster Tools（免費）
+### Ahrefs Free（免費，原名 Ahrefs Webmaster Tools）
 - 查看你的網站目前有哪些反向連結
 - 看連結的 DR、相關性
 - 找出失效的反向連結（404 頁面仍有人連結）

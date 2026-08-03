@@ -6,7 +6,7 @@ Component rationale:
 - reason: Keep SEO Coach moving through the full coaching path while giving beginners practical, free tools at the moment they are useful.
 - strip_when: Remove or merge this file if session-flow and module references fully enforce continuation and free-tool routing without separate guidance.
 
-來源狀態：Ahrefs 免費工具清單依 2026-05-12 官方頁面核對。工具名稱、限制與可用功能可能變動，實際使用前以官方頁面為準。
+來源狀態：Ahrefs 免費工具清單依 https://ahrefs.com/free-seo-tools 於 **2026-08-01** 核對。工具名稱、限制與可用功能可能變動，實際使用前以官方頁面為準。（前次核對 2026-05-12；該次之後 Ahrefs 新增了 AI 可見度三工具、Keyword Rank Checker 與 Website Traffic Checker，「Ahrefs Webmaster Tools」也已改稱 **Ahrefs Free**。）
 
 ---
 
@@ -98,34 +98,45 @@ Component rationale:
 | M6 On-Page | Chrome 原始碼、Screaming Frog 免費版 | 檢查 title / H1 / meta | 頁面優化 |
 | M7 Content Quality | 手動 SERP、People Also Ask | 看搜尋意圖與競品回答方式 | 寫或改內容前 |
 | M10 Keyword Basics | GSC、Google Trends、Autocomplete、Ahrefs Free Keyword Generator、Ahrefs KD Checker、Ahrefs SERP Checker | 找長尾詞、估難度、看 SERP | 關鍵字規劃 |
-| M11 Internal Links | Screaming Frog 免費版、Ahrefs Free / Webmaster Tools | 找孤兒頁、內鏈機會 | 內鏈模組 |
-| M12 Backlinks | GSC Links、Ahrefs Free Backlink Checker、Ahrefs Free / Webmaster Tools | 看外部連結概況 | 外鏈基礎 |
+| M11 Internal Links | Screaming Frog 免費版、Ahrefs Free | 找孤兒頁、內鏈機會 | 內鏈模組 |
+| M12 Backlinks | GSC Links、Ahrefs Free Backlink Checker、Ahrefs Free | 看外部連結概況 | 外鏈基礎 |
+| M13 AI Search | AI Visibility Checker、AI Overviews Tracker、AI Mode Tracker、手動無痕提問 | 看品牌在 AI 答案裡被不被提到 | 用戶問「AI 找不找得到我」時 |
 | M17 Negative SEO | GSC Links、Ahrefs Free Backlink Checker | 看異常外鏈 | 有異常跡象時 |
-| M18 Measurement | GSC、GA4、Ahrefs Free Web Analytics | 看 SEO 成效 | 每月維護 |
+| M18 Measurement | GSC、GA4、Ahrefs Keyword Rank Checker、Ahrefs Free Web Analytics | 看 SEO 成效與排名變化 | G6 回看、每月維護 |
 
 ---
 
 ## Ahrefs 免費工具用法
 
-官方免費工具入口：
-- Ahrefs Free SEO Tools
-- Free Keyword Generator
-- Keyword Difficulty Checker
-- SERP Checker
-- Backlink Checker
-- Broken Link Checker
-- Website Authority Checker
-- Ahrefs SEO Toolbar
-- Ahrefs Free / Webmaster Tools for verified sites
+官方免費工具入口：https://ahrefs.com/free-seo-tools
+
+| 工具 | 看什麼 | 對應教學時機 |
+|---|---|---|
+| Free Keyword Generator | 擴展長尾候選 | G3 候選查詢（學員已能自己讀 SERP 之後） |
+| Keyword Difficulty Checker | 粗估難度方向 | G3 排序時當驗證層 |
+| SERP Checker | 任一國家前 10 名概況 | 學員手動判讀完再對答案 |
+| **Keyword Rank Checker** | 自己的站在指定國家的排名位置 | **G6 回看**，與 GSC 平均排名對照 |
+| **Website Traffic Checker** | 任一網站／頁面的流量估算 | 公開競品觀察，判斷對手規模 |
+| Backlink Checker | 任一網站前 20 個外鏈 | M12 外鏈基礎 |
+| Broken Link Checker | 壞連結 | M11 / M17 |
+| Website Authority Checker | 網域 DR | 只當第三方相對參考 |
+| **AI Visibility Checker** | 品牌在 ChatGPT／Gemini／Perplexity 等平台被提及的頻率 | `13-ai-search.md` |
+| **AI Overviews Tracker** | AI Overviews 的引用與波動 | `13-ai-search.md` |
+| **AI Mode Tracker** | Google AI Mode 的提及與引用 | `13-ai-search.md` |
+| XML Sitemap Generator | 從實際爬取產生 sitemap | M2 索引 |
+| Ahrefs SEO Toolbar | 頁面 on-page 報告、轉址追蹤、切換國家看 SERP | 進階學員 |
+| **Ahrefs Free**（原 Ahrefs Webmaster Tools） | 驗證自有網站後看關鍵字、外鏈與技術概況 | 學員自己的站 |
+
+粗體是 2026-08-01 這次核對才補進來的。所有數字（KD、DR、流量估算、AI 提及次數）都是 Ahrefs 自己的模型輸出，照 `52-public-source-policy.md` 一律標**第三方估值**，不得說成 Google 或各 AI 平台的內部資料。
 
 ### M10 關鍵字規劃
 
-新手流程：
-1. 用 Google Autocomplete 找 5-10 個用戶會講的詞
-2. 用 Ahrefs Free Keyword Generator 擴展長尾詞
-3. 用 KD Checker 看難度方向
-4. 用 SERP Checker 看前幾名是什麼類型頁面
-5. 最後回到 GSC 看自己的網站已經有沒有相關曝光
+新手流程一次只做一步：
+1. 先從一個顧客問題或 GSC 查詢取得 1 個候選詞；沒有 GSC 時才用 Google Autocomplete 找措辭線索
+2. 開新的無痕／私密視窗搜尋同一個詞，記錄地區、語言、裝置與日期
+3. 教練示範第 1 個自然結果；下一輪共做第 2 個，再由學員判讀第 3 個
+4. 只有三筆訊號混合時才加看 2 筆；KD 或免費 SERP 工具只作補充，不是判決
+5. 回到 GSC 與現有頁確認：這是值得測的候選、新建頁、改善既有頁，還是暫不處理
 
 教練提醒：
 > KD 只是方向，不是判決。新手先找「意圖明確、競爭較低、能做出好頁面」的詞。
@@ -143,10 +154,10 @@ Component rationale:
 
 可用：
 - Broken Link Checker：找壞連結
-- Ahrefs Free / Webmaster Tools：已驗證網站可用 Site Audit / Site Explorer 類功能，適合看自己網站的技術和連結概況
+- Ahrefs Free（原名 Ahrefs Webmaster Tools）：已驗證網站可用 Site Audit / Site Explorer 類功能，適合看自己網站的技術和連結概況
 
 限制提醒：
-> 免費版足夠陪跑判斷方向，但不等於完整 SEO audit。需要完整競品、內容缺口、外鏈策略時，已進入顧問級或付費工具範圍。
+> 不用付費工具也能手動完成小範圍 SERP、候選內容缺口與新建／改善判斷；完整市場盤點、大規模競品資料或外鏈策略才可能需要專業工具或顧問。教學流程見 `55-search-opportunity-lab.md`。
 
 ---
 

@@ -107,7 +107,7 @@ Shopify 會自動提供 WebP 格式的圖片，但原始上傳圖片仍需壓縮
 ```html
 <head>
   <title>頁面標題 | 品牌名稱</title>
-  <meta name="description" content="頁面描述，150-160字元">
+  <meta name="description" content="清楚描述本頁內容與價值，不套用固定字數門檻">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://yourdomain.com/page/">
 </head>

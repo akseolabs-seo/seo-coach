@@ -29,6 +29,7 @@ SHOULD_FIRE = [
     "why is my site not ranking on google",
     "關鍵字要怎麼看？我是新手完全不懂",
     "SEO 健檢一下我的網站",
+    "陪我完成四篇 SEO 文章，每篇都要一起改稿",
 ]
 
 SHOULD_NOT_FIRE = [
@@ -90,6 +91,16 @@ def main() -> int:
         if not fired(out, "SessionStart"):
             failures.append("MISS: SessionStart in a folder with seo-progress.md")
 
+        writing = os.path.join(plain, "writing")
+        os.mkdir(writing)
+        with open(
+            os.path.join(writing, "seo-writing-portfolio.md"), "w", encoding="utf-8"
+        ) as fh:
+            fh.write("# SEO 寫作作品集\n")
+        out = run({"hook_event_name": "SessionStart", "cwd": writing})
+        if not fired(out, "SessionStart"):
+            failures.append("MISS: SessionStart in a folder with seo-writing-portfolio.md")
+
     # Malformed / hostile input must never break the prompt.
     for bad in ["", "not json", "{}", '{"hook_event_name":"UserPromptSubmit"}']:
         proc = subprocess.run(
@@ -104,7 +115,7 @@ def main() -> int:
         print(f"\n{len(failures)} failure(s)")
         return 1
 
-    total = len(SHOULD_FIRE) + len(SHOULD_NOT_FIRE) + 2 + 4
+    total = len(SHOULD_FIRE) + len(SHOULD_NOT_FIRE) + 3 + 4
     print(f"PASS: {total} router cases")
     return 0
 

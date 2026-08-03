@@ -1,0 +1,14 @@
+{
+  "policy": "Only publicly reachable @darkseoking Threads posts and explicitly public linked tools/repos may be used. Private messages, unpublished prompts, client cases, local projects, and agent memory are forbidden.",
+  "approved_by_user": true,
+  "checked_at": "2026-08-01",
+  "allowed_url_prefixes": [
+    "https://www.threads.com/@darkseoking/post/",
+    "https://github.com/akseolabs-seo/",
+    "https://aistudio.google.com/apps/drive/"
+  ],
+  "file_sha256": {
+    "references/34-darkseoking-threads.md": "ec5c0cbd70bccc06d245a0d45a5181110e89024b0878e8a0169dcec42e35ec69",
+    "references/49-ak-30day-seo-tips.md": "97b573bb3907851b9c158bd03fda73eb413097d2c6fdf313375dc060f8f5698b"
+  }
+}

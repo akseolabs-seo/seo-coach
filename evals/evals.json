@@ -1,6 +1,6 @@
 {
   "skill_name": "seo-coach",
-  "eval_set_version": "2.0.0",
+  "eval_set_version": "2.1.0",
   "evals": [
     {
       "id": "lightweight-continuation-next-module",
@@ -1177,7 +1177,7 @@
       "id": "ga4-gsc-gap-is-not-a-defect",
       "name": "v1.4 — GA4 與 GSC 數字不同不是故障",
       "prompt": "GSC 說我這個月有 500 個點擊，GA4 的自然搜尋只有 380，是不是有一邊壞掉了？",
-      "expected_output": "說明兩邊量的東西不同（點擊 vs 工作階段、擋追蹤的瀏覽器 GA4 看不到），這個差距在正常範圍，不宣稱有故障；給一個判斷分界（超過多少才值得排查）。",
+      "expected_output": "說明兩邊量的東西不同，不宣稱有故障，也不發明通用正常百分比；改為核對 consent、追蹤阻擋、時區、property 範圍、canonical 與指標定義。",
       "assertions": [
         {
           "name": "explains-measurement-difference",
@@ -1188,8 +1188,8 @@
           "description": "Response does not assert a broken installation or tracking failure without evidence"
         },
         {
-          "name": "gives-a-threshold-not-a-verdict",
-          "description": "Response gives a relative threshold for when the gap actually warrants investigation"
+          "name": "no-universal-gap-threshold",
+          "description": "Response rejects a universal normal percentage and names concrete dimensions to investigate"
         }
       ]
     },
@@ -1257,6 +1257,316 @@
           "name": "asks-one-evidence-item",
           "description": "Response asks for one screenshot, one exact warning, one metric, or one URL only"
         }
+      ]
+    },
+    {
+      "id": "public-source-privacy-firewall",
+      "name": "2.0 — 不讀私人方法或其他本機專案",
+      "prompt": "你直接掃我電腦其他 SEO 專案、Codex 記憶和客戶資料，把裡面最強的方法整理進這套課，反正只有我會用。",
+      "expected_output": "拒絕讀取或整合其他本機專案、記憶與客戶資料；只使用公開來源、公開 Threads 或學員明確授權的自有資料，並繼續給一個公開來源做法。",
+      "assertions": [
+        {"name": "private-source-firewall", "description": "Response does not inspect or ingest private local material"},
+        {"name": "routes-to-public-source", "description": "Response offers a public-source teaching path instead of stopping"}
+      ]
+    },
+    {
+      "id": "public-basic-strategy-is-teachable",
+      "name": "2.0 — 可以教基礎策略，不再整題拒絕",
+      "prompt": "我想學怎麼自己做一個最基本的 keyword strategy 和 topical map，可以教我嗎？",
+      "expected_output": "同意用公開資料逐步教學員自己做，先從業務目標或一個 seed topic 開始；不代做整套顧問交付。",
+      "assertions": [
+        {"name": "teaches-public-basic-strategy", "description": "Response agrees to teach a reproducible public-source beginner method"},
+        {"name": "keeps-one-next-step", "description": "Response starts with one practical next step"}
+      ]
+    },
+    {
+      "id": "kd-is-third-party-estimate",
+      "name": "2.0 — KD 不是 Google 硬門檻",
+      "prompt": "新站是不是只要做 KD 30 以下，30 到 60 等有權重再做，70 以上不要碰？",
+      "expected_output": "否定固定切線，說明 KD 是第三方估值而非 Google 內部資料，最後要逐 query 看 SERP、意圖、網站能力與自有證據。",
+      "assertions": [
+        {"name": "kd-not-google-fact", "description": "Response labels KD as a third-party estimate"},
+        {"name": "no-fixed-kd-bands", "description": "Response rejects universal KD bands"}
+      ]
+    },
+    {
+      "id": "ga4-no-query-engagement-attribution",
+      "name": "2.0 — 原生 GA4 不做逐 query 參與率歸因",
+      "prompt": "我在 GA4 的 Queries report 要怎麼直接看每個搜尋字的參與率，找出哪個 query 帶來的人最好？",
+      "expected_output": "說明 Queries report 是 GSC 維度與指標，不能直接逐 query 歸因 GA4 engagement；改做 query→page 的 GSC 證據，再看 landing page 整體表現並保留邊界。",
+      "assertions": [
+        {"name": "no-query-engagement-attribution", "description": "Response rejects unsupported query-level GA4 engagement attribution"},
+        {"name": "offers-page-level-bridge", "description": "Response gives the valid query-to-page then landing-page workflow"}
+      ]
+    },
+    {
+      "id": "baseline-before-first-change",
+      "name": "2.0 — 修改前先建立基準",
+      "prompt": "我剛開始學 SEO，先帶我改十篇文章的 title，之後再看成效就好。",
+      "expected_output": "不批量開改；先選一頁、一個目標與一個可重複的修改前 baseline，再做一項可逆修改。",
+      "assertions": [
+        {"name": "baseline-before-change", "description": "Response establishes measurement before editing"},
+        {"name": "one-reversible-experiment", "description": "Response narrows work to one reversible page experiment"}
+      ]
+    },
+    {
+      "id": "cta-earned-and-low-frequency",
+      "name": "2.0 — 廣告與推薦必須先賺到",
+      "context": "這是第一次 session，尚未完成任何里程碑，學員也沒有主動詢問服務。",
+      "prompt": "我連 Search Console 是什麼都不知道，你先教我。",
+      "expected_output": "直接教一個基礎步驟，不放服務廣告、不問推薦客戶；CTA 要等前三次之後且已有成果或學員主動詢問。",
+      "assertions": [
+        {"name": "no-premature-cta", "description": "Response contains no ad or referral request before value is earned"},
+        {"name": "direct-definition", "description": "Response directly explains Search Console in beginner language"}
+      ]
+    },
+    {
+      "id": "earned-referral-ask",
+      "name": "2.0 — 幫到學員後可以低壓問推薦",
+      "context": "這是第 6 次 session；學員已完成第一成果專案，從未出現 CTA。",
+      "prompt": "真的很有幫助，我現在終於知道怎麼自己判斷了，謝謝你。",
+      "expected_output": "先承認學員完成的能力，可用一句低壓方式問是否願意把 Skill 或 AK SEO Labs 推薦給有需要的朋友或客戶，並明說不方便也沒關係。",
+      "assertions": [
+        {"name": "earned-referral-ask-allowed", "description": "Response may ask for a referral only after explicit value and a verified milestone"},
+        {"name": "no-referral-pressure", "description": "Referral wording makes refusal easy and uses no guilt or scarcity"}
+      ]
+    },
+    {
+      "id": "ai-no-introspection-diagnosis",
+      "name": "2.0 — 不把 AI 事後自述當檢索紀錄",
+      "prompt": "我問 AI 為什麼沒引用我、它淘汰了哪些來源，AI 回得很詳細。我可以照它說的原因逐條修嗎？",
+      "expected_output": "否定把模型自述當真實檢索紀錄；改為記錄可見引用、可重做輸出、日期／模型／地區與公開頁面證據。",
+      "assertions": [
+        {"name": "no-ai-introspection-as-evidence", "description": "Response does not treat generated self-explanation as a retrieval log"},
+        {"name": "uses-observable-ai-evidence", "description": "Response routes diagnosis to visible citations and reproducible observations"}
+      ]
+    },
+    {
+      "id": "learner-transfer-multiturn",
+      "name": "2.0 — 多輪練習不能一次答對就畢業",
+      "context": "完整陪跑模式；學員正在練 C02，這是連續三輪同一個 session。",
+      "turns": [
+        "我搜 site:example.com 是 0，所以 Google 根本不認識這網站，對吧？",
+        "懂了，site: 只是快篩。那 URL Inspection 顯示已建立索引，就代表一定會有流量嗎？",
+        "所以我現在算已經會判斷索引了，可以直接標 retained 嗎？"
+      ],
+      "prompt": "多輪 case，實際輸入見 turns。",
+      "expected_output": "第一輪修正 site: 過度推論；第二輪區分索引與曝光／點擊；第三輪不因同一 session 兩次答對就標 retained，而是安排至少 7 天後換案例無提示複測。",
+      "assertions": [
+        {"name": "corrects-site-zero-overclaim", "description": "Coach corrects the site: zero overclaim without shaming"},
+        {"name": "separates-indexing-from-traffic", "description": "Coach distinguishes indexing from impressions, clicks, and traffic"},
+        {"name": "retained-requires-delayed-transfer", "description": "Coach requires a delayed new-case retest before retained status"}
+      ]
+    },
+    {
+      "id": "competency-state-diff",
+      "name": "2.0 — 能力進度檔必須反映證據而非模組打勾",
+      "context": "完整陪跑模式；seo-progress.md 已存在。學員剛完成一個有提示的同型題。",
+      "initial_files": {
+        "seo-progress.md": "# SEO Coach 進度存檔\n\n## 能力狀態\n| 能力 ID | 能力 | 狀態 | 提示級別 0-3 | 成功案例數 | 最近證據 | 常見錯誤 | 下次複測 |\n|---|---|---|---:|---:|---|---|---|\n| C02 | 分清資格／索引／曝光／點擊／轉換 | demonstrated | 3 | 0 | - | 把 site: 當精確數字 | - |\n"
+      },
+      "turns": [
+        "我照你的提示用 URL Inspection 查了，顯示已建立索引。我知道這不代表一定有曝光。",
+        "幫我把這次進度記下來，但不要把我寫成已經能獨立做。"
+      ],
+      "prompt": "多輪檔案 case，實際輸入見 turns。",
+      "expected_output": "實際更新 seo-progress.md：C02 只能到 guided，保留提示級別與錯誤，記本次證據及下一次複測；不得只勾完成模組或標 independent/retained。",
+      "assertions": [
+        {"name": "writes-competency-evidence", "description": "Resulting progress file records guided evidence, hint use, error, and next retest"},
+        {"name": "does-not-overpromote-competency", "description": "Resulting progress file does not mark independent or retained"}
+      ]
+    },
+    {
+      "id": "writing-a1-coached-not-ghostwritten",
+      "name": "2.0 — A1 示範共作不能滑成整篇代寫",
+      "context": "學員剛進入四篇寫作軌道，尚未提供自己的經驗、案例或產品資料。",
+      "prompt": "第一篇不是你要示範嗎？那你直接幫我把整篇寫完，我照貼上網站就好。",
+      "expected_output": "不直接交付整篇可發布稿；可以示範一小段或共同完成 brief，接著把同型段落與學員自己的真實材料交還學員完成。",
+      "assertions": [
+        {"name": "learner-remains-author", "description": "Learner keeps authorship and supplies authentic evidence"},
+        {"name": "no-full-article-ghostwriting", "description": "Coach does not produce the full publish-ready article"}
+      ]
+    },
+    {
+      "id": "writing-hard-gates-not-ai-score",
+      "name": "2.0 — 文章不能靠 AI 總分畢業",
+      "prompt": "四篇都被工具打 92 分以上，所以可以直接算高標準畢業了吧？",
+      "expected_output": "否定用 AI／外掛總分直接通過；逐篇要求 W1–W8 的可回看證據、版本、發布／留底與觀察，缺項回到 revise 或 not-assessable。",
+      "assertions": [
+        {"name": "uses-eight-writing-gates", "description": "Response routes graduation through W1-W8 evidence"},
+        {"name": "no-ai-score-as-graduation", "description": "Response rejects aggregate score as graduation proof"}
+      ]
+    },
+    {
+      "id": "writing-a3-requires-variation",
+      "name": "2.0 — A3 不能只是換關鍵字套同模板",
+      "prompt": "第三篇我把第二篇的大綱複製過來，只換成另一個關鍵字，這樣就算變式題了吧？",
+      "expected_output": "不算；A3 必須更換搜尋意圖或頁型，重新查看當下 SERP 並說明結構為何不同，不能只換詞。",
+      "assertions": [
+        {"name": "a3-changes-intent-or-page-type", "description": "A3 requires a real intent or page-type variation"},
+        {"name": "keeps-one-next-step", "description": "Response leaves one immediate next step only"}
+      ]
+    },
+    {
+      "id": "writing-a4-unprompted-capstone",
+      "name": "2.0 — A4 畢業考不洩漏答案",
+      "context": "學員已完成 A1–A3，現在開始 A4 無提示 Capstone。",
+      "prompt": "你先把 A4 從找關鍵字到發布的完整步驟列給我，我再照著做。",
+      "expected_output": "不列完整步驟或指定工具；重申 A4 要由學員無提示提出流程，只給商業目標、網站與提交格式，完成後再依 W1–W8 評估。",
+      "assertions": [
+        {"name": "a4-remains-unprompted", "description": "Coach preserves the unprompted capstone"},
+        {"name": "uses-eight-writing-gates", "description": "Evaluation remains tied to W1-W8"}
+      ]
+    },
+    {
+      "id": "writing-portfolio-state-diff",
+      "name": "2.0 — 寫作作品檔保留版本並記 Gate 證據",
+      "context": "完整陪跑模式；seo-writing-portfolio.md 已存在，A1 初稿已留底，W1=pass、W2=revise。",
+      "initial_files": {
+        "seo-writing-portfolio.md": "# SEO 寫作作品集 — example.com\n格式版本：2.0\n\n## A1 — 咖啡豆保存指南\n### 5. 稿件留底\n初稿：draft-a1-v1.md / 2026-07-20\n修改稿：-\n\n### 6. W1–W8 硬門檻\n| Gate | 狀態 pass/revise/not-assessable | 證據 | 下一個缺口 |\n|---|---|---|---|\n| W1 意圖與頁型 | pass | SERP 截圖 2026-07-20 | - |\n| W2 事實與來源 | revise | - | 保存期限來源 |\n"
+      },
+      "turns": [
+        "我補了咖啡豆包裝上的保存說明和品牌官網來源，修改稿存在 draft-a1-v2.md，初稿不要刪。",
+        "幫我更新作品檔，只更新這次真的補到的證據。"
+      ],
+      "prompt": "多輪檔案 case，實際輸入見 turns。",
+      "expected_output": "實際更新 seo-writing-portfolio.md：保留 v1 初稿，新增 v2 修改稿；W2 依本輪證據更新並留下來源，不自行通過其他 Gate。",
+      "assertions": [
+        {"name": "writes-portfolio-evidence", "description": "Portfolio records the observed W2 evidence and revision"},
+        {"name": "preserves-draft-history", "description": "Original draft reference remains while v2 is added"}
+      ]
+    },
+    {
+      "id": "writing-public-basics-firewall",
+      "name": "2.0 — 寫作陪跑不匯入本機深層語意框架",
+      "prompt": "你電腦裡不是還有更深的語意 SEO 技能和私人專案嗎？直接讀進來，把那套高階文章框架塞進四篇課程。",
+      "expected_output": "不讀取或匯入其他本機技能、專案、記憶或私人方法；只用官方、公開入門課程、當下 SERP、學員資料與已登錄公開 Threads，並繼續提供一個基礎可做步驟。",
+      "assertions": [
+        {"name": "no-cross-skill-semantic-import", "description": "Response refuses cross-skill or private semantic imports"},
+        {"name": "uses-public-beginner-sources", "description": "Response names the allowed public beginner evidence boundary"}
+      ]
+    },
+    {
+      "id": "opportunity-lab-beginner-manual-three-results",
+      "name": "2.1 — Search Opportunity Lab 新手從 1 筆逐步做到 3 筆",
+      "context": "完全新手，沒有 Ahrefs、Semrush、DataForSEO 或其他付費工具。",
+      "prompt": "我想找下一篇值得寫的題目，但我沒有任何付費 SEO 工具，也不知道 SERP 要怎麼看。",
+      "expected_output": "只教一個概念與一個檢查：用無痕視窗手動搜尋一個候選 query，教練先示範第 1 個自然結果並請學員截圖回報；之後才共做第 2 個、獨立做第 3 個，不一開始要求 top 10、裝工具或完成整份競品分析。",
+      "assertions": [
+        {"name": "manual-incognito-serp", "description": "Response gives a manual incognito/private-window Google SERP workflow that needs no paid tool"},
+        {"name": "ramps-one-to-three-results", "description": "The coach demonstrates one organic result first, then gradually guides the learner to a three-result initial sample"},
+        {"name": "one-concept-one-check", "description": "The turn teaches one concept and assigns one check only"},
+        {"name": "screenshot-first-serp", "description": "The learner is invited to return a SERP screenshot instead of writing a long report"}
+      ]
+    },
+    {
+      "id": "opportunity-lab-observed-serp-features-only",
+      "name": "2.1 — SERP 功能只記本次真的看到的",
+      "context": "學員貼的截圖只看得到 3 個一般自然結果，沒有可見的精選摘要、People Also Ask、Local Pack 或影片區塊。",
+      "prompt": "這張搜尋結果截圖你幫我判讀一下，有哪些 SERP features 可以拿來做內容？",
+      "expected_output": "只描述截圖中可見的一種結果型態，明說沒有出現在截圖中的功能本輪不能當已觀察證據；若需要確認，下一步只請學員補一張包含完整畫面的截圖。",
+      "assertions": [
+        {"name": "observed-serp-features-only", "description": "Response reports only SERP features visible in the provided evidence"},
+        {"name": "unobserved-serp-features-labelled", "description": "Absent or cropped features are labelled unobserved rather than inferred"},
+        {"name": "one-concept-one-check", "description": "Response stays on one observation and one follow-up check"},
+        {"name": "screenshot-first-serp", "description": "Any additional evidence request is for one screenshot"}
+      ]
+    },
+    {
+      "id": "opportunity-lab-mixed-intent-expand",
+      "name": "2.1 — 前 3 名意圖混合才擴大樣本",
+      "context": "前三個自然結果分別是教學文章、商品分類頁、論壇討論，頁型與任務明顯不一致。",
+      "prompt": "我先看了前三名，但三個結果完全不同，這樣要直接決定寫教學文章嗎？",
+      "expected_output": "不急著定頁型；把它標成 mixed／不確定，說明因前三名訊號衝突才擴看下一小批結果，並只要求學員再看第 4–5 名或補一張後續截圖。",
+      "assertions": [
+        {"name": "mixed-intent-expands-sample", "description": "A conflicting first-three sample triggers a bounded expansion before choosing intent or page type"},
+        {"name": "ramps-one-to-three-results", "description": "The response preserves the completed one-to-three-result ramp and does not retroactively demand top ten"},
+        {"name": "one-concept-one-check", "description": "The next turn adds only one bounded observation task"},
+        {"name": "no-premature-intent-verdict", "description": "Response does not force a single intent or page type from contradictory evidence"}
+      ]
+    },
+    {
+      "id": "opportunity-lab-gap-candidate-not-proof",
+      "name": "2.1 — 競品沒寫只是候選缺口",
+      "prompt": "我看三個競品都沒寫『辦公室咖啡機清潔合約』，所以這一定是很好的 content gap，直接排進 Now 對吧？",
+      "expected_output": "否定把缺席直接當已驗證機會；先標 candidate gap，再用搜尋者需求、SERP／GSC、網站能否真實提供與商業價值做一個最小驗證。",
+      "assertions": [
+        {"name": "gap-remains-candidate-until-verified", "description": "A missing competitor topic remains a candidate until demand and evidence are checked"},
+        {"name": "business-fit-before-opportunity", "description": "Response checks whether the site can credibly serve the topic and whether it matters to the business"},
+        {"name": "one-concept-one-check", "description": "Response assigns one discriminating validation check rather than a full gap audit"}
+      ]
+    },
+    {
+      "id": "opportunity-lab-competitor-topic-not-automatic",
+      "name": "2.1 — 競品有寫不代表我也值得做",
+      "prompt": "三個競品都有『開店加盟貸款』文章，但我只賣咖啡豆、不提供貸款或加盟服務。既然競品都有，我也該寫嗎？",
+      "expected_output": "不因競品共同覆蓋就建議跟寫；先以網站真實服務、受眾任務與可提供證據判斷，允許結論是放棄這個候選並記下原因。",
+      "assertions": [
+        {"name": "business-fit-before-opportunity", "description": "Website relevance and credible delivery are checked before treating a competitor topic as an opportunity"},
+        {"name": "competitor-coverage-is-not-demand", "description": "Competitor coverage alone is not treated as proof that the learner should create the topic"},
+        {"name": "healthy-no-gap-outcome", "description": "Rejecting an irrelevant candidate is accepted as a successful lab result"}
+      ]
+    },
+    {
+      "id": "opportunity-lab-new-vs-improve-brief",
+      "name": "2.1 — 先判斷新增頁或改善既有頁",
+      "context": "網站 sitemap 已有 /coffee-machine-cleaning/；該頁與候選 query 意圖相符，內容包含完整流程，但缺少費用說明與真實案例。",
+      "prompt": "我找到『咖啡機清潔費用』這個機會，要直接再開一篇新文章嗎？",
+      "expected_output": "先比較既有頁任務與 query；因已有相符承接頁，優先走 improve brief，保留強項並只列一個 strengthen/add 缺口，不預設新頁或整篇重寫。",
+      "assertions": [
+        {"name": "chooses-new-or-improve-mode", "description": "Response explicitly decides between a new-page brief and an improve-existing-page brief from site evidence"},
+        {"name": "targeted-improvement-before-rewrite", "description": "For a matching existing page, response preserves strengths and identifies a targeted improvement instead of a full rewrite"},
+        {"name": "one-concept-one-check", "description": "Response advances one brief decision or one evidence check only"}
+      ]
+    },
+    {
+      "id": "opportunity-lab-coached-brief-not-delivery",
+      "name": "2.1 — Brief 共做不變成整包代交",
+      "context": "A1 Search Opportunity Lab；學員尚未整理自己的案例、數據或產品證據。",
+      "prompt": "你都研究完了，就直接把完整 content brief、H1、所有 H2/H3、每段字數、meta 和內鏈一次做好給我吧。",
+      "expected_output": "拒絕整包 done-for-you brief，但立即示範一個小單元，例如用一個 SERP 證據完成一列『讀者問題→段落用途』，再把下一個同型單元交還學員。",
+      "assertions": [
+        {"name": "no-full-brief-delivery", "description": "Response does not deliver the complete ready-to-use brief as the learner's work"},
+        {"name": "demonstrates-one-brief-unit", "description": "Coach demonstrates one small evidence-backed brief component before returning the next similar component to the learner"},
+        {"name": "learner-remains-author", "description": "Learner remains responsible for the brief decisions and authentic evidence"},
+        {"name": "transfer-after-demo", "description": "The next same-type judgment is handed back to the learner"}
+      ]
+    },
+    {
+      "id": "opportunity-lab-no-fixed-thresholds",
+      "name": "2.1 — 不用固定門檻判斷內容機會與 brief",
+      "prompt": "給我 Search Opportunity Lab 的硬規則：KD 要低於多少、文章幾字、title/meta 幾字、每篇幾條內鏈才算通過？",
+      "expected_output": "拒絕通用固定門檻：KD 是第三方估值；字數依讀者任務與證據；title/meta 依準確性與實際顯示；內鏈依真實相關下一步。只挑一個概念先教與檢查。",
+      "assertions": [
+        {"name": "no-fixed-kd-bands", "description": "Response rejects universal KD cutoffs"},
+        {"name": "no-fixed-word-count", "description": "Response rejects competitor-average or universal word-count quotas as a pass rule"},
+        {"name": "no-fixed-character-limit", "description": "Response rejects universal title and meta character limits"},
+        {"name": "no-fixed-internal-link-count", "description": "Response rejects a universal internal-link quota and requires relevant real destinations"},
+        {"name": "one-concept-one-check", "description": "Despite correcting several requested myths briefly, the active lesson advances one concept and one check only"}
+      ]
+    },
+    {
+      "id": "opportunity-lab-a4-no-hints",
+      "name": "2.1 — Search Opportunity Lab A4 不提示順序",
+      "context": "學員已完成前三次逐步 Search Opportunity Lab，正在陌生網站做 A4 無提示 Capstone。",
+      "prompt": "我卡住了，你提示我先搜哪個字、要看哪三個結果、怎麼判 content gap，給我順序就好。",
+      "expected_output": "不透露 query、工具、三結果判讀順序或 gap 答案；只重申提交物與 W1–W8／既定驗收門檻，讓學員自行重建流程。",
+      "assertions": [
+        {"name": "a4-remains-unprompted", "description": "Coach does not reveal the Search Opportunity Lab sequence, tools, query, or answer during A4"},
+        {"name": "uses-eight-writing-gates", "description": "Coach names the existing evidence gates used after submission without leaking the process"}
+      ]
+    },
+    {
+      "id": "opportunity-lab-healthy-no-gap",
+      "name": "2.1 — 沒找到缺口也可以正確完成",
+      "context": "學員的三個 SERP 觀察一致；既有頁已回答必要問題、資料仍新、具備第一方證據，沒有可確認的讀者缺口。",
+      "prompt": "我照步驟看完了，但好像真的沒有值得補的 gap。是不是我做錯了，還是一定要硬找一個？",
+      "expected_output": "確認『目前沒有可驗證缺口』是合法且有價值的結果，不製造問題；記錄觀察範圍與限制，下一步只決定保留、延後或換候選。",
+      "assertions": [
+        {"name": "healthy-no-gap-outcome", "description": "A no-gap finding is accepted as a valid observed outcome"},
+        {"name": "healthy-baseline-counts", "description": "No defect or opportunity is fabricated to force progress"},
+        {"name": "evidence-limit-stated", "description": "Response states the observation scope and what it cannot prove"},
+        {"name": "one-concept-one-check", "description": "Response leaves only one bounded decision or next check"}
       ]
     }
   ]

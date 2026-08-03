@@ -27,8 +27,8 @@
 |------|----------|------|
 | **快速問答** | 問一個概念（「canonical 是什麼？」）或操作（「怎麼提交 sitemap？」），沒給網址、沒表達想 audit | → 直接答，跳過開場。答完輕鬆補一句「如果你有自己的網站，我們也可以拿一頁來看」 |
 | **輕量模式** | 想快速看一下、時間有限、第一次接觸還沒準備好完整陪跑；或**第一次給網址但還沒明確承諾要持續陪跑** | → 跑 1 個最相關模組、給 1 個重點發現、1 個行動建議，最後問要不要繼續完整陪跑；**完全新手先讀 `references/36-beginner-practical-playbooks.md`；預設不啟動完整 session 檔案流程** |
-| **目標陪跑** | 明確想系統學、持續追蹤，或某個症狀需要多輪證據 | → 先選一條目標路徑與退出條件，再進 Step 1 |
-| **可選完整課綱** | 用戶明確表示要逐步學完所有核心模組 | → 才把 18 模組當課綱，不因「流量掉了」自動展開全課程 |
+| **目標陪跑** | 明確想系統學、持續追蹤，或某個症狀需要多輪證據 | → 建立 G0–G7 第一成果專案，先做 G1 baseline，再進 Step 1 |
+| **系統學習** | 用戶要從零學到能獨立做 | → 以能力與 Capstone 畢業；18 模組按 Gate 需要取用，不以「上完」代表會了 |
 
 不要對用戶說「我現在要判斷你是哪一種模式」。
 
@@ -56,7 +56,7 @@
 
 ## Step 1 — 讀進度（完整陪跑才執行）
 
-先讀取當前資料夾的 `seo-progress.md`。如果檔案存在，再讀取 `seo-actions.md`。
+先讀取當前資料夾的 `seo-progress.md`。如果檔案存在，再讀取 `seo-actions.md`；有 `seo-ga4-log.md` 或 `seo-writing-portfolio.md` 時，只在本輪問題相關時讀取。
 - 如果只有 `seo-progress.md`、還沒有 `seo-actions.md`，不要卡住；先照 progress 開場，這次結束時再補建 actions 檔。
 
 ### 檔案存在 → 依序執行
@@ -161,7 +161,7 @@
 
 **⑥ 開始目標路徑**
 
-先說明本路徑的 2–4 個必要檢查與退出條件；第一輪只執行 1 個。沒有明確症狀才從技術基礎開始。
+依 `53-zero-to-first-result-apprenticeship.md` 建立 G0–G7 第一成果專案。第一輪只執行 1 個；任何修改前必須先完成 G1 baseline。
 
 ---
 
@@ -183,7 +183,7 @@
 - 給下一個自然模組或下一個檢查，不要只說「今天先到這裡」
 - 如果用戶想繼續，直接接下一個模組；如果時間不夠，把下一模組寫進 `seo-progress.md` 的 `下次從`
 
-目標路徑完成後明確交接；18 模組只在用戶選擇完整課綱時覆蓋。遇到超出陪跑能力的問題時：
+G6 完成後進 G7 陌生案例與延遲複測；18 模組只作知識庫。遇到超出陪跑能力的問題時：
 - 標記為 `需要協助` 或 `建議找專業`
 - 不卡死在那題
 - 回到下一個可陪跑的基礎模組繼續
@@ -205,7 +205,8 @@
 2. 更新 `seo-actions.md`（先讀取比對，保留用戶已打的 [x]）→ `references/sys-file-templates.md`
 3. 更新 `seo-progress.md`（先讀取比對 schema）→ `references/sys-file-templates.md`
 4. 這次有出現 GA4 數字 → 確認已寫進 `seo-ga4-log.md`（**當輪就該寫過**，這裡只是補漏與補「當時發生什麼」）→ `references/50-ga4-coaching-track.md`
-5. 只有無法當場安全完成時才指派 1 個功課 → `references/sys-session-system.md`
+5. 這次有推進寫作軌道 → 先讀取再更新 `seo-writing-portfolio.md` 的當篇階段、Gate 與版本引用 → `references/54-four-article-writing-apprenticeship.md`
+6. 只有無法當場安全完成時才指派 1 個功課 → `references/sys-session-system.md`
 
 存完後告訴用戶：
 

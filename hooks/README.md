@@ -4,7 +4,7 @@
 
 裝了之後：
 
-- **在陪跑資料夾裡**（有 `seo-progress.md` / `seo-actions.md` / `seo-ga4-log.md`）→ session 一開始就載入技能並接續上次進度
+- **在陪跑資料夾裡**（有 `seo-progress.md` / `seo-actions.md` / `seo-ga4-log.md` / `seo-writing-portfolio.md`）→ session 一開始就載入技能並接續上次進度
 - **在任何其他專案裡** → 只有當提問看起來是新手向 SEO 陪跑時才載入
 
 沒裝也完全能用。這是加確定性，不是必要條件。
@@ -16,7 +16,6 @@
 | 檔案 | 用途 |
 |------|------|
 | `seo_coach_router.py` | 偵測器。兩個平台共用同一支（stdin / stdout 契約相同） |
-| `test_router.py` | 26 個 pipe test。改了觸發字要重跑 |
 | `claude-code.settings.snippet.json` | Claude Code 設定片段 |
 | `codex.hooks.snippet.json` | Codex 設定片段 |
 
@@ -48,7 +47,7 @@ echo '{"hook_event_name":"UserPromptSubmit","prompt":"我是 SEO 新手，想學
 
 1. 打開（或建立）`$CODEX_HOME/hooks.json`，預設是 `~/.codex/hooks.json`
 2. 把 `codex.hooks.snippet.json` 的內容合併進去，`<SKILL_DIR>` 換成路徑
-3. Codex 對 hook 有信任機制，第一次執行會要你確認來源
+3. 重開 Codex，輸入 `/hooks` 檢視來源並信任這個 hook
 
 **先驗證偵測器本身**（跟平台無關，一定要先過）：
 
@@ -56,7 +55,7 @@ echo '{"hook_event_name":"UserPromptSubmit","prompt":"我是 SEO 新手，想學
 echo '{"hook_event_name":"UserPromptSubmit","prompt":"我的網站流量掉了怎麼辦","cwd":"."}' | python <SKILL_DIR>/seo_coach_router.py
 ```
 
-**已驗證到什麼程度**（2026-07-29，Codex 0.133.0）：hooks 引擎存在；事件名稱、stdin 欄位（`hook_event_name` / `prompt` / `cwd`）與輸出契約（`hookSpecificOutput.additionalContext`）與 Claude Code 相同——這些是從 Codex 執行檔內建的 JSON schema 讀出來的。**沒有**跑過端到端實測（隔離 `CODEX_HOME` 沒有認證，turn 起不來）。所以：偵測器本身已驗證，Codex 端的檔案位置與載入請以你自己第一次安裝時的結果為準；若 Codex 回報 `failed to parse hooks config`，先確認路徑與 JSON 格式。
+**已驗證到什麼程度**（2026-07-31，Codex CLI 0.146.0）：`hooks` feature 為 stable；公開片段已對齊官方目前的 PascalCase 事件名、`~/.codex/hooks.json`、stdin 欄位（`hook_event_name` / `prompt` / `cwd`）與 `hookSpecificOutput.additionalContext` 輸出契約。偵測器通過 28 個本機 pipe test；另以公開版 router 在隔離專案做 `SessionStart` 端到端 canary，Codex 實際收到 `[seo-coach router]` developer context。非管理式 hook 安裝後仍必須由用戶在 `/hooks` 信任；未信任前 Codex 會略過它。
 
 ---
 
@@ -80,7 +79,7 @@ echo '{"hook_event_name":"UserPromptSubmit","prompt":"我的網站流量掉了�
 | `SEO_CTX` + `BEGINNER` | 兩個都命中才觸發（弱 SEO 詞 × 新手訊號） |
 | `SESSION_FILES` | 哪些檔案代表「這是陪跑資料夾」 |
 
-改完**一定要跑一次** `python hooks/test_router.py`。測試裡有故意放的反例，例如「我下個月要去 Seoul 玩」——`seo` 是 `Seoul` 的前三個字母，沒有邊界保護就會誤觸發。
+如果你改過觸發條件，至少要重跑上面的兩個手動驗證：一個應觸發的 SEO 新手問題，以及一個不應觸發的普通問題。
 
 ---
 

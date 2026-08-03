@@ -42,7 +42,7 @@ Google 通常能識別誰是原創，特別是如果你的頁面更早被索引�
 
 ### 定期監控反向連結
 **每月至少一次：**
-- Ahrefs Webmaster Tools（免費）→ 查看新增的反向連結
+- Ahrefs Free（免費，原名 Ahrefs Webmaster Tools）→ 查看新增的反向連結
 - GSC → 連結 → 外部連結
 
 **警報信號：**
