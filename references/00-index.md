@@ -41,6 +41,7 @@
 | 接 GSC／GA4／CMS 讓教練直接讀數據（MCP／API） | `references/35-data-integration.md` |
 | 新手實戰 Playbooks（5 分鐘檢查、最小下一步） | `references/36-beginner-practical-playbooks.md` |
 | 版本檢查（用戶觸發，比對 GitHub 最新版） | `references/37-update-check.md` |
+| 陪跑續航規則 + 免費 SEO 工具地圖 | `references/38-continuous-coaching-free-tools.md` |
 | 教練風格行為定義（系統） | `references/sys-coach-styles.md` |
 | 進度檔案與行動清單模板（系統） | `references/sys-file-templates.md` |
 | 功課、冷卻、里程碑、小結卡（系統） | `references/sys-session-system.md` |
@@ -103,8 +104,8 @@ Reference：`14-topical-map.md`
 
 **Module 10 — Keyword Basics**
 Hook：「你現在目標打的關鍵字，是你想用的詞，還是你的用戶真的在搜尋的詞？」
-工具：GSC → 查詢、Google Autocomplete、Google Trends
-Reference：`09-keyword-basics.md`
+工具：GSC → 查詢、Google Autocomplete、Google Trends、Ahrefs Free Keyword Generator / KD Checker / SERP Checker
+Reference：`09-keyword-basics.md`（免費工具補充：`38-continuous-coaching-free-tools.md`）
 
 ---
 
@@ -112,12 +113,12 @@ Reference：`09-keyword-basics.md`
 
 **Module 11 — Internal Links**
 Hook：「如果你把你的網站想成一個城市，你覺得內部連結是什麼？」
-工具：Screaming Frog、Ahrefs Webmaster Tools（免費版）
+工具：Screaming Frog 免費版、Ahrefs Free / Webmaster Tools
 Reference：`07-internal-links.md`
 
 **Module 12 — Backlinks 基礎**
 Hook：「你知道你的網站目前有多少其他網站連結過來嗎？」
-工具：Ahrefs Webmaster Tools（免費）、GSC → 外部連結
+工具：Ahrefs Free Backlink Checker、Ahrefs Free / Webmaster Tools、GSC → 外部連結
 Reference：`10-links-backlinks.md`
 
 ---
@@ -149,12 +150,12 @@ Reference：`12-scenarios.md`
 
 **Module 17 — Negative SEO 防護**
 Hook：「你有沒有監控過你的網站是否有異常的反向連結突然出現？」
-工具：Ahrefs Webmaster Tools、GSC → 外部連結
+工具：Ahrefs Free Backlink Checker、Ahrefs Free / Webmaster Tools、GSC → 外部連結
 Reference：`20-negative-seo.md`
 
 **Module 18 — SEO 成效衡量**
 Hook：「你怎麼知道你做的 SEO 有沒有在發揮作用？你目前看什麼數字？」
-工具：GSC → 成效、GA4 → 自然搜尋
+工具：GSC → 成效、GA4 → 自然搜尋、Ahrefs Free Web Analytics（可選）
 Reference：`21-seo-measurement.md`
 
 ---
@@ -173,3 +174,4 @@ Reference：`21-seo-measurement.md`
 - **自然對話校正**：需要更像真人教練的接話、收尾、邊界回應方式 → `33-coach-dialogue-examples.md`
 - **被廠商報價打中**：用戶問「這個 SEO 服務值不值得買 / 我自己做得來嗎」→ `34-darkseoking-threads.md`
 - **完全新手落地**：用戶不知道現在要做什麼、被工具嚇到、只需要第一個可執行檢查 → `36-beginner-practical-playbooks.md`
+- **陪跑續航 + 免費工具**：每輪收尾、完整模組覆蓋、免費工具選擇 → `38-continuous-coaching-free-tools.md`

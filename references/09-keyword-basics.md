@@ -54,9 +54,21 @@
 - 免費，但需要廣告帳號才能看到搜尋量範圍
 - 適合查詢搜尋量和找相關關鍵字
 
-### Ahrefs Webmaster Tools（免費版）
-- 可以查看你自己的網站的關鍵字排名情況
-- 有限的關鍵字研究功能
+### Ahrefs 免費工具
+**用途：** 在沒有付費 Ahrefs / Semrush 的情況下，做第一輪關鍵字方向判斷。
+
+可用入口：
+- **Free Keyword Generator**：擴展長尾關鍵字
+- **Keyword Difficulty Checker**：粗估難度方向
+- **SERP Checker**：看前幾名頁面類型與競爭環境
+- **Ahrefs Free / Webmaster Tools**：驗證自己的網站後，看自己網站的關鍵字、外鏈與技術概況
+
+**新手流程：**
+1. 先用 Google Autocomplete 找 5 個用戶會講的詞
+2. 放進 Ahrefs Free Keyword Generator 擴展長尾
+3. 用 KD Checker 過濾太難的詞
+4. 用 SERP Checker 看前幾名是文章、產品頁、分類頁，還是大型品牌
+5. 回到自己的網站，決定要做哪一頁承接這個搜尋意圖
 
 ### Ubersuggest / Google Trends（免費）
 - Ubersuggest：每天有限次數的關鍵字查詢
@@ -130,7 +142,8 @@
 ### 預算為零時的退路
 - **GSC → 查詢報告**（你已有的數據）
 - **Google Autocomplete + People Also Ask**（觀察真實用戶用詞）
-- **Ahrefs Webmaster Tools 免費版**（可看自己網站排名情況）
+- **Ahrefs 免費工具**（Free Keyword Generator / KD Checker / SERP Checker / Backlink Checker）
+- **Ahrefs Free / Webmaster Tools**（驗證自己的網站後，看自己站的關鍵字、外鏈與技術概況）
 
 足夠開始第一波長尾關鍵字佈局。
 

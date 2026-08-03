@@ -40,6 +40,11 @@ A case **passes** only if **all** its assertions PASS. Partial pass is recorded 
 | `gives-one-five-minute-check` | Response gives one concrete beginner action doable without paid tools or setup |
 | `no-tool-overload` | First beginner response does not push GSC, GA4, MCP/API, Screaming Frog, or a stack of tools before one basic check |
 | `keeps-one-next-step` | Response ends with exactly one practical next step, not a checklist or roadmap |
+| `previews-next-module` | Response names the next module, next SEO block, or next check that follows after the current action |
+| `no-premature-seo-done` | Response does not imply that one quick check, one module, or one fix means SEO coaching is complete |
+| `mentions-18-module-coverage` | Response explains that full coaching covers the full module path / 18 modules / all core SEO blocks |
+| `one-step-at-a-time` | Response commits to continuous progress while still keeping the current action limited to one module/check |
+| `tracks-next-start` | Response says progress, next module, or next session starting point will be recorded or continued |
 | `asks-website-first-routing-question` | When no URL is provided, response asks one routing question focused on whether the user has a website / URL; it does not default to GBP or Google Maps |
 | `regular-website-first` | Response treats generic website/ranking/traffic/CMS prompts as regular website SEO unless map/local intent is explicit |
 | `uses-index-or-discovery-check` | Response starts with `site:` search, sitemap, robots.txt, URL inspection, homepage access, or another basic discovery/indexing check |
@@ -57,6 +62,12 @@ A case **passes** only if **all** its assertions PASS. Partial pass is recorded 
 | `does-not-apologize-for-boundary` | Response treats scope limits as intentional product boundaries, not as failures |
 | `offers-one-safe-next-step` | Response still offers one safe diagnostic or beginner-compatible next step after setting a boundary |
 | `refers-professional-when-needed` | Response recommends professional help for full strategic execution or high-risk implementation when appropriate |
+| `continues-after-boundary` | Response does not stop at the boundary; it routes the user to the next safe coachable module or check |
+| `does-not-provide-full-consultant-roadmap` | Response avoids delivering detailed consultant-grade implementation plans for high-risk technical/strategy issues |
+| `uses-free-keyword-tools` | Response includes free keyword research tools such as GSC, Google Autocomplete, Google Trends, or equivalent |
+| `mentions-ahrefs-free-keyword-tools` | Response mentions Ahrefs free keyword tools such as Free Keyword Generator, KD Checker, SERP Checker, or Ahrefs Free / Webmaster Tools |
+| `gives-one-practical-workflow` | Response gives a short actionable workflow rather than a list of tool names only |
+| `does-not-overpromise-tool-data` | Response treats free-tool data as directional and avoids ranking guarantees |
 
 ---
 
@@ -82,4 +93,4 @@ If an eval case itself conflicts with current SKILL.md behavior, that is a findi
 
 This rubric is versioned alongside the skill. When SKILL.md bumps a major version (e.g. 1.x → 2.x), re-walk every assertion in this file and confirm it still matches the spec.
 
-Rubric version: **1.0** (matches SKILL.md 1.0.0 — first public release)
+Rubric version: **1.1** (matches SKILL.md 1.1.0 — continuous coaching and free-tool routing)

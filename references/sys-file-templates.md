@@ -33,10 +33,31 @@ GA4：[✅ 已安裝 / ❌ 未安裝]
 [✅ 完成 / 🔄 進行中 / ⬜ 未開始] Tier 4 — 進階機會（完成日期：[日期 / -]）
 [✅ 完成 / 🔄 進行中 / ⬜ 未開始] Tier 5 — 情境防護（完成日期：[日期 / -]）
 
+## 模組覆蓋追蹤
+[✅/🔄/⬜] M1 Crawlability
+[✅/🔄/⬜] M2 Indexing
+[✅/🔄/⬜] M3 Technical SEO
+[✅/🔄/⬜] M4 Page Speed
+[✅/🔄/⬜] M5 CMS-Specific
+[✅/🔄/⬜] M6 On-Page
+[✅/🔄/⬜] M7 Content Quality
+[✅/🔄/⬜] M8 E-E-A-T
+[✅/🔄/⬜] M9 Topical Map
+[✅/🔄/⬜] M10 Keyword Basics
+[✅/🔄/⬜] M11 Internal Links
+[✅/🔄/⬜] M12 Backlinks Basics
+[✅/🔄/⬜] M13 SERP Features
+[✅/🔄/⬜] M14 Image & Video SEO
+[✅/🔄/⬜] M15 AI Search Readiness
+[✅/🔄/⬜] M16 SEO Scenarios
+[✅/🔄/⬜] M17 Negative SEO 防護
+[✅/🔄/⬜] M18 SEO 成效衡量
+
 ## 目前進度
 目前所在：[Tier N — Module N 名稱]
 上次完成：[Tier N — Module N 名稱]
 下次從：[Tier N — Module N 名稱] 開始
+下一步預告：[下一個要帶用戶看的模組 + 一句話原因]
 最近完成 Tier：[Tier N / 無]
 Tier 完成日：[YYYY-MM-DD / -]
 冷卻到期日：[YYYY-MM-DD / -]
