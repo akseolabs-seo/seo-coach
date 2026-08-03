@@ -1,6 +1,6 @@
 {
   "skill_name": "seo-coach",
-  "eval_set_version": "1.1.0",
+  "eval_set_version": "1.2.0",
   "evals": [
     {
       "id": "lightweight-continuation-next-module",
@@ -670,6 +670,338 @@
         {
           "name": "coaching-not-consulting",
           "description": "Coach posture maintained throughout"
+        }
+      ]
+    },
+    {
+      "id": "beginner-opening-two-sentences",
+      "name": "Item 1 — 新手開場 2 句直入檢查，不倒邊界牆",
+      "prompt": "我想開始做 SEO，我的網站是 example.com",
+      "expected_output": "開場極短（自介 1-2 句），立刻進入第一個 5 分鐘檢查；不出現不適合清單、免責聲明、服務範圍長篇說明，也不要求用戶先在 (a)(b)(c) 選單選一次。",
+      "assertions": [
+        {
+          "name": "opening-max-three-paragraphs",
+          "description": "The entire opening before the first check is at most 3 short paragraphs"
+        },
+        {
+          "name": "no-unsuitable-list-upfront",
+          "description": "No 不適合 / out-of-scope list appears in the opening"
+        },
+        {
+          "name": "no-disclaimer-upfront",
+          "description": "No disclaimer (不保證排名 / 業界變化快 etc.) appears in the opening"
+        },
+        {
+          "name": "first-check-in-first-turn",
+          "description": "The first turn already gives one concrete check action on the user's site"
+        }
+      ]
+    },
+    {
+      "id": "boundary-lazy-disclosure",
+      "name": "Item 1 — 邊界延遲揭露：觸及才講",
+      "prompt": "你可以幫我做 PBN 站群嗎？",
+      "expected_output": "此時才說明 PBN 超出本 skill 範圍（延遲揭露成功），語氣不像拒絕，留一條可走的路（回到基礎陪跑或轉介）。",
+      "assertions": [
+        {
+          "name": "boundary-stated-on-touch",
+          "description": "Claude states the PBN boundary at this moment, in context"
+        },
+        {
+          "name": "not-a-rejection-tone",
+          "description": "Response leaves one usable path (a basic coached next step or referral), not a flat refusal"
+        }
+      ]
+    },
+    {
+      "id": "screenshot-first-reporting",
+      "name": "Item 2 — 截圖是一級輸入",
+      "prompt": "（新手，完整陪跑中）好，我打開 GSC 的頁面索引報告了，然後呢？",
+      "expected_output": "回報方式明確包含「直接截圖貼上來就行，不用打字描述」；收到截圖後教練會先用人話描述看到什麼。",
+      "assertions": [
+        {
+          "name": "screenshot-invited",
+          "description": "Claude explicitly offers screenshot paste as the reporting method"
+        },
+        {
+          "name": "keeps-one-next-step",
+          "description": "Claude asks for one thing only, not a multi-item checklist"
+        }
+      ]
+    },
+    {
+      "id": "lightweight-mini-card",
+      "name": "Item 3 — 輕量模式收尾給迷你卡 + 存檔邀請",
+      "prompt": "（輕量模式，剛完成一個 sitemap 檢查，發現 sitemap 404）原來我的網站沒有 sitemap！那今天先這樣好了",
+      "expected_output": "收尾出現三行迷你卡（用戶自己的發現／為什麼重要／下一步一個），接著自然邀請存檔轉完整陪跑；未經同意不寫任何檔案。",
+      "assertions": [
+        {
+          "name": "mini-summary-card",
+          "description": "A short card appears containing: the user's own finding, why it matters, one next action"
+        },
+        {
+          "name": "save-invitation",
+          "description": "Claude offers to save progress for next time (upgrade to full coaching)"
+        },
+        {
+          "name": "no-files-without-consent",
+          "description": "Claude does not write progress/action files before the user agrees"
+        },
+        {
+          "name": "finding-is-specific",
+          "description": "The card cites the user's actual finding (sitemap 404), not generic SEO statements"
+        }
+      ]
+    },
+    {
+      "id": "backup-before-destructive-edit",
+      "name": "Item 4 — 破壞性修改功課含留底/症狀/還原",
+      "prompt": "（完整陪跑中，發現 robots.txt 誤擋了 /blog/）好，那我的功課就是去改 robots.txt 對吧？",
+      "expected_output": "功課包含三件事：改之前先留底（截圖/複製現狀）、改錯的症狀長什麼樣、怎麼還原。",
+      "assertions": [
+        {
+          "name": "backup-step-included",
+          "description": "The homework includes copying/screenshotting current robots.txt before editing"
+        },
+        {
+          "name": "failure-symptom-described",
+          "description": "Claude describes what going wrong would look like (e.g. pages dropping from index)"
+        },
+        {
+          "name": "restore-path-given",
+          "description": "Claude explains how to revert if the edit goes wrong"
+        }
+      ]
+    },
+    {
+      "id": "answer-shape-prestated",
+      "name": "Item 5 — 問題附答案形狀 +「看不懂」合法",
+      "prompt": "（完全新手）好，我現在打開 site:example.com 的搜尋結果了",
+      "expected_output": "教練的問題附帶答案形狀（回 A/B、回一個數字、或貼截圖就行），並明示「看不懂也可以直接說看不懂」。",
+      "assertions": [
+        {
+          "name": "answer-shape-prestated",
+          "description": "Claude tells the user exactly how simple the reply can be (A/B, one number, or screenshot)"
+        },
+        {
+          "name": "dont-understand-is-legal",
+          "description": "Claude explicitly says 看不懂/不確定 is also an acceptable answer"
+        }
+      ]
+    },
+    {
+      "id": "novice-prediction-question",
+      "name": "Item 6 — 零基礎用預測題不用開放題",
+      "prompt": "我完全不懂 SEO，第一次弄網站，網址是 example.com，幫我看看",
+      "expected_output": "對零基礎用戶的第一個 Socratic 問題是低成本二選一/三選一預測題（例：你猜 Google 找得到你的網站嗎？A 找得到 B 找不到），並預告會馬上一起驗證；不是開放式「你覺得呢」。",
+      "assertions": [
+        {
+          "name": "prediction-question-for-novice",
+          "description": "The question offered is a cheap A/B (or A/B/C) prediction, not an open-ended question"
+        },
+        {
+          "name": "verify-promised",
+          "description": "Claude says the guess will be verified together right away"
+        },
+        {
+          "name": "no-tool-overload",
+          "description": "No GSC/GA4/MCP/paid tool setup demanded in the first turn"
+        }
+      ]
+    },
+    {
+      "id": "experienced-open-question",
+      "name": "Item 6 迴歸 — 有經驗用戶不降級成選擇題",
+      "prompt": "我做過幾年網站，GSC 也會用。我有一頁排名一直卡在第二頁，你怎麼帶我看？",
+      "expected_output": "對有經驗用戶維持開放式 Socratic 問題（聚焦驗證方法、意圖匹配、取捨），不使用幼稚的 A/B 選擇題。",
+      "assertions": [
+        {
+          "name": "open-question-for-experienced",
+          "description": "The question is open-ended and analysis-oriented, not a binary guessing game"
+        },
+        {
+          "name": "depth-matches-maturity",
+          "description": "Language skips beginner analogies and goes to judgment/verification"
+        }
+      ]
+    },
+    {
+      "id": "hint-ladder",
+      "name": "Item 7 — 救援走提示階梯，不直接給答案",
+      "prompt": "（教練剛問：你打開 robots.txt 看到什麼？）我不知道，看不懂那是什麼",
+      "expected_output": "第一步先縮小範圍給暗示（例如「你看有沒有一行以 Disallow 開頭」）或給選項，而不是直接把整份 robots.txt 判讀完；若示範，示範後要把下一個同型問題留給用戶。",
+      "assertions": [
+        {
+          "name": "hint-before-answer",
+          "description": "Claude narrows the question (hint or options) instead of immediately giving the full interpretation"
+        },
+        {
+          "name": "interaction-preserved",
+          "description": "The turn ends with something for the user to do or answer"
+        }
+      ]
+    },
+    {
+      "id": "three-layer-map-for-novice",
+      "name": "Item 8 — 對新手用三層地圖語言定位進度",
+      "prompt": "（新手，剛確認完 site: 有收錄）所以我這樣算是做完 SEO 檢查了嗎？",
+      "expected_output": "用三層地圖語言定位（Google 看得到 → 看得懂 → 值得排前面），說明現在只完成「看得到」層的一部分；不對新手報 Tier/Module 編號。",
+      "assertions": [
+        {
+          "name": "three-layer-language",
+          "description": "Progress is described using the 看得到/看得懂/值得排前面 三層 frame"
+        },
+        {
+          "name": "no-module-numbers-to-novice",
+          "description": "Claude does not cite Tier N / Module N numbers to the novice"
+        },
+        {
+          "name": "no-premature-seo-done",
+          "description": "Claude does not imply SEO is done"
+        }
+      ]
+    },
+    {
+      "id": "symptom-entry-routing",
+      "name": "Item 9 — 症狀入口：內容症狀不從 robots.txt 開跑",
+      "prompt": "我發了 50 篇文章都沒什麼流量，想搞懂到底哪裡出問題，可以帶我完整看一次嗎？",
+      "expected_output": "第一個檢查對準內容/關鍵字層（GSC 查詢、排名位置、搜尋意圖），不是 robots.txt/sitemap；同時說明基礎技術面之後會回頭補檢查。",
+      "assertions": [
+        {
+          "name": "entry-matches-symptom",
+          "description": "First check targets content/keyword layer (e.g. GSC queries or ranking positions), not crawlability"
+        },
+        {
+          "name": "backfill-promised",
+          "description": "Claude notes the technical basics will still be checked later"
+        },
+        {
+          "name": "keeps-one-next-step",
+          "description": "Only one check is initiated this turn"
+        }
+      ]
+    },
+    {
+      "id": "homework-auto-downscale",
+      "name": "Item 10 — 連續 2 次未交功課自動降階",
+      "prompt": "（seo-progress.md 顯示：待交功課「改寫首頁 title」，連續未完成次數：2）不好意思，上次的功課我又沒做，最近真的太忙",
+      "expected_output": "不責備、一句話正常化，把功課自動縮小成 10 分鐘內可完成的版本，今天不進新模組。",
+      "assertions": [
+        {
+          "name": "downscaled-homework",
+          "description": "The new homework is clearly smaller (≤10 minutes) than the original"
+        },
+        {
+          "name": "normalizing-tone",
+          "description": "Claude normalizes without lecturing or guilt-tripping"
+        },
+        {
+          "name": "no-new-module-today",
+          "description": "Claude does not start a new module before the smaller homework is set"
+        }
+      ]
+    },
+    {
+      "id": "term-budget-and-memory",
+      "name": "Item 11 — 已學術語直接用，新術語一輪一個",
+      "prompt": "（seo-progress.md 已學術語：canonical＝已學。用戶問）那我這頁的 canonical 要指到哪裡？順便問一下什麼是 hreflang？",
+      "expected_output": "canonical 直接使用不重新解釋；hreflang 用一句白話定義（本輪唯一新術語）；不再額外引入其他新縮寫。",
+      "assertions": [
+        {
+          "name": "known-term-not-retaught",
+          "description": "Claude uses canonical directly without re-explaining the concept from zero"
+        },
+        {
+          "name": "one-new-term-with-plain-definition",
+          "description": "hreflang gets a one-sentence plain-language definition; no other new jargon is introduced"
+        }
+      ]
+    },
+    {
+      "id": "time-budget-stated",
+      "name": "Item 12 — 檢查與功課附預估時間",
+      "prompt": "（新手）好啊，那你說我現在要做什麼檢查？",
+      "expected_output": "給出的檢查指令附預估時間（例：約 3 分鐘）。",
+      "assertions": [
+        {
+          "name": "time-budget-stated",
+          "description": "The check instruction includes an estimated time in minutes"
+        },
+        {
+          "name": "gives-one-five-minute-check",
+          "description": "The check is beginner-safe and doable without paid tools"
+        }
+      ]
+    },
+    {
+      "id": "verify-after-report",
+      "name": "Item 14 — 用戶回報後 WebFetch 核對，溫和糾錯",
+      "prompt": "（教練請用戶查 robots.txt；實際檔案內容是 User-agent: * / Disallow: /wp-admin/）我看了，我的 robots.txt 寫 Disallow: /，是不是整個網站都被擋住了？！",
+      "expected_output": "教練用 WebFetch 核對實際內容，發現用戶看錯了；溫和糾正（不羞辱），把差異當教學素材，並安撫恐慌。",
+      "assertions": [
+        {
+          "name": "webfetch-verification-attempted",
+          "description": "Claude verifies the user's report against the live robots.txt via WebFetch"
+        },
+        {
+          "name": "gentle-correction",
+          "description": "The correction normalizes the mistake (容易看錯) without shaming"
+        },
+        {
+          "name": "difference-used-as-teaching",
+          "description": "Claude uses the gap between report and reality as the teaching moment"
+        }
+      ]
+    },
+    {
+      "id": "patience-card",
+      "name": "Item 16 — 修復型功課附見效時間與回訪條件",
+      "prompt": "（session 收尾，這次發現 sitemap 404，功課是產生並提交 sitemap）好，我週末就去把 sitemap 弄好提交",
+      "expected_output": "功課附「多久見效」（數天到數週）與「什麼時候該回來找我」（具體時間 + 具體現象），管理修復後的等待焦慮。",
+      "assertions": [
+        {
+          "name": "patience-card",
+          "description": "Homework includes expected time-to-effect and a concrete come-back-if condition"
+        },
+        {
+          "name": "no-instant-result-implied",
+          "description": "Claude does not imply the fix will show results immediately"
+        }
+      ]
+    },
+    {
+      "id": "first-win-guarantee",
+      "name": "Item 17 — 第一次檢查沒發現問題就接第二個",
+      "prompt": "（新手第一次檢查，robots.txt 完全正常）我打開 robots.txt 了，看起來就是你說的正常樣子，沒有 Disallow: /",
+      "expected_output": "小慶祝後不停在「沒問題」，立即接一個更可能有發現的檢查（例如首頁 title 品質），確保第一次 session 有具體發現。",
+      "assertions": [
+        {
+          "name": "continues-to-second-check",
+          "description": "Claude immediately proposes a second, higher-hit-rate check instead of ending"
+        },
+        {
+          "name": "second-check-is-findable",
+          "description": "The second check targets something almost always improvable (e.g. title/meta quality)"
+        },
+        {
+          "name": "keeps-one-next-step",
+          "description": "Only one new check is initiated, not a list"
+        }
+      ]
+    },
+    {
+      "id": "chinese-title-length-check",
+      "name": "Track B1 — 中文 title 長度以中文字計",
+      "prompt": "我照國外教學把首頁 title 寫到 60 個字了，這樣對嗎？",
+      "expected_output": "指出英文教學的 60 characters 不等於 60 個中文字；中文 title 約 25-30 字為宜，超過會被截斷；給一個立即可做的檢查（看 SERP 上有沒有被截斷）。",
+      "assertions": [
+        {
+          "name": "chinese-length-correction",
+          "description": "Claude corrects the characters-vs-中文字 confusion with concrete numbers"
+        },
+        {
+          "name": "keeps-one-next-step",
+          "description": "One concrete verification step is given"
         }
       ]
     }

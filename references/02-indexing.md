@@ -47,6 +47,11 @@ Google Search Console → 索引 → 頁面
 - WordPress 開發時勾選「阻止搜尋引擎索引」，上線忘記取消
 - Yoast/RankMath 某些頁面不小心設成 noindex
 
+### 改 noindex / canonical 前的保護（指派功課必講）
+1. **先留底**：截圖或記下目前的設定（哪些頁有 noindex、canonical 指向哪）
+2. **改錯的症狀**：誤加 noindex → 該頁幾天到幾週後從 Google 消失；canonical 指錯 → GSC 顯示「Google 選擇了不同的標準網頁」且流量轉移到錯的頁
+3. **怎麼還原**：把設定改回留底的狀態，到 GSC 用 URL 檢查工具「要求建立索引」加速恢復；恢復通常需要數天到數週
+
 ### 怎麼檢查
 1. Chrome DevTools → Elements → 搜尋 `noindex`
 2. `view-source:yourdomain.com` → Ctrl+F 搜尋 noindex

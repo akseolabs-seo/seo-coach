@@ -24,6 +24,11 @@
 - 不小心封鎖 CSS/JS 檔案（影響渲染）
 - 同時有多個衝突的規則
 
+### 改 robots.txt 前的保護（指派功課必講）
+1. **先留底**：把現在的 robots.txt 全文複製存起來（或截圖）
+2. **改錯的症狀**：改壞的常見跡象是幾天到幾週後 `site:` 數量明顯下降、GSC 出現「已遭 robots.txt 封鎖」暴增
+3. **怎麼還原**：把留底的內容原封貼回去，再到 GSC 用 URL 檢查工具確認重要頁面恢復可爬
+
 ### 怎麼檢查
 1. 瀏覽器直接開 `yourdomain.com/robots.txt`
 2. Google Search Console → 設定 → robots.txt 測試工具

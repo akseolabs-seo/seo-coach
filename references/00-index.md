@@ -42,35 +42,65 @@
 | 新手實戰 Playbooks（5 分鐘檢查、最小下一步） | `references/36-beginner-practical-playbooks.md` |
 | 版本檢查（用戶觸發，比對 GitHub 最新版） | `references/37-update-check.md` |
 | 陪跑續航規則 + 免費 SEO 工具地圖 | `references/38-continuous-coaching-free-tools.md` |
+| 中文／台灣市場 SEO 特性（斷詞、title 長度、中文 URL） | `references/40-chinese-seo-specifics.md` |
+| Google 垃圾內容政策白話對照（廠商手法自查） | `references/41-spam-policies-plain.md` |
+| 診斷案例敘事庫（症狀→檢查→根因→結果） | `references/42-case-library.md` |
+| 中文 title／meta／內容好壞對照庫 | `references/43-before-after-examples.md` |
+| 新手快問快答庫（FAQ） | `references/44-beginner-faq.md` |
+| CTR 基準值與修復生效時間表 | `references/45-benchmarks-and-timelines.md` |
+| Google 更新時間表（含過期防護） | `references/46-core-update-timeline.md` |
+| 網域／主機／DNS 一頁入門 | `references/47-domain-hosting-dns-primer.md` |
+| 沒網站用戶的判讀練習 | `references/48-practice-reading-drills.md` |
+| 開場三版本 + 邊界延遲揭露（系統） | `references/sys-opening.md` |
 | 教練風格行為定義（系統） | `references/sys-coach-styles.md` |
 | 進度檔案與行動清單模板（系統） | `references/sys-file-templates.md` |
 | 功課、冷卻、里程碑、小結卡（系統） | `references/sys-session-system.md` |
 
 ---
 
+## 三層對新手地圖
+
+對新手溝通進度時用三層講，18 模組只做內部追蹤（存檔照 Tier/Module 記錄）：
+
+| 三層 | 白話 | 對應模組 |
+|------|------|----------|
+| **看得到** | Google 能不能發現你 | M1 Crawlability、M2 Indexing、M3 Technical、M4 Speed、M5 CMS |
+| **看得懂** | Google 能不能理解你 | M6 On-Page、M9 Topical Map、M10 Keywords、M11 Internal Links、M13 SERP Features、M14 Media |
+| **值得排前面** | Google 為什麼要推薦你 | M7 Content、M8 E-E-A-T、M12 Backlinks、M15 AI Readiness |
+
+M16-18（情境、防護、衡量）維持獨立，不硬塞進三層。
+
+---
+
 ## Audit 模組架構（5 層 18 模組）
 
-按 Tier 順序推進。每個模組共用對話節奏（見 SKILL.md 主檔）：Hook → 用戶回答 → 檢查指令 → 診斷 → 教學 → 行動項 → 進度確認 → 過渡。
+按 Tier 順序推進（帶症狀的用戶走 `00-session-flow.md` 症狀入口表）。每個模組共用對話節奏（見 SKILL.md 主檔）：Hook → 用戶回答 → 檢查指令 → 診斷 → 教學 → 行動項 → 進度確認 → 過渡。
 
-### ▌Tier 1 — 技術基礎健診（所有網站必做）
+Hook 有兩個版本：**預設 Hook**（有基礎者）與**新手預測題**（完全新手用，二選一、猜完馬上驗證）。
+
+### ▌Tier 1 — 技術基礎健診（所有網站必做）｜三層：看得到
 
 **Module 1 — Crawlability**
 Hook：「你知道 Google 是怎麼『發現』你的網站內容的嗎？」
+新手預測題：「你猜你的網站有沒有給 Google 看的『頁面清單』（sitemap）？A 有 / B 沒有 / C 不知道那是什麼——猜完我們直接打開看。」
 工具：瀏覽器直開 `domain.com/robots.txt`、`domain.com/sitemap.xml`、GSC → 覆蓋率
 Reference：`01-crawlability.md`
 
 **Module 2 — Indexing**
 Hook：「你有試過在 Google 搜尋 `site:你的網域` 嗎？結果多少頁？」
+新手預測題：「你猜 Google 現在收錄了你幾頁？A 0 頁 / B 少於 10 頁 / C 很多頁——搜 `site:你的網域` 馬上見分曉。」
 工具：`site:` 搜尋、GSC URL 檢查、Chrome DevTools
 Reference：`02-indexing.md`
 
 **Module 3 — Technical SEO**
 Hook：「你知道為什麼 Google 偏好 HTTPS 網站嗎？」
+新手預測題：「你看你網址列左邊，是鎖頭還是『不安全』？A 鎖頭 / B 不安全 / C 沒注意過」
 工具：瀏覽器鎖頭、Google Rich Results Test
 Reference：`03-technical-seo.md`（電商補充：`18-ecommerce-seo.md`）
 
 **Module 4 — Page Speed**
 Hook：「你上次等一個網頁超過 3 秒是什麼感覺？你覺得 Google 怎麼看這件事？」
+新手預測題：「你猜你的網站在手機上打開要幾秒？A 1-2 秒 / B 3-5 秒 / C 更久——我們用手機實測一次。」
 工具：PageSpeed Insights、GSC → Core Web Vitals
 Reference：`08-page-speed.md`（圖片速度：`17-media-optimization.md`）
 
@@ -80,36 +110,41 @@ Reference：`11-cms-specific.md`
 
 ---
 
-### ▌Tier 2 — 頁面與內容品質
+### ▌Tier 2 — 頁面與內容品質｜三層：看得懂＋值得排前面
 
 **Module 6 — On-Page**
 Hook：「你覺得 title tag 和你在瀏覽器分頁看到的網頁標題，是同一個東西嗎？」
+新手預測題：「你猜你首頁分頁上寫的是 A 你是誰＋做什麼 / B 只有品牌名或『首頁』？——切過去看一眼就知道。」
 工具：Chrome DevTools、Screaming Frog（免費版 500 URLs）
-Reference：`04-on-page.md`
+Reference：`04-on-page.md`（中文長度規則：`40-chinese-seo-specifics.md`；好壞對照：`43-before-after-examples.md`）
 
 **Module 7 — Content Quality**
 Hook：「如果你是想搜尋這個關鍵字的用戶，你的頁面有沒有完整回答他的問題？」
+新手預測題：「Google 搜你最想被找到的那個詞，你猜你的頁面 A 有出現 / B 沒出現在前三頁？——搜一次驗證。」
 工具：手動搜尋目標關鍵字，比較排名前三的頁面
 Reference：`05-content-quality.md`
 
 **Module 8 — E-E-A-T**
 Hook：「你聽過 E-E-A-T 嗎？你覺得它對你的行業重要嗎？」
+新手預測題：「一個陌生訪客打開你的網站，你猜他 30 秒內找不找得到『你是誰、怎麼聯絡你』？A 找得到 / B 找不到」
 工具：肉眼審查（About 頁、作者資訊、聯絡方式）
 Reference：`06-eeat.md`
 
 **Module 9 — Topical Map**
 Hook：「如果 Google 要評估你的網站是不是某個領域的專家，你覺得它會看什麼？」
+新手預測題：「你猜 Google 覺得你的網站『專門講什麼』？A 講得出一個主題 / B 什麼都有一點——我們看你的文章列表驗證。」
 工具：Google Autocomplete、People Also Ask、手繪主題地圖
 Reference：`14-topical-map.md`
 
 **Module 10 — Keyword Basics**
 Hook：「你現在目標打的關鍵字，是你想用的詞，還是你的用戶真的在搜尋的詞？」
+新手預測題：「你猜客人搜尋時打的字，跟你網站上寫的字 A 一樣 / B 不一樣？——開 GSC 查詢報表對一次就知道。」
 工具：GSC → 查詢、Google Autocomplete、Google Trends、Ahrefs Free Keyword Generator / KD Checker / SERP Checker
 Reference：`09-keyword-basics.md`（免費工具補充：`38-continuous-coaching-free-tools.md`）
 
 ---
 
-### ▌Tier 3 — 連結生態
+### ▌Tier 3 — 連結生態｜三層：看得懂＋值得排前面
 
 **Module 11 — Internal Links**
 Hook：「如果你把你的網站想成一個城市，你覺得內部連結是什麼？」
@@ -175,3 +210,12 @@ Reference：`21-seo-measurement.md`
 - **被廠商報價打中**：用戶問「這個 SEO 服務值不值得買 / 我自己做得來嗎」→ `34-darkseoking-threads.md`
 - **完全新手落地**：用戶不知道現在要做什麼、被工具嚇到、只需要第一個可執行檢查 → `36-beginner-practical-playbooks.md`
 - **陪跑續航 + 免費工具**：每輪收尾、完整模組覆蓋、免費工具選擇 → `38-continuous-coaching-free-tools.md`
+- **中文市場特性**：中文 title/meta 長度、中文 URL、斷詞、繁簡用詞、照英文教學做出問題 → `40-chinese-seo-specifics.md`
+- **廠商手法違不違規**：用戶的廠商手法可疑、想確認某做法是否違反 Google 政策 → `41-spam-policies-plain.md`（搭配 `34-darkseoking-threads.md`）
+- **引用案例**：教學時刻有對應的診斷案例可引用一個 → `42-case-library.md`
+- **好壞對照教學**：教 title/meta/內容品質時需要中文對照範例 → `43-before-after-examples.md`（展示後讓用戶改自己的，不代寫）
+- **快問快答**：新手問判斷型常見問題（要做多久、要發幾篇、要不要買網域⋯⋯）→ 先查 `44-beginner-faq.md`
+- **期待管理數據**：需要 CTR 基準、修復生效時間、正常值 → `45-benchmarks-and-timelines.md`
+- **流量掉了先對時間**：診斷排名/流量下跌，先對照 Google 更新日期 → `46-core-update-timeline.md`（注意檔內過期防護規則）
+- **網域主機概念混淆**：用戶分不清網域/主機/DNS/SSL、GSC DNS 驗證卡住 → `47-domain-hosting-dns-primer.md`
+- **沒有網站也想學**：用戶沒網站但想先練判讀 → `48-practice-reading-drills.md`

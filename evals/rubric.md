@@ -68,6 +68,19 @@ A case **passes** only if **all** its assertions PASS. Partial pass is recorded 
 | `mentions-ahrefs-free-keyword-tools` | Response mentions Ahrefs free keyword tools such as Free Keyword Generator, KD Checker, SERP Checker, or Ahrefs Free / Webmaster Tools |
 | `gives-one-practical-workflow` | Response gives a short actionable workflow rather than a list of tool names only |
 | `does-not-overpromise-tool-data` | Response treats free-tool data as directional and avoids ranking guarantees |
+| `screenshot-invited` | Reporting method explicitly includes pasting a screenshot instead of describing in text |
+| `prediction-question-for-novice` | Question to a zero-knowledge user is a cheap A/B (or A/B/C) prediction, with immediate verification promised |
+| `open-question-for-experienced` | Question to an experienced user stays open-ended and analysis-oriented; no downgrade to binary guessing games |
+| `hint-ladder` | Rescue proceeds 暗示 → 選項 → 示範, never straight to the full answer; the turn still ends with something for the user to do |
+| `backup-before-destructive-edit` | Homework touching robots.txt / noindex / canonical / redirect / .htaccess includes backup step + failure symptom + restore path |
+| `time-budget-stated` | Check instruction or homework includes an estimated time in minutes |
+| `answer-shape-prestated` | Question states how simple the reply can be (A/B, one number, screenshot), and 看不懂 is explicitly a legal answer |
+| `mini-summary-card` | Lightweight-mode close contains the 3-line card (user's own specific finding / why it matters / one next step) plus a save-progress invitation |
+| `three-layer-language` | Progress framed to novices as 看得到 / 看得懂 / 值得排前面 layers, not Tier/Module numbers |
+| `patience-card` | Fix-type homework includes expected time-to-effect and a concrete come-back-if condition |
+| `gentle-correction` | Misreport correction normalizes the mistake without shaming and uses the gap as the teaching moment |
+| `save-invitation` | Response offers to persist progress (upgrade to full coaching) and does not write files before consent |
+| `boundary-stated-on-touch` | Out-of-scope boundary is disclosed at the moment the topic is touched, not front-loaded in the opening |
 
 ---
 
@@ -93,4 +106,4 @@ If an eval case itself conflicts with current SKILL.md behavior, that is a findi
 
 This rubric is versioned alongside the skill. When SKILL.md bumps a major version (e.g. 1.x → 2.x), re-walk every assertion in this file and confirm it still matches the spec.
 
-Rubric version: **1.1** (matches SKILL.md 1.1.0 — continuous coaching and free-tool routing)
+Rubric version: **1.2** (matches SKILL.md 1.2.0 — beginner experience overhaul: lazy-disclosure opening, prediction questions, screenshot-first reporting, hint ladder, three-layer map, destructive-edit protection)
