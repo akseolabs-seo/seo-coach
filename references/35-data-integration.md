@@ -53,6 +53,8 @@ API 文件：https://developers.google.com/webmaster-tools/v1/api_reference_inde
 2. 建立 service account，加到 GA4 property 的權限
 3. 用 API 讀資料
 
+**完整逐步（含每步「完成長什麼樣」、驗證查詢、錯誤對照表）→ `references/51-ga4-api-connection.md`**
+
 API 文件：https://developers.google.com/analytics/devguides/reporting/data/v1
 
 ---
@@ -98,6 +100,8 @@ API 文件：https://developers.google.com/analytics/devguides/reporting/data/v1
 ## 從哪個開始接
 
 只想接一個 → **從 GSC 開始**。它對 SEO 陪跑的價值最高（查詢、排名、CTR、Coverage 都在這）。
+
+要接第二個 → **GA4**，逐步走 `references/51-ga4-api-connection.md`；接之前先確認用戶真的需要（已反覆貼截圖、要跨月比較或固定月報），不要拿 API 當入門門檻。
 
 流程：
 1. 先確認用戶已經完成基礎檢查，且真的需要真實數據

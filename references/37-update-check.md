@@ -56,7 +56,7 @@
 
 ### Step 1：讀本地版本
 
-Read 本地 `SKILL.md` 的 frontmatter，抓 `version:` 欄位的值。
+讀本地 `SKILL.md` 正文的 `Current version:` 欄位。
 
 回報給用戶：「你目前裝的是 X.Y.Z」
 
@@ -68,7 +68,7 @@ WebFetch 以下 URL，比對遠端最新版的 SKILL.md：
 https://raw.githubusercontent.com/akseolabs-seo/seo-coach/main/SKILL.md
 ```
 
-從 frontmatter 抓 `version:` 欄位。
+從正文抓 `Current version:` 欄位。
 
 **如果 fetch 失敗**（repo 還沒公開、網路問題、URL 不對）：
 - 不要假裝有檢查到結果

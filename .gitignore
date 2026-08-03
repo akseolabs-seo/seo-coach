@@ -4,3 +4,6 @@ Thumbs.db
 *.swo
 .env
 .env.local
+
+# eval run artifacts
+evals/runs/

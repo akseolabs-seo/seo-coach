@@ -150,6 +150,18 @@ Component rationale:
 
 ---
 
+## Firecrawl 免費 keyless SERP（陽春版 Ahrefs）
+
+沒預算又想知道「誰在跟我搶這個關鍵字」時，Firecrawl 把搜尋服務 ＋ 網頁轉 Markdown 都用**免註冊 keyless** 開出來，免費額度 1,000 credits，做前期自動化 SERP 競品搜尋很夠。對新手最有用的用法不是拿來裝爬蟲工程師，而是當「超陽春版 Ahrefs 的 Google SERP」：
+
+1. 打搜尋端口 `api.firecrawl.dev/v2/search`，丟目標關鍵字，拿一批搜尋結果。
+2. 打爬頁端口 `api.firecrawl.dev/v2/scrape`，把前幾個對手 URL 清成 markdown。
+3. 貼給 AI，叫它拆標題、段落、內容缺口、FAQ、內鏈機會。
+
+限制要講清楚：它不能取代專業 Google SERP 爬蟲——結果不能客製化地區、綜合多個搜尋引擎，SERP 的國家／地區／語言／個人化都會有差。但新手先知道誰在跟你搶題目已經夠用。（工具狀態 as-of 2026-07，以官方頁面為準）
+
+---
+
 ## 收尾模板
 
 ### 輕量模式

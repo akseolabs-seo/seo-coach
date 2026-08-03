@@ -2,12 +2,12 @@
 
 用途：診斷「流量／排名掉了」的第一個動作——**先把掉量起始日拿來對照更新日期**，再猜原因。
 
-**資料截至：2026-01**
+**資料截至：2026-07-11**
 
 ## ⚠️ 過期防護（每次使用前先執行）
 
 1. 看上面的「資料截至」日期：距今 **超過 3 個月** → 必須先對用戶說明：「我手上的更新列表到 [日期] 為止，之後的更新要用官方儀表板確認」，並給網址：
-   **Google Search Status Dashboard → status.search.google.com/products/rgc（Ranking 分頁）**
+   **Google Search Status Dashboard → https://status.search.google.com/summary（Ranking）**
 2. 用戶的掉量日期在「資料截至」之後 → 不要用本檔判斷，直接帶用戶開 dashboard 對日期
 3. 維護者更新本檔時，同步改「資料截至」日期
 
@@ -15,7 +15,8 @@
 
 ## 更新對照的正確用法
 
-- 掉量起始日 ±1 週內有更新開始或結束 → **可能相關**，往內容品質方向查（`12-scenarios.md` Core Update 段落）
+- 先查 Search Console Data Anomalies，排除官方報表問題；再對照 Ranking dashboard
+- 掉量起始日落在更新 rollout 期間或緊鄰前後 → **可能相關**，不是因果定案
 - 沒撞上更新 → 優先查「自己改了什麼」（改版、換主機、改 URL、robots/canonical）
 - **撞上更新 ≠ 被懲罰**（Marie Haynes 式預期管理）：Core Update 是 Google 重新比較「誰更值得排前面」，多數情況不是你犯規，是別人被重新評估得更高
 - Update 還在滾動期間（開始到完成之間）不要急著大改，等完全推出再評估
@@ -24,6 +25,13 @@
 
 | 更新 | 開始 | 完成 | 重點 |
 |------|------|------|------|
+| June 2026 Spam | 2026-06-24 | 2026-06-26 | 垃圾內容系統更新；先看是否涉及 spam policy，不把所有波動都歸因於此 |
+| May 2026 Core | 2026-05-21 | 2026-06-02 | 常規核心更新 |
+| March 2026 Core | 2026-03-27 | 2026-04-08 | 常規核心更新 |
+| March 2026 Spam | 2026-03-24 | 2026-03-25 | 垃圾內容系統更新 |
+| February 2026 Discover | 2026-02-05 | 2026-02-27 | Discover 專屬更新；不要拿來解釋一般 Web Search 下跌 |
+| December 2025 Core | 2025-12-11 | 2025-12-29 | 常規核心更新 |
+| August 2025 Spam | 2025-08-26 | 2025-09-22 | 垃圾內容系統更新 |
 | June 2025 Core | 2025-06-30 | 2025-07-17 | 常規核心更新，整站品質重新評估 |
 | March 2025 Core | 2025-03-13 | 2025-03-27 | 常規核心更新 |
 | December 2024 Spam | 2024-12-19 | 2024-12-26 | 垃圾內容政策執法 |
@@ -33,7 +41,7 @@
 | June 2024 Spam | 2024-06-20 | 2024-06-27 | 垃圾內容政策執法 |
 | March 2024 Core + Spam | 2024-03-05 | 2024-04-19 | 近年最大：Helpful Content 併入核心系統；新增規模化內容濫用、過期網域濫用、寄生 SEO 三條政策（→ `41-spam-policies-plain.md`） |
 
-2025 下半年之後的更新：本檔未涵蓋，一律查 dashboard。
+官方即時來源：https://status.search.google.com/summary 。本表只作教學快查；診斷時仍開 live dashboard。
 
 ## 給用戶的白話講法
 

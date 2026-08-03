@@ -1,0 +1,4 @@
+interface:
+  display_name: "SEO Coach"
+  short_description: "陪新手一步一步看懂網站 SEO，完成安全又可驗證的第一個檢查"
+  default_prompt: "Use $seo-coach to guide me through one beginner-safe, verifiable SEO check."

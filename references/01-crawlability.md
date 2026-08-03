@@ -31,12 +31,25 @@
 
 ### 怎麼檢查
 1. 瀏覽器直接開 `yourdomain.com/robots.txt`
-2. Google Search Console → 設定 → robots.txt 測試工具
+2. Search Console 的 robots.txt report 看 Fetch status、Checked on、Issues
+3. 特定重要 URL 用 URL Inspection 看 `Crawl allowed?`
+
+注意：robots.txt 404 通常代表沒有爬行限制，不是技術錯誤。robots.txt 只控制爬取，不是可靠的退出索引方法；要用 `noindex` 時，頁面必須能被爬到才能讀到指令。
 
 ### 邊界
 - 複雜的多語系或動態網站的 robots.txt 策略
 - 爬行預算優化（大型網站特有問題）
 → 建議尋求專業 SEO 服務
+
+---
+
+## Cloudflare 預設擋 AI 爬蟲可能連累 Googlebot
+
+如果你的網站掛在 Cloudflare 後面，這點要特別確認。依 Cloudflare 官方公告，2026-09-15 起它會在網站頁面**預設阻擋 AI 訓練與 AI 代理類爬蟲**，搜尋爬蟲維持允許。麻煩在混用型爬蟲——Cloudflare 直接點名 Googlebot 這種同時帶搜尋與訓練用途的爬蟲會照**最嚴格規則**處理；你的站若套到新預設、或原本就開了 AI 爬蟲阻擋，Googlebot 可能一起被擋，導致頁面停止被收錄。（as-of 2026-07 政策，請以當前 Cloudflare 官方設定為準）
+
+行動：有用 Cloudflare 就去「網路安全／設定／機器人流量設定」確認，別讓巨頭打仗、最後陣亡的是你。
+
+附帶一個對 AEO／GEO 有用的東西：Cloudflare 的 AI Crawl Control → 最佳化／分析頁，可以看 AI 爬蟲每天請求你哪些 URL、幾次、哪些頁最常被抓。注意這數字**不能**直接解讀成「AI 拿你的內容回答了幾次」，較準確是 AI 相關爬蟲在找來源時實際成功存取過哪些頁、流量集中在哪些路徑；但用來看「哪些頁被 AI 系統注意到、該優化哪頁的段落與答案密度」已經很夠用。
 
 ---
 

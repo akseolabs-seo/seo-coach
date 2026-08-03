@@ -30,7 +30,7 @@
 | 負面 SEO 防護 | `references/20-negative-seo.md` |
 | SEO 成效衡量 / 向非SEO說明價值 | `references/21-seo-measurement.md` |
 | Google 地圖 / Local SEO 低比重例外（GBP、NAP） | `references/22-local-seo.md` |
-| Google Analytics 4 基礎 | `references/23-ga4-basics.md` |
+| Google Analytics 4 基礎（安裝、報表、指標定義） | `references/23-ga4-basics.md` |
 | Google Search Console 完整操作指南 | `references/24-gsc-guide.md` |
 | SEO 術語表（中英對照，80+ 詞彙） | `references/25-glossary.md` |
 | Ahrefs SEO 初學者課程精華（Sam Oh，14 部影片） | `references/30-ahrefs-course-insights.md` |
@@ -42,15 +42,19 @@
 | 新手實戰 Playbooks（5 分鐘檢查、最小下一步） | `references/36-beginner-practical-playbooks.md` |
 | 版本檢查（用戶觸發，比對 GitHub 最新版） | `references/37-update-check.md` |
 | 陪跑續航規則 + 免費 SEO 工具地圖 | `references/38-continuous-coaching-free-tools.md` |
-| 中文／台灣市場 SEO 特性（斷詞、title 長度、中文 URL） | `references/40-chinese-seo-specifics.md` |
+| 新手教學協議（示範→共做→獨立） | `references/39-beginner-coaching-protocol.md` |
+| 中文／台灣市場 SEO 特性（斷詞、title 顯示、中文 URL） | `references/40-chinese-seo-specifics.md` |
 | Google 垃圾內容政策白話對照（廠商手法自查） | `references/41-spam-policies-plain.md` |
 | 診斷案例敘事庫（症狀→檢查→根因→結果） | `references/42-case-library.md` |
 | 中文 title／meta／內容好壞對照庫 | `references/43-before-after-examples.md` |
 | 新手快問快答庫（FAQ） | `references/44-beginner-faq.md` |
-| CTR 基準值與修復生效時間表 | `references/45-benchmarks-and-timelines.md` |
+| 比較基線與修復生效時間表 | `references/45-benchmarks-and-timelines.md` |
 | Google 更新時間表（含過期防護） | `references/46-core-update-timeline.md` |
 | 網域／主機／DNS 一頁入門 | `references/47-domain-hosting-dns-primer.md` |
 | 沒網站用戶的判讀練習 | `references/48-practice-reading-drills.md` |
+| AK『30 天 SEO 小知識』系列來源對照／更新台帳（內容已散入各主題檔） | `references/49-ak-30day-seo-tips.md` |
+| GA4 陪跑軌道（一次一張指路卡、L1–L6 逐級解鎖） | `references/50-ga4-coaching-track.md` |
+| 把 GA4 接進來（Data API service account 逐步 + 錯誤對照） | `references/51-ga4-api-connection.md` |
 | 開場三版本 + 邊界延遲揭露（系統） | `references/sys-opening.md` |
 | 教練風格行為定義（系統） | `references/sys-coach-styles.md` |
 | 進度檔案與行動清單模板（系統） | `references/sys-file-templates.md` |
@@ -76,7 +80,7 @@ M16-18（情境、防護、衡量）維持獨立，不硬塞進三層。
 
 按 Tier 順序推進（帶症狀的用戶走 `00-session-flow.md` 症狀入口表）。每個模組共用對話節奏（見 SKILL.md 主檔）：Hook → 用戶回答 → 檢查指令 → 診斷 → 教學 → 行動項 → 進度確認 → 過渡。
 
-Hook 有兩個版本：**預設 Hook**（有基礎者）與**新手預測題**（完全新手用，二選一、猜完馬上驗證）。
+Hook 有兩個版本：**預設 Hook**（有基礎者）與**新手辨識題**。完全新手先看 `39-beginner-coaching-protocol.md` 的示範，再用下列題目判讀下一個同型案例；不要拿空白預測題當第一份價值。
 
 ### ▌Tier 1 — 技術基礎健診（所有網站必做）｜三層：看得到
 
@@ -191,7 +195,7 @@ Reference：`20-negative-seo.md`
 **Module 18 — SEO 成效衡量**
 Hook：「你怎麼知道你做的 SEO 有沒有在發揮作用？你目前看什麼數字？」
 工具：GSC → 成效、GA4 → 自然搜尋、Ahrefs Free Web Analytics（可選）
-Reference：`21-seo-measurement.md`
+Reference：`21-seo-measurement.md`（GA4 那一段怎麼帶用戶看 → `50-ga4-coaching-track.md`）
 
 ---
 
@@ -201,7 +205,9 @@ Reference：`21-seo-measurement.md`
 - **進階技術概念**（JS SEO / 爬行預算 / 分頁 / Log File）：用戶有技術背景或主動問到 → `16-advanced-technical.md`
 - **電商產品頁 + Faceted Navigation**：電商用戶 → `18-ecommerce-seo.md`
 - **Google 地圖 / Local SEO 低比重例外**：只有用戶明確問 GBP、NAP、Google 地圖時才讀 `22-local-seo.md`；只做基本方向或轉介，不展開地圖排名服務
-- **GA4 基礎**：用戶問數據怎麼看 → `23-ga4-basics.md`
+- **GA4 基礎**：用戶問 GA4 怎麼裝、某個指標是什麼意思 → `23-ga4-basics.md`
+- **GA4 陪跑軌道**：用戶問「SEO 有沒有效／流量有沒有變多／哪一篇有用／進來的人有沒有下單」→ `50-ga4-coaching-track.md`，**一輪只給一張指路卡**（精確路徑 → 只看一個數字 → 一條常見誤讀）
+- **接 GA4 API**：用戶已反覆貼 GA4 截圖、要跨月比較或固定月報 → `51-ga4-api-connection.md`；完全新手第一輪不提
 - **GSC 從零設定**：用戶從來沒用過 GSC → `24-gsc-guide.md`
 - **術語解釋**：用戶問到不懂的詞彙 → `25-glossary.md`
 - **初學者白話補充**：用戶是新手、被術語卡住、需要更友善的解釋順序 → `31-beginner-friendly-source-map.md`

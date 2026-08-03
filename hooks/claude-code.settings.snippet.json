@@ -1,0 +1,29 @@
+{
+  "_comment": "seo-coach auto-summon router for Claude Code. MERGE these two entries into the existing hooks object of ~/.claude/settings.json (global, all projects) or .claude/settings.json (one project). Do not replace the file — if you already have UserPromptSubmit hooks, append to that array. Replace <SKILL_DIR> with the folder containing seo_coach_router.py, e.g. C:/Users/you/.claude/skills/seo-coach/hooks or ~/.claude/skills/seo-coach/hooks",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"<SKILL_DIR>/seo_coach_router.py\"",
+            "timeout": 10,
+            "statusMessage": "seo-coach session router"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"<SKILL_DIR>/seo_coach_router.py\"",
+            "timeout": 10,
+            "statusMessage": "seo-coach router"
+          }
+        ]
+      }
+    ]
+  }
+}

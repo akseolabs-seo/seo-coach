@@ -1,5 +1,10 @@
 # Google Search Console 完整操作指南
 
+**reason**: 提供新手可定案的索引與成效資料，避免用 `site:`、紅色狀態或單一平均值過度推論。
+**strip_when**: Search Console 的報表名稱或資料定義改變，且本流程無法再用目前路徑完成同一判斷。
+
+資料核對：2026-07-11。介面逐步推出的功能要先確認該 property 是否看得到。
+
 ## 是什麼
 Google Search Console（GSC）是 Google 提供的免費工具，讓你看到 Google 怎麼看你的網站——爬行狀況、索引狀態、搜尋表現、技術問題。
 
@@ -31,7 +36,7 @@ Google 需要確認你是網站的擁有者，有幾種方式：
 **WordPress 最簡單的方式：**
 Yoast SEO → 一般 → Webmaster Tools → 貼上 Google 驗證碼
 
-**驗證後等 24-48 小時**，GSC 才開始收集數據。
+**驗證後不會補回驗證前的完整資料**；新 property 需要時間開始顯示報表，不要把固定 24–48 小時當保證。
 
 ### Step 4：提交 Sitemap
 左側選單 → Sitemap → 輸入你的 sitemap URL → 提交
@@ -70,6 +75,23 @@ Yoast SEO → 一般 → Webmaster Tools → 貼上 Google 驗證碼
 **比較日期範圍：**
 右上角「比較」→ 選「與前一期間比較」→ 看哪些字排名上升/下降
 
+### 新手先看 Insights，再進 Performance
+
+若介面有 **Insights**，先只做三件事：
+1. 看 clicks / impressions 趨勢。
+2. 選一個 trending down 頁面。
+3. 選一個 trending up query，再點進 Performance 保留相同時段查原因。
+
+若有 branded / non-branded 篩選，可用來區分品牌需求與新受眾；這是 AI 分類，可能誤標，也不是每個 property 都有。
+
+### 最近 24 小時
+
+Performance 的「24 hours」可看最近可用的 24 小時、以小時拆分，通常只延遲數小時。適合發布新內容、改版或突發事故後快速觀察。
+
+- 最新虛線資料仍在收集中，數字可能改變。
+- 不把未完成小時和完整日直接比較。
+- 24-hour view 使用瀏覽器本地時區；其他日期報表可能採 Pacific Time。
+
 ---
 
 ### 2. URL 檢查工具
@@ -95,8 +117,16 @@ Yoast SEO → 一般 → Webmaster Tools → 貼上 Google 驗證碼
 **路徑：** 左側 → 索引 → 頁面
 
 **看什麼：**
-- **已索引的頁面數** vs 你實際的頁面數（差距大 = 有問題）
+- 先確認首頁、重要服務／產品頁、核心文章等「本來就應該被索引」的 canonical URL
 - **未索引的原因**（點擊各原因可看到受影響的 URL）
+
+**不要追求 100% 收錄。** duplicate、noindex、404、篩選參數頁未索引可能完全正常；報表數量也不是網站所有 URL 的完整 inventory。只修「本來應該被索引」且原因不合理的頁面。
+
+### `site:` 只是快篩，不是計數器
+
+- 沒有 GSC 時，`site:domain.com` 只能快速看 Google 是否顯示任何頁面。
+- 單一重要 URL 是否收錄，用 URL Inspection 定案。
+- 整站看 Page Indexing 的趨勢、原因分類與重要頁，不拿 `site:` 結果數當收錄量。
 
 **常見的未索引原因和處理方式：**
 | 原因 | 意義 | 處理 |
@@ -148,9 +178,45 @@ Search Console 的「行動裝置可用性」報告與 Mobile-Friendly Test 已�
 
 ---
 
+## 內容負債：「90 天 0 點擊」頁怎麼處理
+
+GSC 裡一排「90 天 0 點擊」的頁面不是安靜當空氣，它們更像倉庫裡的空紙箱，堆久了會把走道塞住。弱頁越生越多、Googlebot 還得在裡面繞來繞去——Google 的 crawl budget 文件也說，重複、不重要、沒必要被爬的 URL 會吃掉原本能花在重要頁的爬行時間。小站多發幾篇不至於馬上出事，但這帳單別裝沒看到。
+
+先去 GSC 看三個訊號，越堆越多就是內容負債：
+- 索引 → 頁面 → **已爬取但目前未收錄（Crawled - currently not indexed）**
+- 索引 → 頁面 → **找到但目前未編入索引（Discovered - currently not indexed）**
+- 成效 → 網頁：篩出過去 90 天 0 點擊的頁面
+
+處理方式（按點擊數排序、一頁頁看）：
+- 能合併的 → 併進主題主頁
+- 完全沒商業價值的 → 直接移掉
+- 還有救的 → 補真實案例、價格區間、規格限制、客戶真正會問的問題
+
+用 AI 寫、批量處理都可以，但每頁都要有明確任務，別再製造一堆「看起來像文章」的空殼。建議先把最礙事的 30 頁垃圾處理掉，讓一個主題變厚，再談新增。
+
+---
+
+## Recommendations、annotations 與報表異常
+
+### Recommendations
+
+Overview 可能顯示 issues、opportunities、configuration 建議。它們是可選、會變動的提示，不是必須全部修完的分數清單；先判斷是否影響重要頁與當前目標。
+
+### Custom annotations
+
+完成重大改動後，在 Performance 圖表對日期按右鍵加註「改了什麼 + URL 群組」。這能避免幾週後忘記流量變化前發生過什麼。
+
+- 每 property 最多 200 條、每條 120 字，500 天後刪除。
+- 所有 owner／full user 可見，不放姓名、電話或其他個資。
+- comparison mode 與 24-hour view 不顯示 annotations。
+
+### 先排除 Google 報表異常
+
+遇到暴跌先查 Search Console Data Anomalies 與 Search Status Dashboard，再查自己改版、部署、索引、安全性與內容競爭。官方異常只能解釋報表；若 GA4 或 server logs 也下降，仍需查網站層。
+
 ## GSC 的重要限制
 
-- **數據延遲**：GSC 的數據通常延遲 2-3 天，不是即時的
+- **數據延遲**：完整日資料不是即時；最近 24 小時視圖通常延遲數小時且可能是 preliminary
 - **歷史數據**：只保留 16 個月的成效數據（超過就看不到了）
 - **排名是平均值**：「平均排名」是加權平均，不代表任何人實際搜尋看到的位置
 - **曝光次數**：用戶滾動到你的結果才算曝光，不是在頁面上出現就算
@@ -163,6 +229,7 @@ Search Console 的「行動裝置可用性」報告與 Mobile-Friendly Test 已�
 每月例行 GSC 檢查（15 分鐘）
 
 □ 成效 → 點擊數趨勢（vs 上月）
+□ Insights → 一個 trending up 與一個 trending down 項目（若可用）
 □ 成效 → 查詢 → 排名 11-20 的字（機會）
 □ 成效 → 查詢 → 排名下降的字（警報）
 □ 索引 → 頁面 → 新增的未索引錯誤
@@ -170,3 +237,10 @@ Search Console 的「行動裝置可用性」報告與 Mobile-Friendly Test 已�
 □ 手機實機 / Lighthouse → 有沒有明顯可用性問題
 □ Sitemap → 確認狀態正常
 ```
+
+官方來源：
+- Get started：https://support.google.com/webmasters/answer/10267942
+- Page Indexing：https://support.google.com/webmasters/answer/7440203
+- Recommendations：https://support.google.com/webmasters/answer/15107108
+- Annotations：https://support.google.com/webmasters/answer/16530728
+- 24-hour data：https://developers.google.com/search/blog/2025/04/san-hourly-data

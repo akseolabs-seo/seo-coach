@@ -73,9 +73,10 @@ URL 結構一旦確定盡量不要改，改了要設 301 重定向，否則外�
 |--------|---------|------------------|
 | Article | 部落格文章 | 文章卡片 |
 | Product | 產品頁 | 價格、評分 |
-| FAQPage | FAQ 頁面 | 展開問答 |
 | LocalBusiness | 本地商家 | 地圖、電話 |
 | BreadcrumbList | 所有頁面 | 麵包屑路徑 |
+
+> 2026-05 起 Google Search 不再顯示 FAQ rich results。FAQ 內容仍可服務讀者，但不要再把 `FAQPage` 當成可取得展開問答的 SEO 功課。官方變更：https://developers.google.com/search/updates
 
 ### 怎麼測試
 - Google Rich Results Test（`search.google.com/test/rich-results`）

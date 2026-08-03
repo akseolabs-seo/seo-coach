@@ -1,5 +1,66 @@
 # SEO Coach Changelog
 
+## 2.0.0 — GA4 陪跑軌道、自動召喚 router、可執行的 eval 套件
+
+**Type**: major
+**Date**: 2026-07-29
+**Rollback point**: 1.2.0（commit 92c5002 — git 上的還原點；1.2.0 未對外發布）
+
+**對外的上一個發布版本是 1.1.0**，所以多數使用者這次一次跨過 1.2.0 與 2.0.0 兩層改動。1.2.0 那層（開場瘦身、症狀入場、截圖回報、提示階梯、三層地圖、破壞性改動保護、9 個新知識檔）也是第一次到他們手上，內容見下方 1.2.0 段落。
+
+**先看下面第一節**——教練的教學法和續課規則反轉了，那是這版真正的 breaking change。其餘是新增能力：GA4 陪跑軌道、自動召喚 router、跑得起來的 eval 套件。
+
+### 行為反轉（升級要注意）
+
+同樣的輸入，這版的行為跟 1.2.0 不一樣：
+
+- **教學法反轉**：完全新手從「先答二選一預測題」改成**先示範一個結果**，再把下一個同型判斷交給他。用戶說「你先看／直接告訴我」時立刻示範，不再強迫先猜、也不再走提示階梯。
+- **功課不再是續課門票**：只有真正的證據依賴或安全風險才擋下一步，其餘情況先縮小成 5-10 分鐘的 micro-step 或直接 park。
+- **18 模組從預設漏斗改成 opt-in 課綱**：預設依用戶目標走 2-4 個必要檢查並講清楚退出條件；「流量掉了」不再自動展開整套課程。月度維護要再次取得同意。
+- **成功條件放寬**：第一個勝利可以是健康基線、完成並重驗一個低風險修正、或建立有效量測——不再為了「一定要找到問題」製造假陽性。
+- **證據護欄收緊**：`site:` 不再當精確收錄計數器（只是快篩，單一 URL 用 URL Inspection 定案）；sitemap 404 不再被寫成未收錄的單一根因。
+- **移除錯誤硬規則**：中文 title/meta 不再鎖死 25–30／75–80 字；不再用通用「3–6 個月見效」或固定 CTR 曲線判定新手網站。
+- **session 檔從兩個變三個**：拿到 GA4 數字時會建立 `seo-ga4-log.md`。有工具在讀進度檔的話要留意。
+- **Eval**：舊的 prediction-first、homework hard gate、forced first defect 三組 assertion 被反轉——1.2.0 的判準在這版是錯的。
+
+### 官方資料更新（2026）
+
+GSC 24-hour view、Insights、Recommendations、custom annotations、2026 Generative AI performance report（限量推出）、FAQ rich result 退役、`llms.txt` 規則、2025–2026 ranking updates。
+
+### 封裝
+
+frontmatter 收斂成 `name` + `description`；新增 `agents/openai.yaml`、source/package validator、可重建 `.skill` 的 build 腳本。
+
+### GA4 陪跑軌道
+
+- 新增 `50-ga4-coaching-track.md`：**一輪一張指路卡**——精確點擊路徑（雙中文字樣 + 英文原名，因為 GA4 各版本選單不一致）→ 只看一個數字 → 一條常見誤讀 → 換你做。L1–L6 每級只解鎖一個概念：工作階段 vs 使用者 → 管道群組 → 維度 vs 指標 → 事件 → 關鍵事件 → GSC×GA4。
+- **數字一出現就主動做三件事**（不等用戶問）：用人話翻譯這個數字在算什麼、跟台帳上次比或明講是基準線、當輪寫進台帳並告訴用戶。另有 9 條誤讀觸發表，畫面上出現就當場講掉一句（Direct 不是老客戶、`(not set)`、參與率定義、關鍵事件 0、資料保留預設 2 個月⋯⋯），一輪一條。
+- 新增第三個 session 檔 **`seo-ga4-log.md`**：只增不刪的數據台帳，每列都要填「當時發生什麼」——三個月後看到波動，那一欄是唯一能把因果對起來的東西。只在第一次拿到 GA4 數字時建立，輕量模式不建。
+- 新增 `51-ga4-api-connection.md`：Data API + service account 逐步，每步附「完成長什麼樣」，含驗證查詢與 7 條錯誤對照。**接通的定義是 API 數字與介面數字對得起來**，不是腳本不報錯；接了 API 也仍要讓用戶自己在介面看一次同一個數字。
+- 台帳只寫本輪實際看到的數字，來源必填 `截圖／API／用戶口述`。
+- `23-ga4-basics.md` 的「轉換事件」更新為「關鍵事件（Key events，舊介面叫轉換）」。
+
+### 自動召喚 router（選用安裝）
+
+- 新增 `hooks/`：一支 `seo_coach_router.py` 同時支援 Claude Code 與 Codex——兩邊的 hook stdin 欄位與輸出契約相同，不需要各寫一份。
+- `SessionStart` 只在**陪跑資料夾**（有 `seo-progress.md` / `seo-actions.md` / `seo-ga4-log.md`）觸發並接續上次進度；`UserPromptSubmit` 在任何專案偵測到新手向 SEO 提問才觸發。
+- 注入文字要求「若更適合其他更專門的 SEO 技能就改用那一個」，不把整站 audit、語意內容、GEO 硬吃進陪跑模式。
+- 不裝完全不影響既有行為。無第三方套件、不寫檔、不連網，任何例外靜默 exit 0。
+- `hooks/test_router.py` 26 個 pipe test，含 `Seoul` / `museo` 這類 `seo` 子字串誤觸發的反例。
+
+### Eval 套件變成可執行
+
+- 新增 `scripts/run_evals.py`：每個 case 送進獨立的 `claude -p` 全新 session 與空白工作目錄，存下回應、記錄該 case 實際產生了哪些檔案、輸出把判準內嵌好的判分工作表。`--judge` 提供模型判分的第一輪 triage（FAIL 必須人工覆核）。
+- **補完 81 條缺失判準**：改版前 146 個 assertion 裡有 81 個（55%）在 rubric 找不到定義，60 個 case 有 42 個受影響——等於過半的判分只能望文生義。現在 146/146 都有可引用的判準。
+- validator 新增閘門：assertion 沒有對應 rubric 定義就 build 失敗，這個坑不會再回來。
+- 新增 10 個 GA4 相關 eval case 與 22 條判準。
+
+### 已驗證 / 未驗證
+
+已跑：runner 3 case 端到端（含 `seo-ga4-log.md` 真的被寫出來）；GA4 6 個 case 6/6 通過（記錄在 `evals/ga4-track-eval-2026-07-29.md`，其中 1 個是修正 spec 後重跑才過）；router 26/26；validator 閘門有反向測試；打包 64 個 runtime 檔。
+
+未跑：其餘 54 個既有 eval 尚未用新 runner 整套重跑；`51` 的 Data API 流程未端到端實跑（需真實 GCP 專案）；hook 兩平台的實際觸發未驗證（需寫進使用者自己的設定檔），Codex `hooks.json` 的檔案位置以安裝時結果為準——細節寫在 `hooks/README.md`。
+
 ## 1.2.0 — Beginner experience overhaul + knowledge base expansion
 
 **Type**: minor

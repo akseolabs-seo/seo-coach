@@ -1,6 +1,6 @@
 {
   "skill_name": "seo-coach",
-  "eval_set_version": "1.2.0",
+  "eval_set_version": "2.0.0",
   "evals": [
     {
       "id": "lightweight-continuation-next-module",
@@ -432,15 +432,15 @@
       "name": "回訪用戶 — 有未交功課（3 天內）",
       "prompt": "我回來了，繼續學習",
       "context": "seo-progress.md exists with: 上次session=2天前, 待交功課=建立sitemap.xml並提交GSC, 功課狀態=待完成, 下次從=Tier1-Module2索引狀態",
-      "expected_output": "先問功課，確認完才繼續 Module 2。不重新問平台或風格。",
+      "expected_output": "先問功課卡在哪；能縮就做 5-10 分鐘 micro-step，不影響下一判斷就 park。功課不是續課門票。不重新問平台或風格。",
       "assertions": [
         {
           "name": "asks-homework-first",
           "description": "Claude asks about the homework before continuing to next module"
         },
         {
-          "name": "blocks-progress-until-homework",
-          "description": "Claude does not move to Module 2 until homework is addressed"
+          "name": "homework-is-not-a-gate",
+          "description": "Claude does not block all progress merely because homework is incomplete"
         },
         {
           "name": "no-re-onboarding",
@@ -656,8 +656,8 @@
       "expected_output": "先用低摩擦方式看一個最值得先看的問題，避免一開場就進完整 onboarding；若用戶有意願，再升級成完整陪跑。",
       "assertions": [
         {
-          "name": "asks-before-telling",
-          "description": "Claude asks a question before giving any SEO assessment"
+          "name": "safe-observation-before-question",
+          "description": "Claude first makes one safe public observation, states its evidence limit, then asks one small question"
         },
         {
           "name": "uses-traditional-chinese",
@@ -790,18 +790,18 @@
       ]
     },
     {
-      "id": "novice-prediction-question",
-      "name": "Item 6 — 零基礎用預測題不用開放題",
+      "id": "novice-worked-example-first",
+      "name": "v1.3 — 零基礎先示範，再交同型判讀",
       "prompt": "我完全不懂 SEO，第一次弄網站，網址是 example.com，幫我看看",
-      "expected_output": "對零基礎用戶的第一個 Socratic 問題是低成本二選一/三選一預測題（例：你猜 Google 找得到你的網站嗎？A 找得到 B 找不到），並預告會馬上一起驗證；不是開放式「你覺得呢」。",
+      "expected_output": "先示範一個安全唯讀檢查，說明看到什麼與證據邊界；再把下一個同型判讀交給用戶。不要要求完全新手先空白猜題。",
       "assertions": [
         {
-          "name": "prediction-question-for-novice",
-          "description": "The question offered is a cheap A/B (or A/B/C) prediction, not an open-ended question"
+          "name": "worked-example-before-question",
+          "description": "Claude demonstrates one evidence-bounded check before asking the novice to judge a similar item"
         },
         {
-          "name": "verify-promised",
-          "description": "Claude says the guess will be verified together right away"
+          "name": "no-blank-guessing-tax",
+          "description": "Claude does not require the complete novice to guess before receiving any useful observation"
         },
         {
           "name": "no-tool-overload",
@@ -885,7 +885,7 @@
       "id": "homework-auto-downscale",
       "name": "Item 10 — 連續 2 次未交功課自動降階",
       "prompt": "（seo-progress.md 顯示：待交功課「改寫首頁 title」，連續未完成次數：2）不好意思，上次的功課我又沒做，最近真的太忙",
-      "expected_output": "不責備、一句話正常化，把功課自動縮小成 10 分鐘內可完成的版本，今天不進新模組。",
+      "expected_output": "不責備、一句話正常化，先問阻力；能做就縮成 5-10 分鐘 live micro-step，不能做且不影響下一判斷就 park，不把功課當續課門票。",
       "assertions": [
         {
           "name": "downscaled-homework",
@@ -896,8 +896,8 @@
           "description": "Claude normalizes without lecturing or guilt-tripping"
         },
         {
-          "name": "no-new-module-today",
-          "description": "Claude does not start a new module before the smaller homework is set"
+          "name": "no-hard-homework-gate",
+          "description": "Claude may continue on an independent path when the unfinished task is not a real dependency"
         }
       ]
     },
@@ -970,18 +970,18 @@
       ]
     },
     {
-      "id": "first-win-guarantee",
-      "name": "Item 17 — 第一次檢查沒發現問題就接第二個",
+      "id": "first-win-no-fabricated-defect",
+      "name": "v1.3 — 健康基線也是成果，不強挖缺陷",
       "prompt": "（新手第一次檢查，robots.txt 完全正常）我打開 robots.txt 了，看起來就是你說的正常樣子，沒有 Disallow: /",
-      "expected_output": "小慶祝後不停在「沒問題」，立即接一個更可能有發現的檢查（例如首頁 title 品質），確保第一次 session 有具體發現。",
+      "expected_output": "把 robots.txt 正常記成健康基線並說明它不能證明什麼；本輪最多再給一個有明確理由的檢查，不保證一定找出缺陷。",
       "assertions": [
         {
-          "name": "continues-to-second-check",
-          "description": "Claude immediately proposes a second, higher-hit-rate check instead of ending"
+          "name": "healthy-baseline-counts",
+          "description": "Claude treats the healthy result as a legitimate outcome rather than manufacturing a problem"
         },
         {
-          "name": "second-check-is-findable",
-          "description": "The second check targets something almost always improvable (e.g. title/meta quality)"
+          "name": "evidence-limit-stated",
+          "description": "Claude explains what a normal robots.txt result does and does not prove"
         },
         {
           "name": "keeps-one-next-step",
@@ -991,17 +991,271 @@
     },
     {
       "id": "chinese-title-length-check",
-      "name": "Track B1 — 中文 title 長度以中文字計",
+      "name": "v1.3 — 中文 title 不鎖死固定字數",
       "prompt": "我照國外教學把首頁 title 寫到 60 個字了，這樣對嗎？",
-      "expected_output": "指出英文教學的 60 characters 不等於 60 個中文字；中文 title 約 25-30 字為宜，超過會被截斷；給一個立即可做的檢查（看 SERP 上有沒有被截斷）。",
+      "expected_output": "指出英文 60 characters 不能直接套到中文，也不要改成另一個固定中文字上限；Google 依裝置寬度與查詢截斷或改寫。給一個手機/桌機實際 SERP 檢查。",
       "assertions": [
         {
-          "name": "chinese-length-correction",
-          "description": "Claude corrects the characters-vs-中文字 confusion with concrete numbers"
+          "name": "no-fixed-character-limit",
+          "description": "Claude rejects a universal character limit and explains device/query-dependent display"
         },
         {
           "name": "keeps-one-next-step",
           "description": "One concrete verification step is given"
+        }
+      ]
+    },
+    {
+      "id": "direct-help-bypass",
+      "name": "v1.3 — 用戶說你先看時直接示範",
+      "prompt": "我完全看不懂 robots.txt，你先看，直接告訴我就好",
+      "expected_output": "直接示範一個安全唯讀判讀，說明結果與證據邊界，再把下一個同型問題交給用戶；不先要求猜、不跑三階提示。",
+      "assertions": [
+        {
+          "name": "direct-help-respected",
+          "description": "Claude immediately demonstrates when the user explicitly asks it to look first"
+        },
+        {
+          "name": "no-forced-prediction",
+          "description": "Claude does not require a guess before giving useful help"
+        },
+        {
+          "name": "transfer-after-demo",
+          "description": "Claude hands one similar judgment back to the user after the demonstration"
+        }
+      ]
+    },
+    {
+      "id": "no-unobserved-live-claim",
+      "name": "v1.3 — 未抓取不得宣稱已確認",
+      "prompt": "我的網站是 https://example.com，先幫我確認 http 會不會轉 https",
+      "expected_output": "只有實際讀到 response header 後才能宣稱 redirect 結果；若沒有工具結果，要求用戶打開或貼 header，不把常見設定寫成已觀察事實。",
+      "assertions": [
+        {
+          "name": "live-claim-requires-tool-evidence",
+          "description": "Any claim that the live redirect was checked is backed by an actual tool observation"
+        },
+        {
+          "name": "no-expected-behavior-as-fact",
+          "description": "Claude does not present a typical HTTPS setup as the observed state"
+        }
+      ]
+    },
+    {
+      "id": "site-operator-evidence-guard",
+      "name": "v1.3 — site: 不當精確收錄計數器",
+      "prompt": "我有 30 篇文章，但 site:example.com 只顯示 3 筆，所以 Google 只收錄 3 篇對嗎？",
+      "expected_output": "糾正 site: 結果不完整、不能當精確收錄數；單頁用 URL Inspection，整站看 Page Indexing，先查一個重要 URL。",
+      "assertions": [
+        {
+          "name": "site-is-only-a-quick-check",
+          "description": "Claude states that site: is not a precise indexing counter"
+        },
+        {
+          "name": "gsc-decision-path",
+          "description": "Claude routes single-page and site-wide decisions to the appropriate Search Console reports"
+        }
+      ]
+    },
+    {
+      "id": "sitemap-no-false-causality",
+      "name": "v1.3 — sitemap 404 不直接宣稱根因",
+      "prompt": "我的 sitemap.xml 是 404，難怪文章都沒收錄，就是它害的對吧？",
+      "expected_output": "指出常見 sitemap 路徑不存在是可改善發現，但不是未收錄的單一根因；下一步用 URL Inspection 的原因定案。",
+      "assertions": [
+        {
+          "name": "no-single-cause-overclaim",
+          "description": "Claude does not claim a sitemap 404 alone caused non-indexing"
+        },
+        {
+          "name": "one-discriminating-check",
+          "description": "Claude gives one check that separates discovery, noindex, canonical, and quality explanations"
+        }
+      ]
+    },
+    {
+      "id": "goal-path-exit-condition",
+      "name": "v1.3 — 目標完成後可交接，不強迫 18 模組",
+      "prompt": "我只想學會確認新文章有沒有被 Google 收錄，不想上完整課程",
+      "expected_output": "定義 2-4 個必要檢查與可退出的完成條件；不把 18 模組或月度維護當必選。",
+      "assertions": [
+        {
+          "name": "goal-specific-path",
+          "description": "Claude creates a short path tied to the user's stated outcome"
+        },
+        {
+          "name": "exit-condition-stated",
+          "description": "Claude states when the user can consider this learning goal complete"
+        },
+        {
+          "name": "no-course-funnel",
+          "description": "Claude does not force the full 18-module curriculum"
+        }
+      ]
+    },
+    {
+      "id": "gsc-2026-ai-report",
+      "name": "v1.3 — 生成式 AI 報表採 2026 現況",
+      "prompt": "Search Console 現在能單獨看 AI Overview 的曝光嗎？",
+      "expected_output": "說明 2026-06 起正向部分網站推出 Generative AI performance report；能看 impressions/pages/countries/devices/dates，仍在逐步推出且資料也包含於 Web performance。",
+      "assertions": [
+        {
+          "name": "mentions-generative-ai-report",
+          "description": "Claude knows the dedicated report exists as a limited rollout"
+        },
+        {
+          "name": "rollout-boundary",
+          "description": "Claude does not imply every property already has access"
+        }
+      ]
+    },
+    {
+      "id": "faq-rich-result-retired",
+      "name": "v1.3 — FAQ rich result 已停止",
+      "prompt": "我加 FAQPage schema 就能在 Google 展開問答嗎？",
+      "expected_output": "說明 Google 已於 2026-05 停止顯示 FAQ rich results；FAQ 可為讀者保留，但 schema 不再是取得展開問答的功課。",
+      "assertions": [
+        {
+          "name": "faq-rich-result-retired",
+          "description": "Claude does not promise FAQ rich results"
+        },
+        {
+          "name": "reader-value-preserved",
+          "description": "Claude distinguishes useful FAQ content from obsolete search appearance expectations"
+        }
+      ]
+    },
+    {
+      "id": "ga4-one-pointing-card",
+      "name": "v1.4 — GA4 一次一張指路卡",
+      "prompt": "我 GA4 打開一堆東西完全看不懂，我只想知道從 Google 搜尋來的人有多少。",
+      "expected_output": "只給一張指路卡：精確點擊路徑（獲取 → 流量獲取、切成管道群組、日期 28 天）、只看 Organic Search 的工作階段、一條常見誤讀、一個回報形狀。不整份介紹 GA4。",
+      "assertions": [
+        {
+          "name": "one-pointing-card",
+          "description": "Response answers only the asked question with a single GA4 card, not a tour of GA4"
+        },
+        {
+          "name": "exact-click-path",
+          "description": "Response gives the menu path click by click, with a fallback for when the label differs"
+        },
+        {
+          "name": "names-one-metric",
+          "description": "Response tells the user which single number to read and ignores the rest of the screen"
+        },
+        {
+          "name": "names-one-misreading",
+          "description": "Response includes one concrete misreading guard (e.g. Direct is not no-source, session vs user)"
+        },
+        {
+          "name": "no-info-dump",
+          "description": "≤ 4 paragraphs, ≤ 1 core concept introduced"
+        }
+      ]
+    },
+    {
+      "id": "ga4-api-only-when-earned",
+      "name": "v1.4 — GA4 API 不當入門門檻",
+      "prompt": "我第一次做 SEO，網站剛上線，要不要先把 GA4 的 API 接給你？",
+      "expected_output": "先不接。說明現在接的效益低（資料還沒累積、只看一次），先做一個基礎檢查或確認 GA4 有在收資料；並說明之後什麼情況才值得接。",
+      "assertions": [
+        {
+          "name": "api-gated-on-need",
+          "description": "Response defers API setup and names the condition that would make it worth doing later"
+        },
+        {
+          "name": "no-tool-overload",
+          "description": "First beginner response does not push GSC, GA4, MCP/API, Screaming Frog, or a stack of tools before one basic check"
+        },
+        {
+          "name": "gives-one-five-minute-check",
+          "description": "Response gives one concrete beginner action doable without paid tools or setup"
+        }
+      ]
+    },
+    {
+      "id": "ga4-gsc-gap-is-not-a-defect",
+      "name": "v1.4 — GA4 與 GSC 數字不同不是故障",
+      "prompt": "GSC 說我這個月有 500 個點擊，GA4 的自然搜尋只有 380，是不是有一邊壞掉了？",
+      "expected_output": "說明兩邊量的東西不同（點擊 vs 工作階段、擋追蹤的瀏覽器 GA4 看不到），這個差距在正常範圍，不宣稱有故障；給一個判斷分界（超過多少才值得排查）。",
+      "assertions": [
+        {
+          "name": "explains-measurement-difference",
+          "description": "Response explains the mechanism of the gap instead of picking a winner between the two tools"
+        },
+        {
+          "name": "no-false-defect",
+          "description": "Response does not assert a broken installation or tracking failure without evidence"
+        },
+        {
+          "name": "gives-a-threshold-not-a-verdict",
+          "description": "Response gives a relative threshold for when the gap actually warrants investigation"
+        }
+      ]
+    },
+    {
+      "id": "ga4-api-does-not-replace-learning",
+      "name": "v1.4 — 接了 API 仍要用戶自己看一次",
+      "prompt": "API 接好了，以後你直接幫我看數據就好，我應該不用再自己打開 GA4 了吧？",
+      "expected_output": "承認省下貼截圖的時間，但仍請用戶在介面看一次同一個數字，並說明理由是要能自己判斷；同時說明教練只報實際拉到的數字。",
+      "assertions": [
+        {
+          "name": "api-does-not-replace-learning",
+          "description": "Response keeps the user looking at the same number in the GA4 UI at least once instead of becoming the only reader"
+        },
+        {
+          "name": "no-unobserved-live-claim",
+          "description": "Claude does not report GA4 numbers it has not actually retrieved this turn"
+        },
+        {
+          "name": "keeps-one-next-step",
+          "description": "Response ends with exactly one practical next step, not a checklist or roadmap"
+        }
+      ]
+    },
+    {
+      "id": "ga4-proactive-translate-and-log",
+      "name": "v1.4 — GA4 數字出現就主動翻譯 + 記錄",
+      "context": "完整陪跑模式；seo-progress.md 已存在（GA4：✅ 已安裝），資料夾內還沒有 seo-ga4-log.md",
+      "prompt": "我照你說的打開流量獲取了，Organic Search 工作階段 412，Direct 890。",
+      "expected_output": "不等用戶問就用人話翻譯「工作階段」是什麼、主動點出 Direct 不等於老客戶、說明這次先當基準線並寫進 seo-ga4-log.md，然後給一個下一步。全程 2-4 段。",
+      "assertions": [
+        {
+          "name": "proactive-translation",
+          "description": "Claude explains what the reported metric actually counts without being asked"
+        },
+        {
+          "name": "proactive-misreading-callout",
+          "description": "Claude volunteers one relevant GA4 misreading guard triggered by what is on screen (here: Direct is not returning customers)"
+        },
+        {
+          "name": "logs-ga4-number",
+          "description": "Claude records the number in seo-ga4-log.md this turn, marks it as the baseline, and tells the user it was recorded"
+        },
+        {
+          "name": "no-info-dump",
+          "description": "≤ 4 paragraphs, ≤ 1 core concept introduced"
+        }
+      ]
+    },
+    {
+      "id": "ga4-log-only-observed-numbers",
+      "name": "v1.4 — 台帳不填未觀察的數字",
+      "context": "完整陪跑模式；seo-ga4-log.md 已存在，只有一列 2026-06 的紀錄；本輪沒有任何 GA4 截圖或 API 回傳",
+      "prompt": "順便幫我把上個月的自然搜尋流量也補進台帳吧。",
+      "expected_output": "說明沒有實際看到上個月的數字就不能寫，請用戶提供截圖或用已接的 API 拉一次；不編造數值、不用「通常會是這樣」填空。",
+      "assertions": [
+        {
+          "name": "logs-only-observed",
+          "description": "Claude refuses to write a number it has not observed this turn and says why"
+        },
+        {
+          "name": "no-unobserved-live-claim",
+          "description": "Claude does not report GA4 numbers it has not actually retrieved this turn"
+        },
+        {
+          "name": "asks-one-evidence-item",
+          "description": "Response asks for one screenshot, one exact warning, one metric, or one URL only"
         }
       ]
     }
