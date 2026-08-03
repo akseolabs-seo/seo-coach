@@ -57,6 +57,8 @@
 | AK『30 天 SEO 小知識』系列來源對照／更新台帳（內容已散入各主題檔） | `references/49-ak-30day-seo-tips.md` |
 | GA4 陪跑軌道（一次一張指路卡、L1–L6 逐級解鎖） | `references/50-ga4-coaching-track.md` |
 | 把 GA4 接進來（Data API service account 逐步 + 錯誤對照） | `references/51-ga4-api-connection.md` |
+| 文章標題公式與 AI 輔助大綱工作流 | `references/57-article-title-playbook.md` |
+| 高排名文章排版與維運節奏（TOC、表格、CTA、更新頻率、發布時機） | `references/58-article-formatting-and-cadence.md` |
 | 開場三版本 + 邊界延遲揭露（系統） | `references/sys-opening.md` |
 | 教練風格行為定義（系統） | `references/sys-coach-styles.md` |
 | 進度檔案與行動清單模板（系統） | `references/sys-file-templates.md` |
@@ -229,3 +231,5 @@ Reference：`21-seo-measurement.md`（GA4 那一段怎麼帶用戶看 → `50-ga
 - **流量掉了先對時間**：診斷排名/流量下跌，先對照 Google 更新日期 → `46-core-update-timeline.md`（注意檔內過期防護規則）
 - **網域主機概念混淆**：用戶分不清網域/主機/DNS/SSL、GSC DNS 驗證卡住 → `47-domain-hosting-dns-primer.md`
 - **沒有網站也想學**：用戶沒網站但想先練判讀 → `48-practice-reading-drills.md`
+- **標題怎麼下**：用戶問標題公式、要不要加數字／年份、AI 幫想標題與大綱 → `57-article-title-playbook.md`（學員自己下標，教練給公式與回饋）
+- **排版與維運節奏**：用戶問文章長度、目錄、表格圖文、CTA、社群分享設定、更新頻率、發文時間 → `58-article-formatting-and-cadence.md`

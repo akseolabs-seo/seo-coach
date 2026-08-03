@@ -1,5 +1,16 @@
 # SEO Coach Changelog
 
+## 2.2.0 — 標題公式與文章維運
+
+**Type**: minor
+**Date**: 2026-08-03
+
+- 新增 `references/57-article-title-playbook.md`：八個標題型（數字／年份／問句／括號等）與公開研究證據（Backlinko、HubSpot/Outbrain、中文公開觀察，均標第三方估值與查核日期）、關鍵字措辭與簡稱策略、AI 輔助標題與大綱的「大綱優先」工作流、用自己 GSC 做 title A/B 驗證的方法。
+- 新增 `references/58-article-formatting-and-cadence.md`：文章長度與結構、目錄（TOC）、表格圖文加值、懶人包 hub-spoke 互連佈局、CTA 與 OG 社群分享設定、更新頻率與時機、發布時間策略（誠實邊界：無官方最佳時辰）、發布後成效觀察順序。
+- `references/46-core-update-timeline.md` 資料截至更新為 2026-08-03（以官方 status dashboard 核對，June 2026 spam 之後無新更新）。
+- 移除 `adapters/new-platform.md`（harness-engineer 通用模板殘留，引用的檔案不屬於本 repo）。
+- evals 86 → 88（標題不整批代寫、發文時間不編造時辰），rubric 補 6 個 assertion 定義；`validate_skill.py --require-evals` 通過。
+
 ## 2.1.0 — 搜尋機會實驗室：沒有付費工具也能循序學會
 
 **Type**: minor

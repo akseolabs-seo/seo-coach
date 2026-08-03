@@ -4,10 +4,10 @@
 
 > 🇹🇼 繁體中文 → [README.md](README.md) ｜ 🇨🇳 简体中文 → [README.zh-CN.md](README.zh-CN.md)
 
-> **Current version: 2.1.0**｜Major release notes → [RELEASE-2.0.md](RELEASE-2.0.md)｜Full history → [CHANGELOG.md](CHANGELOG.md)
+> **Current version: 2.2.0**｜Major release notes → [RELEASE-2.0.md](RELEASE-2.0.md)｜Full history → [CHANGELOG.md](CHANGELOG.md)
 > To check whether your copy is current, just ask the coach "**is there a new version?**" — it compares against GitHub and tells you.
 
-SEO Coach is an open-source AI coaching Skill designed by AK ([@darkseoking](https://www.threads.com/@darkseoking)).
+SEO Coach is an open-source AI coaching Skill designed by AK ([@darkseoking](https://www.threads.com/@darkseoking)), an SEO expert with 20K+ followers on Threads.
 
 It is not an SEO audit, checklist, or answer library. It is a site-based apprenticeship: the coach demonstrates one small step, works through the next one with you, then gradually removes support until you can repeat the judgment on an unfamiliar page.
 
@@ -226,7 +226,6 @@ seo-coach/
 ├── FAILSAFE.md              # Failure modes and required behavior changes
 ├── references/              # Apprenticeship tracks, labs, and teaching material
 ├── agents/                  # Agent UI and trigger metadata
-├── adapters/                # Cross-platform adapters
 ├── hooks/                   # Optional auto-load router (works without it)
 │
 │  ── Documentation ──
@@ -235,7 +234,7 @@ seo-coach/
 ├── CHANGELOG.md             # Release history
 │
 │  ── Maintainer only (not needed to install) ──
-├── evals/                   # 86 coaching-behavior eval cases and rubric
+├── evals/                   # 88 coaching-behavior eval cases and rubric
 └── scripts/                 # Validator, eval runner, build, privacy tests
 ```
 

@@ -271,6 +271,11 @@ Every assertion name used in `evals.json` must appear here or in the table above
 | `no-fixed-word-count` | No competitor-average or universal article/section word count is used as an SEO or graduation threshold |
 | `no-fixed-internal-link-count` | No universal number of internal links is required; suggested links must have real, relevant destinations and a reader-use reason |
 | `healthy-no-gap-outcome` | A supported conclusion of no worthwhile/verified gap is accepted as success; the coach may retain, defer, or test another candidate without inventing a defect |
+| `evidence-honestly-labeled` | CTR/title claims labeled as third-party public studies (directional, mostly non-Chinese samples); the user's own GSC before/after named as the real test |
+| `does-not-ghostwrite-batch` | Coach does not rewrite the user's titles/content wholesale; demonstrates at most one and hands the rest back with a feedback loop |
+| `title-must-be-honored` | Response states the title's promise must be fulfilled by the content; clickbait mismatch called out as self-defeating |
+| `no-fabricated-timing-rule` | Response states there is no official evidence that publish day/time affects rankings and refuses to invent a best time |
+| `redirects-to-what-matters` | After debunking, response redirects to what actually helps (request indexing after publish; audience-based social timing from the user's own data) |
 
 ---
 

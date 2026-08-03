@@ -4,10 +4,10 @@
 
 > 🇹🇼 繁體中文 → [README.md](README.md) ｜ 🇺🇸 English → [README.en.md](README.en.md)
 
-> **当前版本：2.1.0**｜大版本更新介绍 → [RELEASE-2.0.md](RELEASE-2.0.md)｜逐版变更 → [CHANGELOG.md](CHANGELOG.md)
+> **当前版本：2.2.0**｜大版本更新介绍 → [RELEASE-2.0.md](RELEASE-2.0.md)｜逐版变更 → [CHANGELOG.md](CHANGELOG.md)
 > 想知道自己装的是不是最新版，直接问教练「**有没有新版？**」，它会去 GitHub 比对后告诉你。
 
-SEO Coach 是由 AK（[Threads @darkseoking](https://www.threads.com/@darkseoking)）设计的开源 AI 教练 Skill。
+SEO Coach 是由 AK（[Threads @darkseoking](https://www.threads.com/@darkseoking)，Threads 2 万+ 关注的 SEO 专家）设计的开源 AI 教练 Skill。
 
 它不是 SEO audit、检查清单或问答知识库。它是一套以真实网站、能力证据和反复练习为核心的 SEO 学徒制：教练先示范一小步，陪你完成下一步，再逐渐撤掉提示，直到你能在陌生页面独立完成同一套判断。
 
@@ -226,7 +226,6 @@ seo-coach/
 ├── FAILSAFE.md              # 失效模式与必须改变的行为
 ├── references/              # 学徒主线、实验室与教学资料
 ├── agents/                  # Agent 展示与触发 metadata
-├── adapters/                # 跨平台 adapter
 ├── hooks/                   # 可选自动加载 router（不装也能用）
 │
 │  ── 说明文档 ──
@@ -235,7 +234,7 @@ seo-coach/
 ├── CHANGELOG.md             # 逐版变更
 │
 │  ── 维护用（安装不需要）──
-├── evals/                   # 86 个教练行为 eval case 与判准
+├── evals/                   # 88 个教练行为 eval case 与判准
 └── scripts/                 # 验证器、eval runner、构建与隐私测试
 ```
 
