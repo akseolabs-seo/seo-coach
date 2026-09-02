@@ -1,285 +1,261 @@
-# SEO Coach — 一套真的帶你學會 SEO 的 AI 教練
+# SEO Coach — An AI Coach That Helps You Actually Learn SEO
 
-> 不是再給你一份 SEO 報告，而是陪你在真實網站上練到自己會判斷、會動手、會驗證。
+> Not another SEO report. A coach that stays with you on a real site until you can observe, decide, act, and verify for yourself.
 
-> 🇺🇸 English → [README.en.md](README.en.md) ｜ 🇨🇳 简体中文 → [README.zh-CN.md](README.zh-CN.md)
+> 🇹🇼 Traditional Chinese → [README.zh-TW.md](README.zh-TW.md) ｜ 🇨🇳 Simplified Chinese → [README.zh-CN.md](README.zh-CN.md)
 
-> **目前版本：2.2.0**｜大版本更新介紹 → [RELEASE-2.0.md](RELEASE-2.0.md)｜逐版變更 → [CHANGELOG.md](CHANGELOG.md)
-> 想知道自己裝的是不是最新版，直接問教練「**有沒有新版？**」，它會去 GitHub 比對後告訴你。
+> **Current version: 2.5.0**｜Release notes → [RELEASE-2.5.0.md](RELEASE-2.5.0.md)｜Changelog → [CHANGELOG.md](CHANGELOG.md)
+> To check whether your copy is current, just ask the coach "**is there a new version?**" — it compares against GitHub and tells you.
 
-SEO Coach 是由 AK（[@darkseoking](https://www.threads.com/@darkseoking)，Threads 2 萬+ 追蹤的 SEO 專家）設計的開源 AI 教練 Skill。
+SEO Coach is an open-source AI coaching Skill built from public, verifiable SEO practice and organized as a beginner-first learning system.
 
-它不是 SEO audit、檢查清單或問答知識庫。它是一套以真實網站、能力證據與反覆練習為核心的 SEO 學徒制：教練先示範一小步，陪你做下一步，再逐漸撤掉提示，直到你能在陌生頁面獨立完成同一套判斷。
+It is not an SEO audit, checklist, or answer library. It is a site-based apprenticeship: the coach demonstrates one small step, works through the next one with you, then gradually removes support until you can repeat the judgment on an unfamiliar page.
 
-## 我為什麼做 SEO Coach
+## Why SEO Coach Exists
 
-我一直認為，**SEO 是少數人的遊戲**。
+I have always believed that **SEO is a game played well by a small minority**.
 
-真正有用的 SEO，不只是「title 要怎麼寫」「文章要幾個字」這些公開知識，而是你怎麼觀察搜尋結果、怎麼判斷機會、怎麼在資訊不足時做決定，以及做錯後怎麼找到原因。這些判斷會直接形成競爭優勢，所以你幾乎不會遇到一位老師，毫無保留地把自己真正依賴的研究方法、客戶經驗和決策邏輯全部教給你。
+Useful SEO is not just knowing how to write a title or how long an article should be. The advantage comes from how you observe a search result, judge an opportunity, decide with incomplete information, and find the mechanism when a test fails. Those judgments create competitive advantage, so very few teachers will disclose every private research method, client lesson, and decision framework they actually rely on.
 
-我做 SEO Coach，不是要假裝一個免費 Skill 能把你變成另一個我。
+SEO Coach is not designed to pretend that a free Skill can turn you into another SEO master.
 
-我想做的是給你一個**低成本但正確的開始**：先把公開、可驗證、值得新手掌握的基礎練好；對 SEO 真正產生興趣；在自己的網站排出第一個關鍵詞；然後開始發展你自己的觀察方式、思維邏輯與想法。
+It gives you a **low-cost but sound beginning**: learn the public and verifiable fundamentals, become genuinely interested in SEO, rank your first keyword on your own site, and start developing your own reasoning, observations, and ideas.
 
-> 你用了 SEO Coach，不會因此變得跟我一樣強。真正的差距仍然來自長期研究、實戰、失敗與判斷。但它可以讓你少走很多低級彎路，用更低的成本建立一個足夠好的起點。
+> Using SEO Coach will not instantly give you the judgment of an experienced SEO master. That gap still comes from years of research, practice, failure, and judgment. It can, however, help you avoid many beginner mistakes and build a strong starting point at very low cost.
 
-這也是 SEO Coach 和一般教學內容最大的不同：它不承諾把秘密交給你，而是陪你建立未來能產生自己方法的基本能力。
+That is the difference between SEO Coach and another information product: it does not promise to hand you a secret method. It helps you build the foundation from which your own method can eventually emerge.
 
-## 為什麼不是「再學更多 SEO 知識」
+## Learning SEO Is Not the Same as Reading About SEO
 
-看過教學，不等於會做 SEO。拿到 audit，也不等於知道下一步怎麼判斷。
+A tutorial does not prove you can make a decision. An audit does not prove you know what to do next.
 
-真正會做 SEO，至少要能完成這個閉環：
+SEO Coach trains you to complete a real loop:
 
 ```text
-目標與安全
-  ↓
-建立修改前基準
-  ↓
-確認 Google 看得到
-  ↓
-理解查詢、SERP 與承接頁
-  ↓
-做一項低風險、可還原的修改
-  ↓
-重新驗證真實頁面
-  ↓
-在正確時間回看數據
-  ↓
-決定保留、回復或再測
-  ↓
-換陌生案例獨立重做
+Goal and safety
+  → pre-change baseline
+  → crawl and index evidence
+  → query, SERP, and page ownership
+  → one low-risk reversible change
+  → live revalidation
+  → evidence-based follow-up
+  → keep, revert, or test again
+  → repeat on an unfamiliar case
 ```
 
-SEO Coach 記錄的不是「上過第幾課」，而是你目前能否：
+Progress is not measured by modules completed. It is measured by whether you can perform after a demonstration, with guidance, independently, and again later on a different case.
 
-- 看過示範後說出判斷依據。
-- 在提示下完成同型任務。
-- 無提示獨立完成。
-- 隔一段時間、換一個案例仍能重做。
+## How the Coach Teaches
 
-一次答對不算學會；延遲複測後仍做得到，才算真正保留下來。
+### The coach chooses the next useful step
 
-## 它怎麼教你
+Beginners are not asked to choose a module, tool, or report they do not yet understand. When your goal is clear, the coach selects the smallest dependency and explains what to inspect, why it matters, and what counts as complete.
 
-### 1. 教練自主帶路
+Each turn normally teaches one concept and advances one observable check. It does not open with a full-site audit.
 
-你不需要先知道該選哪個模組、工具或報表。當目標清楚時，教練會根據目前證據，直接選出最小而有用的下一步，告訴你：
+### Demonstration → guided practice → independence
 
-- 現在看哪裡。
-- 為什麼先看這裡。
-- 做到什麼程度算完成。
+You are not forced to guess. The coach demonstrates the first case, works through the second with you, and gives you the third to complete independently. If you say “I don’t know” or “show me,” it demonstrates instead of continuing to quiz you.
 
-每輪預設只教一個概念、完成一個檢查，不會一開始就把完整 audit 倒給新手。
+### Evidence before conclusions
 
-### 2. 先示範，再共做，最後獨立
+The coach separates live observations, official guidance, third-party estimates, learner-authorized data, and what remains unobserved. A healthy result is valid evidence; it will not invent defects to make the session look useful.
 
-完全新手不用猜答案。教練會先示範一個真實案例，接著陪你判斷第二個同型案例，再把第三個交給你獨立完成。
+### Every change is rechecked
 
-如果你說「我不懂」或「你先看」，教練會直接示範，不會繼續用問題考你。
+You preserve the baseline and rollback path, make one bounded change, reopen the live page, and review GSC or GA4 only after an appropriate time window. An edit is not treated as success until it has been verified.
 
-### 3. 所有判斷都回到證據
+## Three Main Learning Tracks
 
-教練會區分：
+### Zero to a First Verifiable SEO Result
 
-- 本輪真的看到的公開畫面或網站資料。
-- Google 官方文件說明。
-- 第三方工具估值。
-- 學員提供並授權的資料。
-- 尚未觀察、不能下結論的部分。
+Complete one full project on your own site: goal, baseline, indexing evidence, search opportunity, one reversible change, technical revalidation, delayed review, and an unfamiliar-page capstone.
 
-健康結果也是結果。它不會為了顯得有價值而硬找問題，也不會把單一紅字、`site:` 結果或工具分數包裝成根因。
+The outcome is not a report. It is a workflow you can repeat.
 
-### 4. 修改後一定重驗
+### Search Opportunity Lab
 
-修改前先留底，修改後重新開啟真實頁面確認，並在合適的時間回看 GSC／GA4。沒有重驗，就不宣稱完成；沒有足夠時間窗口，就不把短期波動說成 SEO 成效。
+Learn query selection, search intent, content gaps, site architecture, page ownership, and content briefs.
 
-## 三條主要學習路線
+No Ahrefs, Semrush, or DataForSEO is required for the foundational practice:
 
-### 從零到第一個可驗證成果
+1. Open a new incognito/private window and record query, location, language, device, and date.
+2. The coach demonstrates the first organic result.
+3. You assess the second result together.
+4. You assess the third independently.
+5. Add only two more results if the first three still show mixed intent.
+6. Stop at “insufficient evidence” when the evidence does not support a verdict.
 
-適合不知道從哪開始、或學了很多卻沒有完整做過一次的人。
+A competitor covering a topic does not mean you should. A competitor omitting it does not make it an opportunity. A verified gap must also fit real demand, your existing pages, your ability to deliver credibly, and business value.
 
-你會在自己的網站走完目標、基準、索引、搜尋機會、一項修改、技術重驗、成效回看與陌生頁面 Capstone。完成的不是一份報告，而是一條你能再次執行的 SEO 工作方法。
+Free tools (keyword expansion, difficulty, SERP, rank checking, traffic estimates, AI visibility) are not dumped on you in round one. They unlock **by stage**: once you can read the screen, tools enter as a **verification layer** — you state your judgment first, then open the tool to compare. Where the two disagree is the best teaching material available. Every tool number is labelled a third-party estimate, never presented as internal Google or AI-platform data.
 
-### 搜尋機會實驗室
+### Four-Article SEO Writing Apprenticeship
 
-適合學習選題、關鍵字、搜尋意圖、內容缺口、網站架構與 content brief。
+This is not four AI-written articles. It is a progression that returns research and writing judgment to the learner:
 
-主線是**手動判讀**，不是工具操作——因為看不懂搜尋結果的人，拿到 `KD = 23` 也不知道那代表什麼。所以沒有 Ahrefs、Semrush 或 DataForSEO 一樣能完成完整訓練：
+- A1: coached demonstration and guided work.
+- A2: same-pattern practice with less support.
+- A3: transfer to a different intent or page type.
+- A4: an unprompted capstone.
 
-1. 開新的無痕／私人視窗，記錄查詢、地區、語言、裝置與日期。
-2. 教練先示範第 1 個自然搜尋結果。
-3. 下一輪共同判讀第 2 個。
-4. 第 3 個由你獨立判讀。
-5. 只有三筆意圖仍混合時，才再多看兩筆。
-6. 證據不足時就停在「尚不能判斷」，不硬湊結論。
+Each article retains SERP evidence, a brief, original and revised drafts, feedback, QA, publishing, and observation records. Graduation uses eight evidence gates rather than a single AI score.
 
-競品有寫不代表你也該寫；競品沒寫也不自動等於機會。每個 content gap 都要再核對搜尋需求、自站是否已承接、網站能否可信提供，以及它是否真的對業務有價值。
+## What You Can Learn
 
-免費工具（關鍵字擴展、難度、SERP、排名查詢、流量估算、AI 可見度）不會在第一輪丟給你，而是**按進度分層開放**：學會讀畫面之後，工具才作為**驗證層**進場——你先講你的判斷，再打開工具對答案，不一致的地方就是最好的教學素材。所有工具數字一律標成第三方估值，不會冒充 Google 或 AI 平台的內部資料。
+The coach draws from its technical, content, linking, and measurement library as your situation requires:
 
-### 四篇 SEO 寫作學徒制
+- Crawling, indexing, robots.txt, sitemaps, canonicals, redirects, HTTPS, and basic structured data.
+- Titles, headings, descriptions, URLs, images, and page promises.
+- GSC, GA4, baselines, and before/after evidence.
+- Candidate queries, intent, SERPs, content gaps, and page mapping.
+- Content quality, E-E-A-T, internal links, content maintenance, and SEO writing.
+- Traffic drops, redesigns, new sites, CMS issues, and common SEO myths.
+- Foundational topical maps, SERP features, AI search readiness, ecommerce, and local SEO.
 
-這不是讓 AI 代寫四篇文章，而是用四個逐漸提高難度的作品，把研究與寫作能力交還給你：
+The 18 modules are an on-demand coaching library, not a syllabus you must complete in order.
 
-- A1：教練示範與共作。
-- A2：同型任務，由你完成更多判斷。
-- A3：更換搜尋意圖或頁型，測試能否遷移。
-- A4：無提示 Capstone。
+### Local GSC Search Panel
 
-每篇保留 SERP 證據、content brief、原稿、修改稿、回饋、QA、發布與觀察紀錄。畢業看的是八項能力證據，不是 AI 給的總分。
+If an existing GSC API connector is already connected, open `assets/gsc-dashboard/index.html` and the panel will load the current and optional comparison periods automatically. Without that connector, import CSV, TSV, or JSON manually. The panel computes clicks, impressions, CTR, average position, `1–3 / 4–10 / 11–20 / 21–30` buckets, query movement, anomaly and CTR signals, and transparent rewrite-review candidates directly in the browser. Each query has a current/previous detail view, page breakdown, and matched-rule context; queue status and notes are saved locally.
 
-## 你會實際學到什麼
+The panel does not handle login or credentials, open its own network channel, or call Codex CLI/AI; an existing connector owns the connection and the panel only computes and stores the returned data in the browser. One template supports Traditional Chinese, Simplified Chinese, English, Japanese, and Korean; first run follows the browser language and later manual choices stay local. Its rewrite queue is a deterministic, inspectable rule list—not automatic editing—and GSC average position is not a live SERP rank. See [`references/59-gsc-dashboard.md`](references/59-gsc-dashboard.md) for the bridge contract, formats, formulas, and limits.
 
-教練會依你的網站與當前問題，按需調用技術、內容、連結與衡量知識，包括：
-
-- Google 如何抓取、索引與理解頁面。
-- robots.txt、sitemap、canonical、redirect、HTTPS 與基礎結構化資料。
-- title、H1、meta、URL、圖片與頁面承諾。
-- GSC、GA4 與修改前後的證據紀錄。
-- 關鍵字候選、搜尋意圖、SERP、內容缺口與承接頁。
-- 內容品質、E-E-A-T、內部連結、舊內容判斷與 SEO 寫作。
-- 流量下降、新站、改版、CMS 問題與常見 SEO 迷思。
-- Topical Map、SERP Features、AI 搜尋、電商與本地 SEO 的基礎判斷。
-
-18 個模組是教練的按需知識庫，不是要求你照順序上完的課表。
-
-## 一次 Session 會是什麼樣子
-
-你可以直接說：
+## Try It With Prompts Like These
 
 ```text
-我完全不懂 SEO，請帶我從自己的網站開始學。
+I know nothing about SEO. Teach me using my own website.
 ```
 
 ```text
-我沒有付費工具，教我手動判讀這個關鍵字的 SERP。
+I have no paid tools. Walk me through this SERP manually.
 ```
 
 ```text
-這篇文章一直沒有流量，帶我找出下一個最小檢查。
+This article gets no traffic. Give me the smallest useful check first.
 ```
 
 ```text
-我要系統性學 SEO，請記錄進度，直到我能獨立完成。
+I want to learn SEO systematically. Track my progress until I can work independently.
 ```
 
-教練會先判斷你目前的程度與最小依賴，能安全查看的公開資訊會先示範一項；需要登入的 GSC、GA4 或 CMS 畫面，則會給你一張短操作卡，讓你直接貼截圖回來，不要求寫長報告。
+For public evidence, the coach can demonstrate one safe read-only check. For logged-in GSC, GA4, or CMS evidence, it gives a short pointing card and accepts a screenshot instead of requiring a written report.
 
-## 學習紀錄不會消失
+## Persistent Learning Records
 
-經你同意後，SEO Coach 可以維護：
+With your consent, the coach can maintain:
 
-- `seo-progress.md`：能力狀態、錯誤、提示程度與 1／7／30 天複測。
-- `seo-actions.md`：待辦、完成證據與下一步。
-- `seo-strategy-workbook.md`：查詢、SERP、內容缺口、頁面歸屬與 brief 練習。
-- `seo-writing-portfolio.md`：四篇作品的版本與驗收證據。
-- `seo-ga4-log.md`：本輪真的看到的數字、比較基準與解讀。
+- `seo-progress.md`: competence, errors, hint level, and 1/7/30-day retests.
+- `seo-actions.md`: actions, completion evidence, and next steps.
+- `seo-strategy-workbook.md`: query, SERP, gap, page ownership, and brief practice.
+- `seo-writing-portfolio.md`: four-article versions and gate evidence.
+- `seo-ga4-log.md`: metrics actually observed, baselines, and interpretation.
 
-下次回來會接續上次的能力缺口，不用重新交代整段背景。未完成的功課也不是續課門票；教練會先縮小任務或換一條仍然有效的路。
+When you return, coaching resumes from the last skill gap. Unfinished homework is not a gate to continuing; the coach can shrink or reroute the task.
 
-## 適合誰
+## Who It Is For
 
-- 想從零建立完整 SEO 判斷能力的人。
-- 有網站，但不知道該先看哪裡、改什麼、怎麼驗證的人。
-- 看過很多課程，卻還沒有在真站完成過 SEO 閉環的人。
-- 沒有付費 SEO 工具，希望先學會手動研究的人。
-- 想親手完成 SEO 文章，而不是只收 AI 代寫稿的人。
-- 小型品牌、服務業、內容站、電商或行銷人員，需要一套可重複學習方法的人。
+- Beginners who want a complete SEO decision process.
+- Site owners who do not know what to inspect, change, or verify first.
+- People who have consumed courses but never completed an evidence-backed SEO loop.
+- Learners without paid SEO tools.
+- Writers who want to produce their own SEO work instead of receiving ghostwritten AI copy.
+- Small brands, service businesses, publishers, ecommerce teams, and marketers who need a repeatable learning method.
 
-## 它不是什麼
+## What It Is Not
 
-- 不是一鍵全站 audit 或健康分數產生器。
-- 不是保證排名、流量或索引的捷徑。
-- 不是代寫完整文章、代交策略或大量自動發布工具。
-- 不會根據固定 KD、字數、內鏈數量或外掛分數替你下結論。
-- 不會在缺乏證據時把猜測說成已確認。
+- Not a one-click site audit or health score.
+- Not a promise of rankings, traffic, or indexing.
+- Not a done-for-you strategy, article factory, or bulk publisher.
+- Not a system that treats fixed KD, word count, link count, or plugin scores as truth.
+- Not permission to present guesses as confirmed observations.
 
-大型遷站、重大流量崩跌、大量索引異常、企業級國際 SEO、程式化建頁，以及醫療、金融、法律等高風險判斷，仍可能需要工程師或合格專業人員介入。
+Large migrations, severe traffic loss, mass deindexation, enterprise international SEO, programmatic page generation, and high-risk medical, financial, or legal decisions may require engineers or qualified professionals.
 
-## 安裝：把 URL 丟給你的 AI Agent 就好
+## Installation: Give the URL to Your AI Agent
 
-最懶人的方式，是把下面整段複製給你正在使用的 AI Agent：
+The easiest option is to paste this entire block into the AI agent you already use:
 
 ```text
-請幫我安裝這個 SEO Coach Skill。把 repo 裡的 seo-coach 安裝到正確的 skills 目錄；先不要啟用可選的 hooks。完成後請驗證 $seo-coach 可以被載入，並告訴我實際安裝路徑。
+Install this SEO Coach Skill for me. Put the repository's seo-coach folder in the correct skills directory, but do not enable the optional hooks yet. When finished, verify that $seo-coach can be loaded and tell me the actual installation path.
 
 https://github.com/akseolabs-seo/seo-coach
 ```
 
-如果你的 AI Agent 有 GitHub 存取與本機檔案權限，它可以自己下載、放到正確位置並驗證。安裝完成後開一個新對話，直接說：
+If your AI agent has GitHub and local-file access, it can download, place, and verify the Skill for you. Then start a new conversation and say:
 
 ```text
-用 SEO Coach 帶我從自己的網站開始學 SEO。
+Use SEO Coach to teach me SEO on my own website.
 ```
 
 <details>
-<summary>AI Agent 無法自動安裝時，才看手動方式</summary>
+<summary>Manual fallback if your AI agent cannot install it</summary>
 
-**最乾淨的方式**：到 [Releases](https://github.com/akseolabs-seo/seo-coach/releases) 下載 `seo-coach.skill`，它只包含執行需要的檔案。
+**Cleanest option**: download `seo-coach.skill` from [Releases](https://github.com/akseolabs-seo/seo-coach/releases). It contains only the files needed at runtime.
 
-**或者 clone repo**：
+**Or clone the repository**:
 
 ```bash
 git clone https://github.com/akseolabs-seo/seo-coach
 ```
 
-把 `seo-coach` 資料夾放進 skills 目錄：
+Place the `seo-coach` folder in the appropriate skills directory:
 
 ```text
 Codex:  ~/.codex/skills/seo-coach
 Claude: ~/.claude/skills/seo-coach
 ```
 
-Clone 下來的 repo 含有維護用的 `evals/` 與 `scripts/`，**它們不是執行必要的**，可以刪掉再放進 skills 目錄，留著也不影響運作。
+The cloned repository also contains maintainer-only `evals/` and `scripts/`. They are **not required at runtime** — delete them before installing if you prefer, or leave them; either way the Skill behaves the same.
 
 </details>
 
-`hooks/` 裡的自動召喚 router 是選用功能，不需要它也能使用 SEO Coach。若要啟用，請另外要求 AI Agent 先閱讀 [`hooks/README.md`](hooks/README.md)、解釋會改動什麼，再取得你的同意後安裝。
+The auto-load router under `hooks/` is optional. SEO Coach works without it. To enable it, ask your agent to read [`hooks/README.md`](hooks/README.md), explain the changes, and request your approval before installation.
 
-## 公開來源與隱私邊界
+## Public Sources and Privacy Boundary
 
-SEO Coach 的所有教材，來自 **AK 整理、重新編排的公開資源**，以及我在 Threads 上公開分享、能以公開 URL 查核的 SEO 理論與觀點。公開資源包括 Google 官方文件、公開課程、公開網站／SERP，以及有清楚授權或可公開引用的資料。
+All SEO Coach teaching material comes from **public, traceable resources curated and reorganized for this Skill**, together with SEO theories and viewpoints that can be verified through public sources. These sources include official Google documentation, public courses, public websites/SERPs, and material with clear public attribution or licensing.
 
-它**不包含**我的私人研究方法、未公開測試、客戶資料、客戶案例細節、私訊、未公開 prompt、私人 SOP，或其他本機專案。這條邊界不是缺少內容，而是刻意保護客戶、研究資產與公開教學之間的界線。
+It does **not** contain any private research methods, unpublished tests, client data, private client cases, direct messages, unpublished prompts, private SOPs, or unrelated local projects. This is a deliberate boundary protecting clients, private research assets, and the integrity of the public learning edition.
 
-因此，SEO Coach 提供的是一套扎實的公開基礎與學習方法，不是 AK 私人方法論的完整複製品。你仍要靠自己的網站、觀察、實驗與時間，發展出屬於你的 SEO 判斷。
+SEO Coach therefore gives you a strong public foundation and a learning method—not a complete copy of any private methodology. Your own site, observations, experiments, and time are what turn that foundation into independent SEO judgment.
 
-每次建立公開分享版前，維護版本會執行行為評測、路由測試、隱私外洩 fixtures 與套件一致性驗證，用來檢查「是否真的像教練一樣帶學」，不只檢查 Markdown 能不能讀。為避免把維護工具混進使用者安裝包，公開版不附 `evals/` 與 `scripts/`。
+Before each public build, the maintainer edition runs behavioral evaluations, routing fixtures, privacy-leak tests, and package-parity validation. These test whether the Skill behaves like a coach, not merely whether the Markdown parses. Maintainer-only `evals/` and `scripts/` are intentionally excluded from the public installation.
 
-## Repo 結構
+## Repository Structure
 
 ```text
 seo-coach/
 │
-│  ── 執行必要（安裝時需要）──
-├── SKILL.md                 # 核心教練行為與路由
-├── FAILSAFE.md              # 失效模式與必須改變的行為
-├── references/              # 學徒主線、實驗室、教材與教學協議
-├── agents/                  # Agent 顯示與觸發 metadata
-├── hooks/                   # 選用自動召喚 router（不裝也能用）
+│  ── Required at runtime ──
+├── SKILL.md                 # Core coaching behavior and routing
+├── FAILSAFE.md              # Failure modes and required behavior changes
+├── references/              # Apprenticeship tracks, labs, and teaching material
+├── assets/gsc-dashboard/    # Openable local GSC analysis panel
+├── agents/                  # Agent UI and trigger metadata
+├── hooks/                   # Optional auto-load router (works without it)
 │
-│  ── 說明文件 ──
-├── README.md                # 使用說明與教學理念
-├── RELEASE-2.0.md           # 大版本更新介紹
-├── CHANGELOG.md             # 逐版變更
+│  ── Documentation ──
+├── README.md                # Overview and learning model
+├── RELEASE-2.5.0.md         # Public marketing release notes
+├── RELEASE-2.0.md           # Major release notes
+├── CHANGELOG.md             # Release history
 │
-│  ── 維護用（安裝不需要）──
-├── evals/                   # 88 個教練行為 eval case 與判準
-└── scripts/                 # 驗證器、eval runner、建置與隱私測試
+│  ── Maintainer only (not needed to install) ──
+├── evals/                   # 92 coaching-behavior eval cases and rubric
+└── scripts/                 # Validator, eval runner, build, privacy tests
 ```
 
-## 最後一句
+## The Point
 
-SEO Coach 的目標不是替你做完 SEO，也不是讓你背更多術語。
+SEO Coach is not trying to do SEO instead of you or help you memorize more terminology.
 
-它要做的是：**在你旁邊示範、陪你練習、糾正誤判、保存證據，直到你不需要它提示，也能在下一個網站問題上做出可靠判斷。**
+Its job is to **demonstrate beside you, guide your practice, correct weak judgments, preserve the evidence, and gradually remove support until you can make a reliable decision on the next unfamiliar problem.**
 
-## 免責聲明
+## Disclaimer
 
-SEO 結果會受到產業競爭、網站歷史、技術條件、內容品質與搜尋系統變化影響。SEO Coach 是教育與陪跑工具，不保證排名、流量或索引結果。高風險修改前請保留回復方式，並在真實頁面重新驗證。
+SEO outcomes depend on competition, site history, technical conditions, content quality, and changes in search systems. SEO Coach is an educational tool and does not guarantee rankings, traffic, or indexing. Preserve rollback paths for risky changes and verify the live result.
 
-## 授權
+## License
 
-MIT License — 可自由使用、修改與分發；商業使用請保留原始出處。
+MIT License — free to use, modify, and distribute. Please retain attribution for commercial use.

@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f7f6" />
+    <meta name="description" content="SEO Coach 的本地 GSC 搜尋表現分析面板" data-i18n-content="meta.description" />
+    <title>Search Signal · SEO Coach GSC Panel</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content" data-i18n="skip.main">跳到主要內容</a>
+    <div class="app-shell">
+      <aside class="side-rail" aria-label="面板導覽" data-i18n-aria="nav.navigation">
+        <div class="brand-lockup">
+          <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div>
+            <p class="brand-name">SEARCH<br />SIGNAL</p>
+            <p class="brand-sub" data-i18n="brand.sub">SEO COACH / LOCAL</p>
+          </div>
+        </div>
+
+        <nav class="rail-nav">
+          <a class="rail-link is-active" href="#overview"><span class="rail-index">01</span><span data-i18n="nav.overview">總覽</span></a>
+          <a class="rail-link" href="#keywords"><span class="rail-index">02</span><span data-i18n="nav.keywords">關鍵詞動向</span></a>
+          <a class="rail-link" href="#recommendations"><span class="rail-index">03</span><span data-i18n="nav.queue">重寫佇列</span></a>
+          <a class="rail-link" href="#pages"><span class="rail-index">04</span><span data-i18n="nav.pages">頁面視角</span></a>
+          <a class="rail-link" href="#data-quality"><span class="rail-index">05</span><span data-i18n="nav.quality">資料檢查</span></a>
+        </nav>
+
+        <div class="rail-foot">
+          <span class="status-dot" aria-hidden="true"></span>
+          <div>
+            <p data-i18n="rail.localCompute">LOCAL COMPUTE</p>
+            <small data-i18n="rail.localNote">資料只留在此瀏覽器</small>
+          </div>
+        </div>
+      </aside>
+
+      <main id="main-content" class="main-stage">
+        <header id="overview" class="topbar">
+          <div class="topbar-heading">
+            <div class="topbar-label-row">
+              <p class="eyebrow" data-i18n="top.eyebrow">GSC / LOCAL DASHBOARD</p>
+              <span class="topbar-scope" data-i18n="top.scope">純瀏覽器計算</span>
+            </div>
+            <h1 class="topbar-title" data-i18n="top.title">搜尋成效</h1>
+            <p class="topbar-note" data-i18n="top.note">匯入 GSC 資料，查看排名、流量與重寫候選</p>
+          </div>
+          <div class="topbar-actions">
+            <span id="connectionStatus" class="connection-pill is-idle"><span class="status-dot" aria-hidden="true"></span>等待資料</span>
+            <label class="locale-picker"><span class="visually-hidden" data-i18n="language.label">語言</span><select id="localeSelect" class="select-control" data-i18n-aria="language.label"></select></label>
+            <button id="loadSampleButton" class="button button-quiet" type="button" data-i18n="action.sample">載入示範資料</button>
+            <button id="clearDataButton" class="button button-quiet" type="button" data-i18n="action.clear">清除本機資料</button>
+          </div>
+        </header>
+
+        <section id="import" class="import-panel" aria-labelledby="import-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow" data-i18n="import.eyebrow">IMPORT / DATA SOURCE</p>
+              <h2 id="import-title" data-i18n="import.title">匯入 GSC 資料</h2>
+            </div>
+            <p class="section-caption" data-i18n="import.caption">已有 GSC API 連線會先自動同步；沒有連線再手動匯入。</p>
+          </div>
+
+          <div id="apiSourceStatus" class="api-source-status is-loading" role="status" aria-live="polite">
+            <span class="api-source-indicator" aria-hidden="true"></span>
+            <div class="api-source-copy">
+              <strong id="apiSourceLabel">正在檢查 GSC API…</strong>
+              <span id="apiSourceNote">若已有連線，面板會自動載入目前與比較期間。</span>
+            </div>
+            <button id="refreshApiButton" class="button button-outline" type="button" hidden data-i18n="action.refresh">重新同步</button>
+          </div>
+          <div id="syncSummary" class="sync-summary" hidden></div>
+
+          <div class="import-grid">
+            <div class="drop-card" data-target="current">
+              <div class="drop-topline"><span class="period-label" data-i18n="period.currentLabel">CURRENT / 目前期間</span><span class="drop-number">A</span></div>
+              <h3 data-i18n="period.currentTitle">放入目前期間</h3>
+              <p data-i18n="period.currentDescription">可選一個或多個檔案，面板會在本機合併。</p>
+              <label class="file-picker" for="currentFiles" data-i18n="period.currentPick">選擇目前資料</label>
+              <input id="currentFiles" class="visually-hidden" type="file" accept=".csv,.tsv,.json,text/csv,application/json" multiple />
+              <p id="currentFileSummary" class="file-summary" data-i18n="file.notImported">尚未匯入</p>
+            </div>
+
+            <div class="compare-bridge" aria-hidden="true"><span>VS</span></div>
+
+            <div class="drop-card drop-card-previous" data-target="previous">
+              <div class="drop-topline"><span class="period-label" data-i18n="period.previousLabel">PREVIOUS / 比較期間</span><span class="drop-number">B</span></div>
+              <h3 data-i18n="period.previousTitle">放入比較期間</h3>
+              <p data-i18n="period.previousDescription">建議使用相同範圍與維度。</p>
+              <label class="file-picker file-picker-dark" for="previousFiles" data-i18n="period.previousPick">選擇比較資料</label>
+              <input id="previousFiles" class="visually-hidden" type="file" accept=".csv,.tsv,.json,text/csv,application/json" multiple />
+              <p id="previousFileSummary" class="file-summary" data-i18n="file.notImported">尚未匯入</p>
+            </div>
+          </div>
+
+          <div class="paste-row">
+            <div>
+              <p class="eyebrow" data-i18n="paste.eyebrow">PASTE / OPTIONAL</p>
+              <p class="paste-help" data-i18n="paste.help">也可直接貼上 CSV 或 API JSON；資料不會離開瀏覽器。</p>
+            </div>
+            <div class="paste-controls">
+              <label class="select-label" for="pasteTarget" data-i18n="paste.target">貼到</label>
+              <select id="pasteTarget" class="select-control">
+                <option value="current" data-i18n="paste.current">目前期間</option>
+                <option value="previous" data-i18n="paste.previous">比較期間</option>
+              </select>
+              <button id="pasteImportButton" class="button button-outline" type="button" data-i18n="action.importPaste">匯入貼上內容</button>
+            </div>
+          </div>
+          <textarea id="pasteInput" class="paste-input" rows="3" placeholder="貼上第一列含 Query、Clicks、Impressions、CTR、Position 的資料…" data-i18n-placeholder="paste.placeholder"></textarea>
+          <p id="importMessage" class="import-message" role="status" aria-live="polite"></p>
+        </section>
+
+        <section id="dashboardData" hidden>
+          <div class="section-heading data-heading">
+            <div>
+              <p class="eyebrow" data-i18n="overview.eyebrow">OVERVIEW / CURRENT WINDOW</p>
+              <h2 data-i18n="overview.title">概覽</h2>
+            </div>
+            <div class="data-heading-actions">
+              <button id="exportRecommendationsButton" class="button button-outline" type="button" data-i18n="action.exportQueue">匯出重寫佇列</button>
+              <button id="exportAnalysisButton" class="button button-outline" type="button" data-i18n="action.exportAnalysis">匯出分析 JSON</button>
+              <button id="printButton" class="button button-outline" type="button" data-i18n="action.print">列印報告</button>
+            </div>
+          </div>
+
+          <section class="stat-grid" aria-label="主要指標">
+            <article class="stat-card stat-card-featured">
+              <div class="stat-card-top"><span data-i18n="stat.clicks">CLICK / 點擊</span><span class="stat-index">01</span></div>
+              <strong id="kpiClicks" class="stat-value">—</strong>
+              <div id="kpiClicksDelta" class="stat-delta">等待比較期間</div>
+              <p data-i18n="stat.clicksDesc">目前匯入範圍的總點擊次數</p>
+            </article>
+            <article class="stat-card">
+              <div class="stat-card-top"><span data-i18n="stat.impressions">IMPRESSION / 曝光</span><span class="stat-index">02</span></div>
+              <strong id="kpiImpressions" class="stat-value">—</strong>
+              <div id="kpiImpressionsDelta" class="stat-delta">等待比較期間</div>
+              <p data-i18n="stat.impressionsDesc">目前匯入範圍的總曝光次數</p>
+            </article>
+            <article class="stat-card">
+              <div class="stat-card-top"><span data-i18n="stat.ctr">CTR / 點閱率</span><span class="stat-index">03</span></div>
+              <strong id="kpiCtr" class="stat-value">—</strong>
+              <div id="kpiCtrDelta" class="stat-delta">等待比較期間</div>
+              <p data-i18n="stat.ctrDesc">點擊 ÷ 曝光，不平均各列 CTR</p>
+            </article>
+            <article class="stat-card">
+              <div class="stat-card-top"><span data-i18n="stat.position">AVG POSITION / 平均排名</span><span class="stat-index">04</span></div>
+              <strong id="kpiPosition" class="stat-value">—</strong>
+              <div id="kpiPositionDelta" class="stat-delta">等待比較期間</div>
+              <p data-i18n="stat.positionDesc">GSC 期間平均位置，數字越小越前</p>
+            </article>
+          </section>
+
+          <div class="analysis-grid analysis-grid-top">
+            <section class="surface-card rank-card" aria-labelledby="rank-title">
+              <div class="card-heading"><div><p class="eyebrow" data-i18n="rank.eyebrow">DISTRIBUTION / QUERY COUNT</p><h2 id="rank-title" data-i18n="rank.title">關鍵詞站在哪裡</h2></div><span id="rankTotal" class="heading-metric">—</span></div>
+              <p class="card-intro" data-i18n="rank.intro">以每個 Query 的匯總平均排名分桶；這不是即時 SERP 名次。</p>
+              <div id="rankDistribution" class="rank-distribution"></div>
+              <div class="rank-footnote"><span class="mini-legend legend-teal"></span><span data-i18n="rank.ranked">有平均排名</span><span class="mini-legend legend-muted"></span><span id="rankUnknown">—</span></div>
+            </section>
+
+            <section class="surface-card movement-card" aria-labelledby="movement-title">
+              <div class="card-heading"><div><p class="eyebrow" data-i18n="movement.eyebrow">DELTA / PERIOD OVER PERIOD</p><h2 id="movement-title" data-i18n="movement.title">哪裡正在移動</h2></div><span id="comparisonLabel" class="comparison-label">僅現況</span></div>
+              <div id="movementGrid" class="movement-grid"></div>
+              <p class="card-note" data-i18n="movement.note">排名改善 = 前期平均排名 − 目前平均排名；正數代表數字變小、位置變好。</p>
+            </section>
+          </div>
+
+          <div class="analysis-grid analysis-grid-middle">
+            <section class="surface-card signal-card" aria-labelledby="signal-title">
+              <div class="card-heading"><div><p class="eyebrow" data-i18n="signal.eyebrow">RANK SHIFT / TOP MOVERS</p><h2 id="signal-title" data-i18n="signal.title">上升與下降的訊號</h2></div><span class="heading-metric heading-metric-accent" data-i18n="signal.badge">排名變化</span></div>
+              <div class="signal-columns">
+                <div><div class="signal-column-title"><span class="direction-arrow is-up">↗</span><span data-i18n="signal.up">排名改善</span></div><div id="risingList" class="signal-list"></div></div>
+                <div><div class="signal-column-title"><span class="direction-arrow is-down">↘</span><span data-i18n="signal.down">排名下降</span></div><div id="decliningList" class="signal-list"></div></div>
+              </div>
+            </section>
+
+            <section class="surface-card profile-card" aria-labelledby="profile-title">
+              <div class="card-heading"><div><p class="eyebrow" data-i18n="profile.eyebrow">DATA PROFILE / INPUT HEALTH</p><h2 id="profile-title" data-i18n="profile.title">這份資料能回答什麼</h2></div><span class="heading-metric" data-i18n="profile.badge">LOCAL</span></div>
+              <div id="profileList" class="profile-list"></div>
+              <p class="card-note" data-i18n="profile.caveat">查詢維度會排除沒有 Query 的彙總列；GSC 可能省略匿名查詢。</p>
+            </section>
+          </div>
+
+          <section id="keywords" class="surface-card table-card" aria-labelledby="keywords-title">
+              <div class="card-heading table-heading">
+              <div><p class="eyebrow" data-i18n="keywords.eyebrow">QUERY LEDGER / FILTERABLE</p><h2 id="keywords-title" data-i18n="keywords.title">關鍵詞動向</h2></div>
+              <div class="table-tools">
+                <label class="search-box"><span aria-hidden="true">⌕</span><input id="keywordSearch" type="search" placeholder="搜尋關鍵詞…" data-i18n-placeholder="keywords.search" /></label>
+                <label class="select-wrap"><span class="visually-hidden" data-i18n="keywords.filterLabel">篩選動向</span><select id="keywordFilter" class="select-control" data-i18n-aria="keywords.filterLabel"><option value="all" data-i18n="keywords.filterAll">全部動向</option><option value="rank-up" data-i18n="keywords.filterRankUp">排名改善</option><option value="rank-down" data-i18n="keywords.filterRankDown">排名下降</option><option value="click-up" data-i18n="keywords.filterClickUp">點擊成長</option><option value="click-down" data-i18n="keywords.filterClickDown">點擊下降</option><option value="new" data-i18n="keywords.filterNew">新出現</option><option value="lost" data-i18n="keywords.filterLost">消失</option><option value="stable" data-i18n="keywords.filterStable">穩定</option></select></label>
+                <label class="select-wrap"><span class="visually-hidden" data-i18n="keywords.sortLabel">排序</span><select id="keywordSort" class="select-control" data-i18n-aria="keywords.sortLabel"><option value="impressions" data-i18n="keywords.sortImpressions">按曝光</option><option value="rankDelta" data-i18n="keywords.sortRankDelta">按排名變化</option><option value="clickDelta" data-i18n="keywords.sortClickDelta">按點擊變化</option><option value="query" data-i18n="keywords.sortQuery">按關鍵詞</option></select></label>
+              </div>
+            </div>
+            <div class="table-scroll"><table><thead><tr><th scope="col" data-i18n="table.query">Query</th><th scope="col" data-i18n="table.position">目前排名</th><th scope="col" data-i18n="table.rankChange">排名變化</th><th scope="col" data-i18n="table.impressionChange">曝光變化</th><th scope="col" data-i18n="table.clickChange">點擊變化</th><th scope="col" data-i18n="table.currentCtr">目前 CTR</th><th scope="col" data-i18n="table.signal">訊號</th><th scope="col" data-i18n="table.action">操作</th></tr></thead><tbody id="keywordTableBody"></tbody></table></div>
+            <div class="table-footer"><span id="keywordCountLabel">—</span><span data-i18n="table.footnote">所有變化均來自兩份匯入資料的 deterministic 計算</span></div>
+          </section>
+
+          <section id="recommendations" class="surface-card recommendation-card" aria-labelledby="recommendations-title">
+            <div class="card-heading table-heading">
+              <div><p class="eyebrow" data-i18n="recommendations.eyebrow">RULE QUEUE / HUMAN REVIEW</p><h2 id="recommendations-title" data-i18n="recommendations.title">重寫與優化候選</h2></div>
+              <div class="queue-header-tools"><div class="queue-heading-note"><span class="queue-dot"></span><span data-i18n="recommendations.note">規則排序，不是 AI 生成</span></div><label class="select-wrap"><span class="visually-hidden" data-i18n="recommendations.queueFilterLabel">篩選處理狀態</span><select id="queueFilter" class="select-control" data-i18n-aria="recommendations.queueFilterLabel"><option value="all" data-i18n="recommendations.queueAll">全部狀態</option><option value="open" data-i18n="recommendations.queueOpen">待確認</option><option value="reviewing" data-i18n="recommendations.queueReviewing">核對中</option><option value="in-progress" data-i18n="recommendations.queueInProgress">處理中</option><option value="done" data-i18n="recommendations.queueDone">已完成</option><option value="snoozed" data-i18n="recommendations.queueSnoozed">暫緩</option></select></label></div>
+            </div>
+            <div class="recommendation-intro"><p data-i18n="recommendations.intro">這裡列的是「值得先人工核對」的 Query，不是自動判定要重寫。先回到 SERP、承接頁與你的第一方證據，再決定補強、合併或暫緩。</p><button id="toggleRulesButton" class="text-button" type="button" data-i18n="action.viewRules">查看規則設定 ↗</button></div>
+            <div id="queueSummary" class="queue-summary">—</div>
+            <div id="recommendationList" class="recommendation-list"></div>
+          </section>
+
+          <div class="analysis-grid analysis-grid-middle insights-grid">
+            <section class="surface-card insight-card" aria-labelledby="anomaly-title">
+              <div class="card-heading"><div><p class="eyebrow" data-i18n="insights.eyebrow">SIGNALS / LOCAL PRIORITY</p><h2 id="anomaly-title" data-i18n="insights.anomalies">異常變化</h2></div><span id="anomalyCount" class="heading-metric heading-metric-accent" data-i18n="insights.anomaliesBadge">期間比較</span></div>
+              <div id="anomalyList" class="insight-list"></div>
+            </section>
+            <section class="surface-card insight-card" aria-labelledby="ctr-opportunity-title">
+              <div class="card-heading"><div><p class="eyebrow" data-i18n="insights.eyebrow">SIGNALS / LOCAL PRIORITY</p><h2 id="ctr-opportunity-title" data-i18n="insights.opportunities">CTR 機會</h2></div><span id="ctrOpportunityCount" class="heading-metric" data-i18n="insights.opportunitiesBadge">4–20 區間</span></div>
+              <div id="ctrOpportunityList" class="insight-list"></div>
+            </section>
+          </div>
+
+          <section id="pages" class="surface-card table-card" aria-labelledby="pages-title">
+            <div class="card-heading table-heading"><div><p class="eyebrow" data-i18n="pages.eyebrow">PAGE LENS / CURRENT WINDOW</p><h2 id="pages-title" data-i18n="pages.title">頁面視角</h2></div><span class="heading-metric" data-i18n="pages.badge">Query → Page</span></div>
+            <p class="card-intro" data-i18n="pages.intro">若匯入包含 Page 維度，這裡可以看哪些 URL 承接了曝光與點擊；沒有 Page 維度時仍保留查詢分析。</p>
+            <div class="table-scroll"><table><thead><tr><th scope="col" data-i18n="pages.page">頁面</th><th scope="col" data-i18n="pages.impressions">曝光</th><th scope="col" data-i18n="pages.clicks">點擊</th><th scope="col" data-i18n="pages.ctr">CTR</th><th scope="col" data-i18n="pages.position">平均排名</th><th scope="col" data-i18n="pages.queries">Query 數</th></tr></thead><tbody id="pageTableBody"></tbody></table></div>
+          </section>
+
+          <section id="data-quality" class="surface-card data-quality-card" aria-labelledby="quality-title">
+            <div class="card-heading"><div><p class="eyebrow" data-i18n="quality.eyebrow">PROVENANCE / LIMITS</p><h2 id="quality-title" data-i18n="quality.title">資料來源與邊界</h2></div><span class="heading-metric" data-i18n="quality.badge">TRACEABLE</span></div>
+            <div id="qualityGrid" class="quality-grid"></div>
+          </section>
+        </section>
+
+        <section id="emptyState" class="empty-state" aria-labelledby="empty-title">
+          <div><p class="eyebrow accent-eyebrow" data-i18n="empty.eyebrow">NO DATA</p><h2 id="empty-title" data-i18n="empty.title">尚未匯入資料</h2><p data-i18n="empty.description">先匯入目前期間，或載入示範資料。</p></div>
+          <button id="emptySampleButton" class="button button-primary" type="button" data-i18n="action.sample">載入示範資料</button>
+        </section>
+
+        <details id="rulesPanel" class="rules-panel">
+          <summary><span data-i18n="rules.title">規則設定</span><span class="summary-mark">＋</span></summary>
+          <div class="rules-content">
+            <p data-i18n="rules.description">門檻是面板排序用的可調參數，不是 Google 的硬規則。改動後會立即重算，不會改變原始匯入資料。</p>
+            <div class="rules-grid">
+              <label><span data-i18n="rules.minImpressions">最低曝光</span><input id="minImpressionsInput" type="number" min="0" step="1" value="20" /></label>
+              <label><span data-i18n="rules.rankDelta">排名變化判定（位）</span><input id="minRankDeltaInput" type="number" min="0.1" step="0.1" value="1" /></label>
+              <label><span data-i18n="rules.lowCtrRatio">低 CTR 參考倍率</span><input id="lowCtrRatioInput" type="number" min="0.1" max="1" step="0.05" value="0.75" /></label>
+              <label><span data-i18n="rules.maxRecommendations">最多顯示建議</span><input id="maxRecommendationsInput" type="number" min="1" max="100" step="1" value="30" /></label>
+              <label><span data-i18n="rules.anomalyDrop">異常下降比例</span><input id="anomalyDropRatioInput" type="number" min="0.1" max="0.9" step="0.05" value="0.3" /></label>
+              <label><span data-i18n="rules.anomalyRank">異常排名下降（位）</span><input id="anomalyRankDeltaInput" type="number" min="1" max="100" step="0.5" value="3" /></label>
+              <label><span data-i18n="rules.maxInsights">最多顯示訊號</span><input id="maxInsightsInput" type="number" min="1" max="30" step="1" value="8" /></label>
+            </div>
+          </div>
+        </details>
+
+        <footer class="app-footer"><span data-i18n="footer.left">SEO COACH / SEARCH SIGNAL</span><span data-i18n="footer.right">LOCAL • SOURCE-BOUND • COMPUTED IN BROWSER</span></footer>
+        <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+        <dialog id="keywordDetailDialog" class="detail-dialog" aria-labelledby="detailDialogTitle">
+          <div class="detail-dialog-inner">
+            <div class="detail-dialog-header">
+              <div><p class="eyebrow" data-i18n="detail.title">關鍵詞詳情</p><h2 id="detailDialogTitle">—</h2><p id="detailDialogMeta" class="detail-dialog-meta"></p></div>
+              <form method="dialog"><button class="icon-button" type="submit" aria-label="關閉" data-i18n-aria="action.close">×</button></form>
+            </div>
+            <div id="detailDialogContent" class="detail-dialog-content"></div>
+          </div>
+        </dialog>
+      </main>
+    </div>
+    <script src="engine.js"></script>
+    <script src="locales.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

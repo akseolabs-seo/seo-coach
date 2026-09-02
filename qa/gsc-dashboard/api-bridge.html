@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GSC API bridge fixture</title>
+    <link rel="stylesheet" href="../../assets/gsc-dashboard/styles.css" />
+    <style>
+      html, body, #dashboard { width: 100%; min-height: 100%; margin: 0; }
+      #dashboard { display: block; height: 100vh; border: 0; }
+    </style>
+  </head>
+  <body>
+    <iframe id="dashboard" title="GSC dashboard API bridge fixture" src="../../assets/gsc-dashboard/index.html"></iframe>
+    <script>
+      const fixtureConnector = {
+        isConnected: true,
+        load(request) {
+          window.__gscBridgeRequest = request;
+          return Promise.resolve({
+            current: {
+              sourceName: "Fixture GSC API / 目前期間",
+              startDate: "2026-08-01",
+              endDate: "2026-08-28",
+              dimensions: ["query", "page"],
+              rows: [
+                { keys: ["API 測試查詢", "https://example.com/api"], clicks: 18, impressions: 240, ctr: 0.075, position: 8.2 },
+                { keys: ["API 重寫候選", "https://example.com/rewrite"], clicks: 4, impressions: 180, ctr: 0.0222, position: 14.6 },
+              ],
+            },
+            previous: {
+              sourceName: "Fixture GSC API / 比較期間",
+              startDate: "2026-07-04",
+              endDate: "2026-07-31",
+              dimensions: ["query", "page"],
+              rows: [
+                { keys: ["API 測試查詢", "https://example.com/api"], clicks: 12, impressions: 220, ctr: 0.0545, position: 10.4 },
+                { keys: ["API 重寫候選", "https://example.com/rewrite"], clicks: 5, impressions: 165, ctr: 0.0303, position: 18.3 },
+              ],
+            },
+          });
+        },
+      };
+      document.getElementById("dashboard").addEventListener("load", (event) => {
+        event.target.contentWindow.SEOCoachGscDashboard.connect(fixtureConnector);
+      });
+    </script>
+  </body>
+</html>

@@ -8,6 +8,8 @@
 
 截圖貼數據只是「還沒接」時的暫時方案，不是長期建議；但不要讓新手以為沒接工具就不能開始。
 
+如果需求只是讓使用者自己在瀏覽器看 GSC 的成長、下降、排名分布與重寫候選，不必把資料接進教練或 Codex CLI。直接使用 `assets/gsc-dashboard/index.html`；若宿主已經有 GSC API connector，面板會啟動時自動接收目前／比較期間資料，否則再匯入 GSC CSV／TSV／JSON。面板會在本機完成計算，API bridge 的登入、property、日期窗與請求仍留在外部既有連線層，流程與教練的 MCP／API 讀取分開。面板規則與資料限制見 `references/59-gsc-dashboard.md`。
+
 接 MCP／API 之後，我可以直接讀：
 - GSC：查詢報告、頁面表現、Coverage／Indexing 狀態
 - GA4：流量、來源、行為、轉換

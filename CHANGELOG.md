@@ -1,5 +1,72 @@
 # SEO Coach Changelog
 
+## 2.5.0 — Learn SEO by doing, not just reading
+
+**Release type**: public GitHub release / marketing summary
+**Date**: 2026-09-02
+
+SEO Coach 2.5.0 is for people who want to build SEO judgment on a real website. It turns a long list of tools and terminology into a small, repeatable loop: set a safe goal, establish a baseline, inspect evidence, make one bounded change, verify the live page, and review the result at the right time.
+
+It does not promise to turn you into another SEO master overnight. It gives you a practical, evidence-based way to build your own judgment through repeated work.
+
+### The value in this release
+
+- **A coach that gives judgment back to you.** It demonstrates one step, works through the next with you, and gradually removes support until you can repeat the process on an unfamiliar page.
+- **A local GSC decision panel.** See clicks, impressions, CTR, period-average position, `1–3 / 4–10 / 11–20 / 21–30 / 31–50 / 51+` ranking buckets, query movement, anomaly signals, CTR opportunities, page ownership context, and transparent rewrite-review candidates.
+- **A focused work queue.** Open any Query for current／previous detail, page breakdown, and matched rules; save a review status and note locally so the next action is visible without turning the panel into an automatic publisher.
+- **One template, five languages.** Traditional Chinese, Simplified Chinese, English, Japanese, and Korean share the same interface and calculations. The first visit follows the browser language; manual choices stay in the local browser.
+- **A privacy-first boundary.** Existing GSC connectors can provide data automatically, but the panel does not handle credentials, open its own network channel, call Codex CLI or AI, generate rewrites, or publish changes.
+
+This is a learning and decision-support release, not a ranking guarantee. GSC average position is a period aggregate, and every rewrite candidate still requires a human check against the current SERP, existing page, first-party evidence, and post-change observation.
+
+Full public release notes: [`RELEASE-2.5.0.md`](RELEASE-2.5.0.md).
+
+> The engineering notes below are retained for traceability from the working line. This GitHub package is intentionally published and labeled as version 2.5.0.
+
+## 2.4.0 — GSC 面板工作台與多語系
+
+**Type**: minor
+**Date**: 2026-09-02
+
+- GSC 面板保留單一模板，新增繁體中文、簡體中文、英文、日文與韓文；第一次開啟依瀏覽器語言選擇，手動切換後保存於本機。
+- 新增 Query 詳情視窗，顯示目前／比較期間的點擊、曝光、CTR、平均排名、頁面承接與命中規則。
+- 新增 deterministic 異常訊號（排名／點擊／曝光下降）與 4–20 名低 CTR 機會，全部由瀏覽器內的 GSC 數據計算。
+- 重寫佇列新增待確認、核對中、處理中、已完成、暫緩、備註、狀態篩選與匯出欄位；狀態與備註只保存於本機。
+- GSC API bridge 的 property、維度、列數、partial、同步時間等來源 metadata 會顯示在資料檢查區，方便判斷資料邊界。
+- 保持無直接網路通道、無面板內憑證、無 Codex CLI／AI、無自動改稿與自動發布邊界。
+- `seo-coach` 版本升為 2.4.0。
+
+## 2.3.2 — GSC API 連線後自動匯入
+
+**Type**: patch
+**Date**: 2026-09-01
+
+- GSC 面板啟動時會先偵測既有的宿主 API bridge；有連線就自動載入目前／比較期間資料，沒有連線才回到 CSV／TSV／JSON／貼上匯入。
+- 新增 `window.SEOCoachGscDashboard.connect(connector)` 與 `refreshFromApi()`；connector 負責登入、property、日期窗與 API 請求，面板只在瀏覽器內做 deterministic 計算。
+- 保留無直接網路通道、無 Codex CLI／AI、無面板內憑證處理的邊界，並補上 API 失敗時保留本機資料的手動 fallback。
+- `seo-coach` 版本升為 2.3.2。
+
+## 2.3.1 — GSC 面板清爽後台化
+
+**Type**: patch
+**Date**: 2026-08-31
+
+- 移除大型 hero、訊號環、垂直裝飾標籤與空白狀態裝飾，改為清楚的後台標題列與資料流程。
+- 改用白底、淡青綠、低飽和 amber／coral 狀態色，收斂卡片高度、間距與控制項，改善繁體中文閱讀與手機版密度。
+- 保留原有 GSC 匯入、排名計算、重寫候選、匯出與本機儲存行為；未加入任何 AI、Codex CLI 或外部服務。
+- `seo-coach` 版本升為 2.3.1。
+
+## 2.3.0 — GSC 本地搜尋訊號面板
+
+**Type**: minor
+**Date**: 2026-08-31
+
+- 新增 `assets/gsc-dashboard/`：可直接在瀏覽器開啟的 code-first 面板，支援 GSC Query CSV／TSV／JSON、目前／比較期間匯入、Query 與 Page 視角、排名 `1–3／4–10／11–20／21–30／31–50／51+` 分桶、點擊／曝光／排名變化、deterministic 重寫候選與 CSV／JSON 匯出。
+- 新增 `references/59-gsc-dashboard.md`：欄位格式、計算定義、透明規則、GSC 平均排名與匿名查詢等資料邊界。
+- 面板完全在瀏覽器計算，不呼叫 Codex CLI、AI、外部 API 或網路服務；匯入內容只存放在本機瀏覽器的 localStorage，並提供清除資料入口。
+- 將本地面板路徑與 GSC MCP／API 教練路徑分開，避免把面板的 deterministic 計算誤當成教練讀取或排名證明。
+- `seo-coach` 版本升為 2.3.0。
+
 ## 2.2.0 — 標題公式與文章維運
 
 **Type**: minor
@@ -48,9 +115,9 @@
 - **真的能持續進步**：記錄能力、錯誤、提示程度與延遲複測，下次直接從尚未掌握的地方繼續。
 - **真的以獨立為終點**：Capstone 測試使用者能否在不同頁面重建流程，而不是永遠依賴教練。
 
-這一版的商業定位也更清楚：SEO Coach 不出售「一鍵變強」的幻想，不取代顧問，也不公開 AK 的私人研究與客戶方法。它把 AK 整理的公開資源與 Threads 公開理論，轉化成一套低成本、可以實際練習的入門系統，幫助使用者打好基礎、對 SEO 產生真正興趣、爭取排出第一個關鍵詞，並開始建立自己的思維邏輯。
+這一版的商業定位也更清楚：SEO Coach 不出售「一鍵變強」的幻想，不取代顧問，也不公開任何 SEO 大師的私人研究與客戶方法。它把已登錄的公開資源與公開 SEO 理論，轉化成一套低成本、可以實際練習的入門系統，幫助使用者打好基礎、對 SEO 產生真正興趣、爭取排出第一個關鍵詞，並開始建立自己的思維邏輯。
 
-> 使用 SEO Coach 不會讓你直接變得跟 AK 一樣強；它賣的不是捷徑，而是一個更少走彎路、更有機會走下去的開始。
+> 使用 SEO Coach 不會讓你直接變得跟資深 SEO 大師一樣強；它賣的不是捷徑，而是一個更少走彎路、更有機會走下去的開始。
 
 上一個公開版本是 1.1.0，因此既有使用者升級後，也會一次取得 1.2.0 的新手體驗改善：更短的開場、症狀直接入場、截圖回報、提示階梯、三層學習地圖與安全修改護欄。
 
@@ -127,7 +194,7 @@ frontmatter 收斂成 `name` + `description`；新增 `agents/openai.yaml`、sou
 - 驗證公開安裝包與 Codex／Claude runtime 一致，避免分享版和本機版行為分岔。
 - 真實 API、登入後台與平台 hook 仍以使用者授權及現場環境為準；沒有實際接通就不宣稱已驗證。
 
-所有教材來源限於 AK 整理的公開資源、Google 等官方公開文件、公開網站／SERP，以及 AK 在 Threads 上有公開 URL 的理論與觀點。這個版本不包含 AK 的私人研究方法、未公開測試、客戶資料、客戶案例細節、私訊或私人 SOP。
+所有教材來源限於已登錄的公開資源、Google 等官方公開文件、公開網站／SERP，以及能以公開 URL 查核的理論與觀點。這個版本不包含任何私人研究方法、未公開測試、客戶資料、客戶案例細節、私訊或私人 SOP。
 
 ## 1.2.0 — Beginner experience overhaul + knowledge base expansion
 
@@ -160,7 +227,7 @@ frontmatter 收斂成 `name` + `description`；新增 `agents/openai.yaml`、sou
 
 **知識庫擴充（9 個新檔 + 2 個擴充）**
 - `40` 中文／台灣市場 SEO 特性（title 以中文字計長、斷詞、中文 URL、工具數據稀疏的現實）
-- `41` Google 垃圾內容政策白話對照——廠商手法自查，跟 AK 的廠商獵殺系列互補
+- `41` Google 垃圾內容政策白話對照——廠商手法自查，跟公開 SEO 廠商識別系列互補
 - `42` 診斷案例敘事庫（只使用明確標示的合成示例）
 - `43` 中文 title／meta／內容好壞對照庫
 - `44` 新手快問快答庫（40 題判斷型 FAQ）
@@ -221,7 +288,7 @@ New users could still interpret a quick SEO check as "the SEO coaching is done."
 
 ## 1.0.0 — 首次公開發布
 
-**由 AK（@darkseoking）設計與訓練。**
+**由公開、可驗證的 SEO 實務與教練式學習原則設計與訓練。**
 
 ### 包含
 
@@ -232,7 +299,7 @@ New users could still interpret a quick SEO check as "the SEO coaching is done."
 - 新手輕量模式 + 完整陪跑模式自動分流
 - 持續追蹤 Session 系統（`seo-progress.md` + `seo-actions.md`）
 
-**AK 的「低端 SEO 廠商獵殺計畫」教學整合**
+**公開 SEO 廠商識別教學整合**
 - 廠商關鍵字規劃服務判斷框架
 - AI 寫文章大綱優先法（三階段工作流）
 - 舊文優化優先順序
@@ -246,7 +313,7 @@ New users could still interpret a quick SEO check as "the SEO coaching is done."
 
 **用戶體驗**
 - 開場設定期待：適合誰、不適合誰、我不做什麼
-- AK 虛擬教練身份（「AK 訓練出來的虛擬陪跑教練」）
+- SEO Coach 虛擬教練身份（「由 SEO 實務訓練出的虛擬陪跑教練」）
 - 繁體中文預設，英文自動切換
 - README 中英雙檔（中文主要 + 英文版本）
 - 平台中立：可放進任何 AI agent 的 skills 資料夾使用

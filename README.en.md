@@ -2,26 +2,26 @@
 
 > Not another SEO report. A coach that stays with you on a real site until you can observe, decide, act, and verify for yourself.
 
-> 🇹🇼 繁體中文 → [README.md](README.md) ｜ 🇨🇳 简体中文 → [README.zh-CN.md](README.zh-CN.md)
+> 🇹🇼 Traditional Chinese → [README.zh-TW.md](README.zh-TW.md) ｜ 🇨🇳 Simplified Chinese → [README.zh-CN.md](README.zh-CN.md)
 
-> **Current version: 2.2.0**｜Major release notes → [RELEASE-2.0.md](RELEASE-2.0.md)｜Full history → [CHANGELOG.md](CHANGELOG.md)
+> **Current version: 2.5.0**｜Release notes → [RELEASE-2.5.0.md](RELEASE-2.5.0.md)｜Changelog → [CHANGELOG.md](CHANGELOG.md)
 > To check whether your copy is current, just ask the coach "**is there a new version?**" — it compares against GitHub and tells you.
 
-SEO Coach is an open-source AI coaching Skill designed by AK ([@darkseoking](https://www.threads.com/@darkseoking)), an SEO expert with 20K+ followers on Threads.
+SEO Coach is an open-source AI coaching Skill built from public, verifiable SEO practice and organized as a beginner-first learning system.
 
 It is not an SEO audit, checklist, or answer library. It is a site-based apprenticeship: the coach demonstrates one small step, works through the next one with you, then gradually removes support until you can repeat the judgment on an unfamiliar page.
 
-## Why I Built SEO Coach
+## Why SEO Coach Exists
 
 I have always believed that **SEO is a game played well by a small minority**.
 
 Useful SEO is not just knowing how to write a title or how long an article should be. The advantage comes from how you observe a search result, judge an opportunity, decide with incomplete information, and find the mechanism when a test fails. Those judgments create competitive advantage, so very few teachers will disclose every private research method, client lesson, and decision framework they actually rely on.
 
-I did not build SEO Coach to pretend that a free Skill can turn you into another AK.
+SEO Coach is not designed to pretend that a free Skill can turn you into another SEO master.
 
-I built it to give you a **low-cost but sound beginning**: learn the public and verifiable fundamentals, become genuinely interested in SEO, rank your first keyword on your own site, and start developing your own reasoning, observations, and ideas.
+It gives you a **low-cost but sound beginning**: learn the public and verifiable fundamentals, become genuinely interested in SEO, rank your first keyword on your own site, and start developing your own reasoning, observations, and ideas.
 
-> Using SEO Coach will not make you as strong as I am. That gap still comes from years of research, practice, failure, and judgment. It can, however, help you avoid many beginner mistakes and build a strong starting point at very low cost.
+> Using SEO Coach will not instantly give you the judgment of an experienced SEO master. That gap still comes from years of research, practice, failure, and judgment. It can, however, help you avoid many beginner mistakes and build a strong starting point at very low cost.
 
 That is the difference between SEO Coach and another information product: it does not promise to hand you a secret method. It helps you build the foundation from which your own method can eventually emerge.
 
@@ -114,6 +114,12 @@ The coach draws from its technical, content, linking, and measurement library as
 - Foundational topical maps, SERP features, AI search readiness, ecommerce, and local SEO.
 
 The 18 modules are an on-demand coaching library, not a syllabus you must complete in order.
+
+### Local GSC Search Panel
+
+If an existing GSC API connector is already connected, open `assets/gsc-dashboard/index.html` and the panel will load the current and optional comparison periods automatically. Without that connector, import CSV, TSV, or JSON manually. The panel computes clicks, impressions, CTR, average position, `1–3 / 4–10 / 11–20 / 21–30` buckets, query movement, anomaly and CTR signals, and transparent rewrite-review candidates directly in the browser. Each query has a current/previous detail view, page breakdown, and matched-rule context; queue status and notes are saved locally.
+
+The panel does not handle login or credentials, open its own network channel, or call Codex CLI/AI; an existing connector owns the connection and the panel only computes and stores the returned data in the browser. One template supports Traditional Chinese, Simplified Chinese, English, Japanese, and Korean; first run follows the browser language and later manual choices stay local. Its rewrite queue is a deterministic, inspectable rule list—not automatic editing—and GSC average position is not a live SERP rank. See [`references/59-gsc-dashboard.md`](references/59-gsc-dashboard.md) for the bridge contract, formats, formulas, and limits.
 
 ## Try It With Prompts Like These
 
@@ -208,11 +214,11 @@ The auto-load router under `hooks/` is optional. SEO Coach works without it. To 
 
 ## Public Sources and Privacy Boundary
 
-All SEO Coach teaching material comes from **public resources curated and reorganized by AK**, together with SEO theories and viewpoints I have publicly shared on Threads and that can be verified through a public URL. These sources include official Google documentation, public courses, public websites/SERPs, and material with clear public attribution or licensing.
+All SEO Coach teaching material comes from **public, traceable resources curated and reorganized for this Skill**, together with SEO theories and viewpoints that can be verified through public sources. These sources include official Google documentation, public courses, public websites/SERPs, and material with clear public attribution or licensing.
 
-It does **not** contain my private research methods, unpublished tests, client data, private client cases, direct messages, unpublished prompts, private SOPs, or unrelated local projects. This is a deliberate boundary protecting clients, private research assets, and the integrity of the public learning edition.
+It does **not** contain any private research methods, unpublished tests, client data, private client cases, direct messages, unpublished prompts, private SOPs, or unrelated local projects. This is a deliberate boundary protecting clients, private research assets, and the integrity of the public learning edition.
 
-SEO Coach therefore gives you a strong public foundation and a learning method—not a complete copy of AK’s private methodology. Your own site, observations, experiments, and time are what turn that foundation into independent SEO judgment.
+SEO Coach therefore gives you a strong public foundation and a learning method—not a complete copy of any private methodology. Your own site, observations, experiments, and time are what turn that foundation into independent SEO judgment.
 
 Before each public build, the maintainer edition runs behavioral evaluations, routing fixtures, privacy-leak tests, and package-parity validation. These test whether the Skill behaves like a coach, not merely whether the Markdown parses. Maintainer-only `evals/` and `scripts/` are intentionally excluded from the public installation.
 
@@ -225,16 +231,18 @@ seo-coach/
 ├── SKILL.md                 # Core coaching behavior and routing
 ├── FAILSAFE.md              # Failure modes and required behavior changes
 ├── references/              # Apprenticeship tracks, labs, and teaching material
+├── assets/gsc-dashboard/    # Openable local GSC analysis panel
 ├── agents/                  # Agent UI and trigger metadata
 ├── hooks/                   # Optional auto-load router (works without it)
 │
 │  ── Documentation ──
 ├── README.md                # Overview and learning model
+├── RELEASE-2.5.0.md         # Public marketing release notes
 ├── RELEASE-2.0.md           # Major release notes
 ├── CHANGELOG.md             # Release history
 │
 │  ── Maintainer only (not needed to install) ──
-├── evals/                   # 88 coaching-behavior eval cases and rubric
+├── evals/                   # 92 coaching-behavior eval cases and rubric
 └── scripts/                 # Validator, eval runner, build, privacy tests
 ```
 

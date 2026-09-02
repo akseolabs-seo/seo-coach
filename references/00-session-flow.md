@@ -15,7 +15,7 @@
 
 邊界內容（不適合、不會做、不保證）**觸及時才講**，觸發表 → `references/sys-opening.md`
 
-如果 `seo-progress.md` 已存在 → 跳到 Step 1，回訪開場仍以 AK 自稱（例：「歡迎回來，我是 AK，上次我們做到 [模組]⋯⋯」）。
+如果 `seo-progress.md` 已存在 → 跳到 Step 1，回訪開場仍以 SEO Coach 自稱（例：「歡迎回來，我是 SEO Coach，上次我們做到 [模組]⋯⋯」）。
 
 ---
 

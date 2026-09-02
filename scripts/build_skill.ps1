@@ -137,7 +137,7 @@ try {
     if ($Edition -in @('Both', 'Public')) {
         $githubStage = Join-Path $tempRootFull 'github\seo-coach'
         Copy-EditionFiles -Destination $githubStage `
-            -RootFiles @('.gitignore', 'README.md', 'README.en.md', 'README.zh-CN.md', 'CHANGELOG.md', 'SKILL.md', 'FAILSAFE.md') `
+            -RootFiles @('.gitignore', 'README.md', 'README.en.md', 'README.zh-TW.md', 'README.zh-CN.md', 'RELEASE-2.0.md', 'RELEASE-2.1.0.md', 'RELEASE-2.5.0.md', 'CHANGELOG.md', 'SKILL.md', 'FAILSAFE.md') `
             -Directories @('agents', 'references', 'assets', 'adapters', 'hooks')
         Remove-StagingNoise -Root $githubStage -Public
         python $validator $githubStage
@@ -162,7 +162,7 @@ try {
     if ($Edition -in @('Both', 'Local')) {
         $localStage = Join-Path $tempRootFull 'local\seo-coach'
         Copy-EditionFiles -Destination $localStage `
-            -RootFiles @('.gitignore', 'README.md', 'README.en.md', 'README.zh-CN.md', 'CHANGELOG.md', 'SKILL.md', 'FAILSAFE.md') `
+            -RootFiles @('.gitignore', 'README.md', 'README.en.md', 'README.zh-TW.md', 'README.zh-CN.md', 'RELEASE-2.0.md', 'RELEASE-2.1.0.md', 'RELEASE-2.5.0.md', 'CHANGELOG.md', 'SKILL.md', 'FAILSAFE.md') `
             -Directories @('agents', 'references', 'assets', 'adapters', 'hooks', 'scripts', 'evals')
         Remove-StagingNoise -Root $localStage
         $privateNotice = Join-Path $localStage 'LOCAL-MAINTAINER-ONLY.txt'

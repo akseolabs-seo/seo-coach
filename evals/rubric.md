@@ -116,6 +116,21 @@ A case **passes** only if **all** its assertions PASS. Partial pass is recorded 
 | `proactive-misreading-callout` | The response volunteers one misreading guard triggered by what is visible on screen; one per turn, not the whole list |
 | `logs-ga4-number` | The number is written to `seo-ga4-log.md` in the same turn (baseline marked if first), and the user is told it was recorded |
 | `logs-only-observed` | Only numbers actually observed this turn are logged; source is labelled 截圖／API／用戶口述, and missing data is requested rather than filled in |
+| `routes-to-local-gsc-panel` | Response points to `assets/gsc-dashboard/index.html` and the focused `references/59-gsc-dashboard.md` route |
+| `requires-comparable-periods-for-movement` | Response says current-only data can show distribution, while growth/decline/new/lost comparisons require a comparable previous period |
+| `deterministic-no-ai-runtime` | Response explicitly keeps calculations in the browser and excludes Codex CLI, AI, external APIs, and network services |
+| `average-position-not-live-rank` | Response distinguishes GSC period-average position from a live SERP rank |
+| `rewrite-queue-is-review` | Response describes the rewrite queue as a transparent candidate/review list, not an automatic rewrite instruction |
+| `returns-to-serp-and-page-evidence` | Response routes the next decision to current SERP, the existing page, and first-party evidence |
+| `no-universal-dashboard-threshold` | Response labels panel thresholds as configurable sorting parameters, not universal Google rules |
+| `api-first-panel-import` | Response specifies startup detection of an existing GSC API bridge and automatic current/previous data loading |
+| `connector-owns-auth` | Response keeps authentication, property, date-window, and API request responsibilities outside the local panel |
+| `manual-import-fallback` | Response preserves CSV/TSV/JSON or paste import when no connector exists or API sync fails |
+| `no-direct-network-or-ai-runtime` | Response keeps the panel free of direct network calls, Codex CLI, and AI runtime behavior |
+| `single-template-locales` | Response describes one reusable panel template with first-run browser-language detection and local locale persistence |
+| `deterministic-workbench-signals` | Response includes query detail, anomaly, and CTR opportunity views as browser-computed signals rather than AI output |
+| `queue-status-is-local-review` | Response describes rewrite queue statuses and notes as local human-review state, not automatic rewriting |
+| `preserves-no-ai-boundary` | Response explicitly keeps Codex CLI, AI runtime, and direct panel network behavior out of scope |
 
 ---
 
@@ -309,4 +324,4 @@ If an eval case itself conflicts with current SKILL.md behavior, that is a findi
 
 This rubric is versioned alongside the skill. When SKILL.md bumps a major version (e.g. 1.x → 2.x), re-walk every assertion in this file and confirm it still matches the spec.
 
-Rubric version: **2.1** (matches SKILL.md 2.1.0 — gradual Search Opportunity Lab, manual incognito SERP, evidence-bounded gaps and briefs)
+Rubric version: **2.5** (matches SKILL.md 2.5.0 — GSC panel workbench, local multilingual template, deterministic signals, and neutral public identity)

@@ -1,6 +1,6 @@
 {
   "skill_name": "seo-coach",
-  "eval_set_version": "2.2.0",
+  "eval_set_version": "2.5.0",
   "evals": [
     {
       "id": "lightweight-continuation-next-module",
@@ -1813,6 +1813,98 @@
         {
           "name": "keeps-one-next-step",
           "description": "Response ends with one practical next step"
+        }
+      ]
+    },
+    {
+      "id": "gsc-local-panel-data-route",
+      "name": "2.3 — GSC 本地面板直接用瀏覽器計算",
+      "prompt": "我已經從 GSC 匯出 Query CSV，想在本地面板看哪些關鍵詞成長或下降、排名 1–3／4–10／11–20／21–30 各有多少，還要列出值得重寫的詞；請不要接 Codex CLI 或 AI 功能。",
+      "expected_output": "直接路由到 assets/gsc-dashboard/index.html 與 references/59-gsc-dashboard.md；說明匯入目前期間即可看現況，補上相同範圍的比較期間才可比較成長／下降；明確說明所有聚合、分桶與規則排序在瀏覽器 deterministic 計算，不呼叫 Codex CLI 或 AI，也不由面板直接開網路通道；若宿主已有 API bridge 則可自動匯入，否則使用手動資料。",
+      "assertions": [
+        {
+          "name": "routes-to-local-gsc-panel",
+          "description": "Response routes the user to the local GSC dashboard asset and its focused reference"
+        },
+        {
+          "name": "requires-comparable-periods-for-movement",
+          "description": "Response distinguishes current-only distribution from movement that requires a comparable previous period"
+        },
+        {
+          "name": "deterministic-no-ai-runtime",
+          "description": "Response preserves browser-local deterministic computation, excludes Codex CLI and AI, and keeps direct network access outside the panel"
+        },
+        {
+          "name": "average-position-not-live-rank",
+          "description": "Response labels GSC average position as an aggregate period metric rather than a live SERP rank"
+        }
+      ]
+    },
+    {
+      "id": "gsc-rewrite-queue-review-boundary",
+      "name": "2.3 — GSC 重寫佇列只是人工核對候選",
+      "prompt": "面板把排名 11–20、曝光比較高的關鍵詞排進重寫佇列，那是不是代表一定要整篇重寫？",
+      "expected_output": "否定自動整篇重寫；說明佇列是透明 deterministic 規則產生的人工核對候選，先回到當下 SERP、既有承接頁、第一方證據與網站能否可信提供，再決定補強、合併或暫緩；門檻可調且不是 Google 硬規則。",
+      "assertions": [
+        {
+          "name": "rewrite-queue-is-review",
+          "description": "Response treats the rewrite queue as a review candidate list rather than an automatic rewrite decision"
+        },
+        {
+          "name": "returns-to-serp-and-page-evidence",
+          "description": "Response sends the next judgment back to current SERP, existing page, and first-party evidence"
+        },
+        {
+          "name": "no-universal-dashboard-threshold",
+          "description": "Response labels dashboard thresholds as configurable sorting parameters rather than Google rules"
+        }
+      ]
+    },
+    {
+      "id": "gsc-panel-api-first-auto-import",
+      "name": "2.3.2 — GSC API 連線後面板自動匯入",
+      "prompt": "本地 GSC 面板如果已經有 GSC API 連線，我不想再上傳 CSV；請自動匯入目前／比較資料。沒有連線時才手動匯入，而且不要加入 Codex CLI 或 AI。",
+      "expected_output": "面板啟動時先偵測既有宿主 GSC API bridge 並自動載入目前／比較期間；connector 負責登入、property、日期窗與 API 請求，面板不處理憑證、不直接開網路通道；沒有 bridge 才顯示 CSV／TSV／JSON／貼上備援。",
+      "assertions": [
+        {
+          "name": "api-first-panel-import",
+          "description": "Response specifies startup detection of an existing GSC API bridge and automatic current/previous data loading"
+        },
+        {
+          "name": "connector-owns-auth",
+          "description": "Response keeps authentication, property, date-window, and API request responsibilities outside the local panel"
+        },
+        {
+          "name": "manual-import-fallback",
+          "description": "Response preserves CSV/TSV/JSON or paste import when no connector exists or API sync fails"
+        },
+        {
+          "name": "no-direct-network-or-ai-runtime",
+          "description": "Response keeps the panel free of direct network calls, Codex CLI, and AI runtime behavior"
+        }
+      ]
+    },
+    {
+      "id": "gsc-panel-workbench-locales",
+      "name": "2.4.0 — GSC 面板工作台與多語系",
+      "prompt": "這個 GSC 本地面板除了排名分布和重寫候選，還能不能有 Query 詳情、異常／CTR 機會、重寫處理狀態和多國語言？我希望保留單一模板，第一次依使用者瀏覽器語言顯示，而且不要加入 AI。",
+      "expected_output": "說明面板可用同一模板支援繁中、簡中、英文、日文、韓文，首次依瀏覽器語言選擇且手動選擇只留本機；新增 Query 詳情、deterministic 異常／CTR 訊號、可保存狀態與備註的人工重寫佇列；所有計算仍在瀏覽器內，不呼叫 AI 或 Codex CLI。",
+      "assertions": [
+        {
+          "name": "single-template-locales",
+          "description": "Response describes one reusable panel template with first-run browser-language detection and local locale persistence"
+        },
+        {
+          "name": "deterministic-workbench-signals",
+          "description": "Response includes query detail, anomaly, and CTR opportunity views as browser-computed signals rather than AI output"
+        },
+        {
+          "name": "queue-status-is-local-review",
+          "description": "Response describes rewrite queue statuses and notes as local human-review state, not automatic rewriting"
+        },
+        {
+          "name": "preserves-no-ai-boundary",
+          "description": "Response explicitly keeps Codex CLI, AI runtime, and direct panel network behavior out of scope"
         }
       ]
     }
