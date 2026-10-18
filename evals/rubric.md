@@ -362,4 +362,4 @@ If an eval case itself conflicts with current SKILL.md behavior, that is a findi
 
 This rubric is versioned alongside the skill. When SKILL.md bumps a major version (e.g. 1.x → 2.x), re-walk every assertion in this file and confirm it still matches the spec.
 
-Rubric version: **3.0.1** (matches SKILL.md 3.0.1 — coach identity as a virtual coach developed by AK, plus 3.0 GSC service-account setup and local tool, algorithm-update co-reading, panel evidence cards)
+Rubric version: **3.0** (matches SKILL.md 3.0.0 — coach identity as a virtual coach developed by AK, GSC service-account setup and local tool, algorithm-update co-reading, panel evidence cards)
