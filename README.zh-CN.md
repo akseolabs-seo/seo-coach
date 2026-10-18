@@ -6,7 +6,7 @@
 
 > 由 **AK**（[@darkseoking](https://www.threads.com/@darkseoking)）开发。SEO Coach 是 AK 开发的虚拟 SEO 陪跑教练。
 
-> **当前版本：3.0.0**｜发布说明 → [GitHub Releases](https://github.com/akseolabs-seo/seo-coach/releases)｜逐版变更 → [CHANGELOG.md](CHANGELOG.md)
+> **当前版本：3.0.0**｜发布说明 → [Releases](https://github.com/akseolabs-seo/seo-coach/releases)｜逐版变更 → [CHANGELOG.md](CHANGELOG.md)
 > 想知道自己装的是不是最新版，直接问教练「**有没有新版？**」，它会去 GitHub 比对后告诉你。
 
 SEO Coach 是一套基于公开、可验证的 SEO 实务整理，并按新手学习路径编排的开源 AI 教练 Skill。
