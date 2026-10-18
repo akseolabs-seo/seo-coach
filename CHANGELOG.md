@@ -259,7 +259,7 @@ Baseline analysis showed three structural gaps for beginners: (1) the mandatory 
 ## 1.1.0 — Continuous coaching and free-tool routing
 
 **Type**: minor
-**Date**: not recorded (between 1.0.0 and 1.2.0)
+**Date**: 2026-05-12
 
 This release upgrades SEO Coach from "run one quick check" to a fuller **SEO coaching flow**.
 
