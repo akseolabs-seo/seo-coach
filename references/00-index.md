@@ -57,6 +57,13 @@
 | AK『30 天 SEO 小知識』系列來源對照／更新台帳（內容已散入各主題檔） | `references/49-ak-30day-seo-tips.md` |
 | GA4 陪跑軌道（一次一張指路卡、L1–L6 逐級解鎖） | `references/50-ga4-coaching-track.md` |
 | 把 GA4 接進來（Data API service account 逐步 + 錯誤對照） | `references/51-ga4-api-connection.md` |
+| 證據卡、假設卡與行動卡 | `references/60-evidence-and-judgment-cards.md` |
+| 搜尋意圖與頁面對應練習 | `references/61-search-intent-and-page-fit-drills.md` |
+| GSC 成效變化診斷練習 | `references/62-gsc-diagnosis-drills.md` |
+| 內容研究與決策型寫作練習 | `references/63-content-research-and-decision-writing.md` |
+| 教學回顧與延遲遷移 | `references/64-coach-retro-and-transfer.md` |
+| 把 GSC 接進來（服務帳戶逐步、錯誤對照、教練用 CLI 讀數據） | `references/65-gsc-api-setup.md` |
+| 演算法更新共讀（官方／自己的資料／社群觀察三層） | `references/66-algorithm-update-reading.md` |
 | 文章標題公式與 AI 輔助大綱工作流 | `references/57-article-title-playbook.md` |
 | 高排名文章排版與維運節奏（TOC、表格、CTA、更新頻率、發布時機） | `references/58-article-formatting-and-cadence.md` |
 | 開場三版本 + 邊界延遲揭露（系統） | `references/sys-opening.md` |
@@ -130,7 +137,7 @@ Reference：`04-on-page.md`（中文長度規則：`40-chinese-seo-specifics.md`
 Hook：「如果你是想搜尋這個關鍵字的用戶，你的頁面有沒有完整回答他的問題？」
 新手預測題：「Google 搜你最想被找到的那個詞，你猜你的頁面 A 有出現 / B 沒出現在前三頁？——搜一次驗證。」
 工具：新的無痕／私人視窗；先示範一筆，再逐步完成三筆初始樣本
-Reference：`05-content-quality.md`、`55-search-opportunity-lab.md`
+Reference：`05-content-quality.md`、`55-search-opportunity-lab.md`、`61-search-intent-and-page-fit-drills.md`
 
 **Module 8 — E-E-A-T**
 Hook：「你聽過 E-E-A-T 嗎？你覺得它對你的行業重要嗎？」
@@ -142,13 +149,13 @@ Reference：`06-eeat.md`
 Hook：「如果 Google 要評估你的網站是不是某個領域的專家，你覺得它會看什麼？」
 新手預測題：「你猜 Google 覺得你的網站『專門講什麼』？A 講得出一個主題 / B 什麼都有一點——我們看你的文章列表驗證。」
 工具：顧客問題或 GSC 查詢、手動無痕 SERP、手繪主題地圖；Autocomplete／PAA 只作候選措辭線索
-Reference：`14-topical-map.md`、`55-search-opportunity-lab.md`
+Reference：`14-topical-map.md`、`55-search-opportunity-lab.md`、`61-search-intent-and-page-fit-drills.md`
 
 **Module 10 — Keyword Basics**
 Hook：「你現在目標打的關鍵字，是你想用的詞，還是你的用戶真的在搜尋的詞？」
 新手預測題：「你猜客人搜尋時打的字，跟你網站上寫的字 A 一樣 / B 不一樣？——開 GSC 查詢報表對一次就知道。」
 工具：GSC → 查詢；沒有資料時，用新的無痕／私人視窗手動查一個候選詞。Google Autocomplete、Google Trends 與免費第三方工具只作補充，不是前置條件
-Reference：`09-keyword-basics.md`、`55-search-opportunity-lab.md`（免費工具補充：`38-continuous-coaching-free-tools.md`）
+Reference：`09-keyword-basics.md`、`55-search-opportunity-lab.md`、`61-search-intent-and-page-fit-drills.md`（免費工具補充：`38-continuous-coaching-free-tools.md`）
 
 ---
 
@@ -189,7 +196,7 @@ Reference：`13-ai-search.md`
 
 **Module 16 — SEO Scenarios**
 按需使用：排名下降、改版、新站、Core Update 後恢復
-Reference：`12-scenarios.md`
+Reference：`12-scenarios.md`、`62-gsc-diagnosis-drills.md`
 
 **Module 17 — Negative SEO 防護**
 Hook：「你有沒有監控過你的網站是否有異常的反向連結突然出現？」
@@ -199,7 +206,7 @@ Reference：`20-negative-seo.md`
 **Module 18 — SEO 成效衡量**
 Hook：「你怎麼知道你做的 SEO 有沒有在發揮作用？你目前看什麼數字？」
 工具：GSC → 成效、GA4 → 自然搜尋、Ahrefs Keyword Rank Checker（單一查詢當下名次）、Ahrefs Free Web Analytics（可選）
-Reference：`21-seo-measurement.md`（GA4 那一段怎麼帶用戶看 → `50-ga4-coaching-track.md`）
+Reference：`21-seo-measurement.md`、`62-gsc-diagnosis-drills.md`（GA4 那一段怎麼帶用戶看 → `50-ga4-coaching-track.md`）
 
 ---
 
@@ -226,10 +233,17 @@ Reference：`21-seo-measurement.md`（GA4 那一段怎麼帶用戶看 → `50-ga
 - **好壞對照教學**：教 title/meta/內容品質時需要中文對照範例 → `43-before-after-examples.md`（展示後讓用戶改自己的，不代寫）
 - **四篇寫作作品集**：用戶要從關鍵字、SERP、brief、初稿、多輪修改一路做到發布與觀察 → `54-four-article-writing-apprenticeship.md`
 - **搜尋機會實驗室**：用戶沒有付費工具，或要學選題、手動無痕 SERP、內容缺口、頁面歸屬／網站架構、brief → `55-search-opportunity-lab.md`；完全新手一次只看一個畫面
+- **證據與判斷卡**：需要區分觀察、限制、假設與可回復行動時 → `60-evidence-and-judgment-cards.md`
+- **意圖與頁面對應**：需要決定 new／improve／defer／do-not-target，或懷疑多頁承接時 → `61-search-intent-and-page-fit-drills.md`
+- **GSC 變化診斷**：查詢／頁面上升下降、接近首頁、內容衰退或多頁承接時 → `62-gsc-diagnosis-drills.md`
+- **研究與決策型寫作**：要補統計、比較方案、查證主張或建立研究卡時 → `63-content-research-and-decision-writing.md`
+- **回顧與遷移**：session 收尾、能力狀態更新、換題複測或跨資料夾續接時 → `64-coach-retro-and-transfer.md`
 - **快問快答**：新手問判斷型常見問題（要做多久、要發幾篇、要不要買網域⋯⋯）→ 先查 `44-beginner-faq.md`
 - **期待管理數據**：需要 CTR 基準、修復生效時間、正常值 → `45-benchmarks-and-timelines.md`
 - **流量掉了先對時間**：診斷排名/流量下跌，先對照 Google 更新日期 → `46-core-update-timeline.md`（注意檔內過期防護規則）
+- **是不是被更新打到**：用戶問最近有沒有演算法更新、流量是否因更新而掉 → 對完日期後走 `66-algorithm-update-reading.md`
+- **接 GSC API**：用戶已反覆貼 GSC 截圖、說想接 GSC 或不想一直截圖 → `65-gsc-api-setup.md`；完全新手第一輪不提
 - **網域主機概念混淆**：用戶分不清網域/主機/DNS/SSL、GSC DNS 驗證卡住 → `47-domain-hosting-dns-primer.md`
-- **沒有網站也想學**：用戶沒網站但想先練判讀 → `48-practice-reading-drills.md`
+- **沒有網站也想學**：用戶沒網站但想先練判讀 → `48-practice-reading-drills.md`（含 GSC 面板示範資料練習場）
 - **標題怎麼下**：用戶問標題公式、要不要加數字／年份、AI 幫想標題與大綱 → `57-article-title-playbook.md`（學員自己下標，教練給公式與回饋）
 - **排版與維運節奏**：用戶問文章長度、目錄、表格圖文、CTA、社群分享設定、更新頻率、發文時間 → `58-article-formatting-and-cadence.md`

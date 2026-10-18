@@ -4,7 +4,7 @@
 
 > 🇹🇼 Traditional Chinese → [README.zh-TW.md](README.zh-TW.md) ｜ 🇨🇳 Simplified Chinese → [README.zh-CN.md](README.zh-CN.md)
 
-> **Current version: 2.5.0**｜Release notes → [RELEASE-2.5.0.md](RELEASE-2.5.0.md)｜Changelog → [CHANGELOG.md](CHANGELOG.md)
+> **Current version: 3.0.0**｜What's new in 3.0 → [CHANGELOG.md](CHANGELOG.md)｜Earlier release notes → [RELEASE-2.5.0.md](RELEASE-2.5.0.md)
 > To check whether your copy is current, just ask the coach "**is there a new version?**" — it compares against GitHub and tells you.
 
 SEO Coach is an open-source AI coaching Skill built from public, verifiable SEO practice and organized as a beginner-first learning system.
@@ -59,7 +59,7 @@ You are not forced to guess. The coach demonstrates the first case, works throug
 
 ### Evidence before conclusions
 
-The coach separates live observations, official guidance, third-party estimates, learner-authorized data, and what remains unobserved. A healthy result is valid evidence; it will not invent defects to make the session look useful.
+The coach separates live observations, official guidance, third-party estimates, learner-authorized data, and what remains unobserved. A healthy result is valid evidence; it will not invent defects to make the session look useful. Each practical judgment keeps its limit, next discriminating check, and later transfer case.
 
 ### Every change is rechecked
 
@@ -117,9 +117,9 @@ The 18 modules are an on-demand coaching library, not a syllabus you must comple
 
 ### Local GSC Search Panel
 
-If an existing GSC API connector is already connected, open `assets/gsc-dashboard/index.html` and the panel will load the current and optional comparison periods automatically. Without that connector, import CSV, TSV, or JSON manually. The panel computes clicks, impressions, CTR, average position, `1–3 / 4–10 / 11–20 / 21–30` buckets, query movement, anomaly and CTR signals, and transparent rewrite-review candidates directly in the browser. Each query has a current/previous detail view, page breakdown, and matched-rule context; queue status and notes are saved locally.
+Connect Search Console once, in three steps, and both the browser panel and the coach read the same data: (1) in Google Cloud, enable the Google Search Console API, create a service account and download its JSON key to `~/.seo-coach/gsc-service-account.json`; (2) in Search Console → Settings → Users and permissions, add the service account's email as a Restricted user; (3) run `node assets/gsc-tools/gsc.mjs check`, then `node assets/gsc-tools/gsc.mjs serve` and open `http://127.0.0.1:8791/`. The coach walks you through it one step at a time and never asks you to paste the key into the chat ([`references/65-gsc-api-setup.md`](references/65-gsc-api-setup.md)). No site yet? Click "Load demo data" and practise on clearly labelled synthetic data.
 
-The panel does not handle login or credentials, open its own network channel, or call Codex CLI/AI; an existing connector owns the connection and the panel only computes and stores the returned data in the browser. One template supports Traditional Chinese, Simplified Chinese, English, Japanese, and Korean; first run follows the browser language and later manual choices stay local. Its rewrite queue is a deterministic, inspectable rule list—not automatic editing—and GSC average position is not a live SERP rank. See [`references/59-gsc-dashboard.md`](references/59-gsc-dashboard.md) for the bridge contract, formats, formulas, and limits.
+The panel has 13 tabs (overview, all-sites list, 12-month decay heatmap, new pages, rank tracking, striking distance, cannibalization, language versions, segment trends, indexing checks, change notes, raw data export, and the coach's action queue), a detail drawer for any query or page, previous-period or year-over-year comparison, a brand / non-brand split, markers for Google's announced ranking updates, and a "Copy evidence card" button so you can paste what you see to the coach instead of a screenshot. The key is read only by the local tool (read-only scope, bound to `127.0.0.1`); the panel page handles no credentials, calls no AI, and computes everything deterministically in the browser. GSC rows are not written to local storage—only your own notes and settings, which you can export and import. Three languages ship built in (Traditional Chinese, Simplified Chinese, and English); the coach sets the panel language with `node assets/gsc-tools/locale.mjs --use <tag>` and generates any other language once. The action queue lists review candidates, not instructions, and GSC average position is not a live SERP rank. Formulas, the host-connector contract, and limits: [`references/59-gsc-dashboard.md`](references/59-gsc-dashboard.md).
 
 ## Try It With Prompts Like These
 
@@ -206,7 +206,7 @@ Codex:  ~/.codex/skills/seo-coach
 Claude: ~/.claude/skills/seo-coach
 ```
 
-The cloned repository also contains maintainer-only `evals/` and `scripts/`. They are **not required at runtime** — delete them before installing if you prefer, or leave them; either way the Skill behaves the same.
+The cloned repository also contains maintainer-only `evals/` and `scripts/`. They are **not required at runtime** (the tools you run yourself live in `assets/gsc-tools/`, which is part of the runtime package) — delete them before installing if you prefer, or leave them; either way the Skill behaves the same.
 
 </details>
 
@@ -231,7 +231,8 @@ seo-coach/
 ├── SKILL.md                 # Core coaching behavior and routing
 ├── FAILSAFE.md              # Failure modes and required behavior changes
 ├── references/              # Apprenticeship tracks, labs, and teaching material
-├── assets/gsc-dashboard/    # Openable local GSC analysis panel
+├── assets/gsc-dashboard/    # Local GSC panel
+├── assets/gsc-tools/        # Runtime tools: GSC API connection (gsc.mjs) and panel language (locale.mjs)
 ├── agents/                  # Agent UI and trigger metadata
 ├── hooks/                   # Optional auto-load router (works without it)
 │
@@ -242,8 +243,8 @@ seo-coach/
 ├── CHANGELOG.md             # Release history
 │
 │  ── Maintainer only (not needed to install) ──
-├── evals/                   # 92 coaching-behavior eval cases and rubric
-└── scripts/                 # Validator, eval runner, build, privacy tests
+├── evals/                   # 104 coaching-behavior eval cases and rubric
+└── scripts/                 # Maintainer tools: validator, eval runner, build, panel and privacy tests
 ```
 
 ## The Point

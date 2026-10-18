@@ -35,6 +35,8 @@ A4 學員索取完整步驟、工具或答案時，拒絕提示後必須明說�
 
 沒有付費工具時，SERP 研究照 `55-search-opportunity-lab.md` 手動完成：開新的無痕／私人視窗，確認地區與語言，記錄裝置與日期。A1 第一輪由教練只示範第 1 個自然結果，後續輪才共做第 2 個、由學員判讀第 3 個；三筆已一致就停，混合意圖才多看 2 筆。每輪保留截圖，教練不代填完整表。
 
+研究型主張、統計、比較與「哪個方案適合誰」的寫作，先讀 `63-content-research-and-decision-writing.md` 建立研究卡，再回到本軌道的 brief、初稿與 W1–W8；每個重大判斷可連回 `60-evidence-and-judgment-cards.md`。
+
 ## 八個硬門檻
 
 每項只記 `pass / revise / not-assessable`。`not-assessable` 不能當 pass；補到能判斷再結案。AI 分數、外掛綠燈、字數與關鍵字密度都不能取代硬門檻。

@@ -30,6 +30,9 @@ SHOULD_FIRE = [
     "關鍵字要怎麼看？我是新手完全不懂",
     "SEO 健檢一下我的網站",
     "陪我完成四篇 SEO 文章，每篇都要一起改稿",
+    "最近 Google 是不是有演算法更新？",
+    "did the latest core update hit my site?",
+    "我想接 GSC API，不想一直截圖",
 ]
 
 SHOULD_NOT_FIRE = [
@@ -41,6 +44,8 @@ SHOULD_NOT_FIRE = [
     "git rebase 衝突怎麼解",
     "幫我改一下這段 Python 的錯誤處理",
     "Seoul 的天氣怎麼樣",
+    "IG 演算法更新後觸及變好低",
+    "upgrade the project to the latest .NET Core update",
 ]
 
 

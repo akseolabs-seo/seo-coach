@@ -118,19 +118,20 @@ A case **passes** only if **all** its assertions PASS. Partial pass is recorded 
 | `logs-only-observed` | Only numbers actually observed this turn are logged; source is labelled 截圖／API／用戶口述, and missing data is requested rather than filled in |
 | `routes-to-local-gsc-panel` | Response points to `assets/gsc-dashboard/index.html` and the focused `references/59-gsc-dashboard.md` route |
 | `requires-comparable-periods-for-movement` | Response says current-only data can show distribution, while growth/decline/new/lost comparisons require a comparable previous period |
-| `deterministic-no-ai-runtime` | Response explicitly keeps calculations in the browser and excludes Codex CLI, AI, external APIs, and network services |
+| `panel-api-only-no-file-import` | Response states the panel no longer imports CSV/TSV/JSON performance data and reads GSC only through the API (the local `gsc.mjs` server or a host connector); it does not walk the user through importing an export into the panel |
+| `deterministic-no-ai-runtime` | Response explicitly keeps calculations deterministic in the browser, excludes Codex CLI and AI, and keeps credentials and Google API access outside the panel page (the page only calls the local tool's same-origin routes or a host connector) |
 | `average-position-not-live-rank` | Response distinguishes GSC period-average position from a live SERP rank |
-| `rewrite-queue-is-review` | Response describes the rewrite queue as a transparent candidate/review list, not an automatic rewrite instruction |
+| `rewrite-queue-is-review` | Response describes the action queue (formerly the rewrite queue) as a transparent candidate/review list, not an automatic rewrite instruction |
 | `returns-to-serp-and-page-evidence` | Response routes the next decision to current SERP, the existing page, and first-party evidence |
 | `no-universal-dashboard-threshold` | Response labels panel thresholds as configurable sorting parameters, not universal Google rules |
-| `api-first-panel-import` | Response specifies startup detection of an existing GSC API bridge and automatic current/previous data loading |
-| `connector-owns-auth` | Response keeps authentication, property, date-window, and API request responsibilities outside the local panel |
-| `manual-import-fallback` | Response preserves CSV/TSV/JSON or paste import when no connector exists or API sync fails |
-| `no-direct-network-or-ai-runtime` | Response keeps the panel free of direct network calls, Codex CLI, and AI runtime behavior |
-| `single-template-locales` | Response describes one reusable panel template with first-run browser-language detection and local locale persistence |
-| `deterministic-workbench-signals` | Response includes query detail, anomaly, and CTR opportunity views as browser-computed signals rather than AI output |
-| `queue-status-is-local-review` | Response describes rewrite queue statuses and notes as local human-review state, not automatic rewriting |
-| `preserves-no-ai-boundary` | Response explicitly keeps Codex CLI, AI runtime, and direct panel network behavior out of scope |
+| `connector-contract-v2` | Response says a connector that only provides the v1 `load()` method is no longer compatible, and names the v2 contract: required `listSites` and `query`, optional `inspectUrl`, `fetchSitemapUrls` and `listUpdates` |
+| `connector-owns-auth` | Response keeps authentication, credentials, and the actual Google API calls outside the panel page, in the host connector or the local `gsc.mjs` tool |
+| `no-connector-demo-not-import` | Response says that without any connection (host connector or local server) the panel offers only the setup screen and clearly labelled synthetic demo data; it offers no CSV/TSV/JSON or paste fallback and does not treat demo data as real site performance |
+| `no-direct-network-or-ai-runtime` | Response keeps the panel page free of external network calls (only same-origin routes of the local tool), Codex CLI, and AI runtime behavior |
+| `panel-locale-follows-chat` | Response says only zh-Hant, zh-Hans, and en are bundled; the coach sets the panel language from the conversation language with `node assets/gsc-tools/locale.mjs --use <tag>`; browser language is only a later fallback; a non-bundled language is generated once by the coach on first setup, never by AI at panel runtime |
+| `deterministic-workbench-signals` | Response places anomaly and CTR opportunity signals in the action queue as browser-computed signals rather than AI output, and points single-query detail to the detail drawer (click a query or page); it does not describe the CTR reference as an industry benchmark |
+| `queue-status-is-local-review` | Response describes action queue statuses and notes as local human-review state, not automatic rewriting |
+| `preserves-no-ai-boundary` | Response explicitly keeps Codex CLI, AI runtime, and external network calls from the panel page out of scope |
 
 ---
 
@@ -294,6 +295,41 @@ Every assertion name used in `evals.json` must appear here or in the table above
 
 ---
 
+### 2.7 additions: evidence, diagnosis, research, and transfer
+
+| Pattern | What counts as PASS |
+|---------|---------------------|
+| `evidence-card-fields` | Response separates source or scope, actual observation, unsupported conclusion, and one next discriminating check |
+| `intent-page-mismatch` | Response identifies a possible mismatch between the query task/SERP page type and the existing page without declaring a ranking cause |
+| `page-fit-decision` | Response treats new, improve, defer, or do-not-target as conditional decisions supported by evidence |
+| `striking-distance-candidate` | A near-first-page position is treated as a review candidate, not a guarantee or automatic rewrite trigger |
+| `no-destructive-auto-action` | Response does not jump to deletion, redirect, canonicalization, merge, or full rewrite before confirmation and rollback planning |
+| `cannibalization-confirmation-before-action` | Response requires query-page evidence, SERP observation, and task comparison before calling page competition confirmed |
+| `source-verification-card` | A claimed statistic is checked for scope, unit, sample or conditions, URL, date, source level, and limitations |
+| `no-fabricated-data` | An unverified precise number is not repeated or polished as fact; it is marked unknown, omitted, or sent for verification |
+| `decision-tradeoffs` | Recommendation is built from decision criteria, tradeoffs, limitations, and audience-specific conditions |
+| `no-universal-recommendation` | Response does not name a universal best option without the reader, criteria, and evidence needed to support it |
+| `transfer-to-cousin-case` | After a demonstration, the coach hands the learner one similar but different case instead of completing the whole task |
+| `interaction-preserved` | Response ends with a concrete learner action or answer shape |
+| `portable-resume-boundary` | Response distinguishes recorded prior state from current live evidence and does not fill missing state from the summary |
+| `comparable-window-first-check` | When the supplied GSC periods are not comparable, response asks for one matching comparison and defers downstream diagnosis until that evidence returns |
+
+### 3.0 additions: GSC API setup, update reading, and panel evidence cards
+
+| Assertion | What it means for PASS |
+|---------|---------------------|
+| `routes-to-gsc-api-setup` | Response routes to the service-account + local tool path in `references/65-gsc-api-setup.md`, not to a generic "find an MCP" answer |
+| `one-setup-step-this-round` | Response gives only the current setup step with what "done" looks like and waits for the student's report; it does not list all eight steps as this round's task |
+| `never-asks-key-in-chat` | Response tells the student not to paste the key into the chat and never requests the key file or its contents; at most it asks for the `client_email` line |
+| `official-update-source-first` | Response checks or points to Google's own record first (`gsc.mjs updates` or the Search Status Dashboard) and states as fact only what that source returned this turn; no update names or dates from memory |
+| `own-data-second-equal-windows` | Response turns next to the student's own data around the update's start date with equal before/after windows (or asks for the drop start date / matching screenshots), and names an incomplete after-window or unfinished rollout |
+| `community-observation-labelled` | Third-party analysis is only cited after a live search, attributed to its source, and labelled as community observation; it is never presented as Google's statement or as the cause of this site's change. Saying none was looked up yet also passes |
+| `one-distinguishing-check-with-refutation` | Response leaves exactly one distinguishing check and says what result would rule the update explanation out |
+| `no-fix-list-from-update-name` | Response does not derive a list of fixes from the update's name and does not claim the site was hit by the update |
+| `evidence-card-treated-as-observation` | Response restates the pasted card's property, period and numbers as the observation and keeps period-average position distinct from a live rank; it does not upgrade the card into a cause or a rewrite decision |
+| `hypothesis-with-refutation-condition` | Response states one tentative hypothesis and one observable condition that would reject it |
+| `no-rescreenshot-request` | Response does not ask the student to re-send a screenshot or export of the same data the card already contains |
+
 ## Running an eval pass
 
 Automated: `python scripts/run_evals.py` (see `--help`). It sends each case to a fresh
@@ -324,4 +360,4 @@ If an eval case itself conflicts with current SKILL.md behavior, that is a findi
 
 This rubric is versioned alongside the skill. When SKILL.md bumps a major version (e.g. 1.x → 2.x), re-walk every assertion in this file and confirm it still matches the spec.
 
-Rubric version: **2.5** (matches SKILL.md 2.5.0 — GSC panel workbench, local multilingual template, deterministic signals, and neutral public identity)
+Rubric version: **3.0** (matches SKILL.md 3.0.0 — GSC service-account setup and local tool, algorithm-update co-reading, panel evidence cards)

@@ -4,7 +4,9 @@
 
 **資料截至：2026-08-03**（本日以 status.search.google.com/summary 核對：June 2026 spam update 之後無新的 ranking 更新）
 
-## ⚠️ 過期防護（每次使用前先執行）
+**第一來源不是下表**：先執行 `node assets/gsc-tools/gsc.mjs updates`（不需要金鑰，直接讀 Google Search Status Dashboard），或開官方儀表板；下表只是歷史對照，不再追最新一筆。學員問「最近有沒有更新／我是不是被打到」的完整共讀程序 → `66-algorithm-update-reading.md`。
+
+## ⚠️ 過期防護（每次使用下表前先執行）
 
 1. 看上面的「資料截至」日期：距今 **超過 3 個月** → 必須先對用戶說明：「我手上的更新列表到 [日期] 為止，之後的更新要用官方儀表板確認」，並給網址：
    **Google Search Status Dashboard → https://status.search.google.com/summary（Ranking）**
@@ -41,7 +43,7 @@
 | June 2024 Spam | 2024-06-20 | 2024-06-27 | 垃圾內容政策執法 |
 | March 2024 Core + Spam | 2024-03-05 | 2024-04-19 | 近年最大：Helpful Content 併入核心系統；新增規模化內容濫用、過期網域濫用、寄生 SEO 三條政策（→ `41-spam-policies-plain.md`） |
 
-官方即時來源：https://status.search.google.com/summary 。本表只作教學快查；診斷時仍開 live dashboard。
+官方即時來源：`updates` 指令或 https://status.search.google.com/summary 。本表只作歷史快查；診斷時以當場查到的為準。
 
 ## 給用戶的白話講法
 

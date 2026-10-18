@@ -1,5 +1,8 @@
 # 55 — 搜尋機會實驗室：從查詢到一項內容改進
 
+**reason**：把候選查詢、手動 SERP、相對缺口、頁面歸屬與一項可驗證改進串成新手能重做的學習閉環。
+**strip_when**：若主技能不再教搜尋機會或內容頁面判讀，才移除；單純問一個詞或工具操作時不啟動完整實驗室。
+
 本實驗室嵌入 `53-zero-to-first-result-apprenticeship.md` 的 G3→G4。它教學員親手完成一個縮小閉環：**候選查詢 → 手動 SERP → 相對缺口 → 承接頁 → brief → 一項改進**。它不是 keyword report、競品 audit、整站架構案或內容品質評分表，也不重複 G0–G7 的基準、上線與延遲成效判讀規則。
 
 ## 目錄
@@ -74,6 +77,8 @@
 | 學員證據 | 學員授權的 GSC、GA4、CMS 或網站資料 |
 | 教學判斷 | 根據上述證據做的優先建議 |
 | 未觀察 | 畫面、工具或權限沒有提供；不能寫成「不存在」 |
+
+每個實際判斷再用 `60-evidence-and-judgment-cards.md` 留下「觀察／不能支持／下一個區分檢查」。查詢、SERP 與頁面是否吻合的同型練習 → `61-search-intent-and-page-fit-drills.md`；不要把工具排序直接當成頁面決策。
 
 ## Lab 0：建立問題
 
@@ -213,6 +218,7 @@ NEW 或 IMPROVE 決策與理由
 真實內鏈計畫
 brief／單項改動／before-after／重驗
 錯誤類型／下次 1、7、30 天題目
+證據卡／假設卡／行動卡的編號與限制
 ```
 
 ### 單一案例通過條件
@@ -250,16 +256,7 @@ brief／單項改動／before-after／重驗
 
 ## 來源與更新護欄
 
-方法經重新編排後參考以下 pinned 開源技能：Corey Haines 與 AgriciDaniel 的來源採 MIT License，Aaron He Zhu 的來源採 Apache-2.0。此處只吸收可教學的證據流程並重新表達，不整段搬運，也不搬入一次性交付 audit、固定分數或工具依賴：
-
-- [Content Strategy](https://github.com/coreyhaines31/marketingskills/tree/c21a984a56da/skills/content-strategy)
-- [SEO Audit](https://github.com/coreyhaines31/marketingskills/tree/c21a984a56da/skills/seo-audit)
-- [Site Architecture](https://github.com/coreyhaines31/marketingskills/tree/c21a984a56da/skills/site-architecture)
-- [Content Gap Analysis](https://github.com/aaron-he-zhu/aaron-marketing-skills/tree/bc7d62dd685b/seo-geo/survey/content-gap-analysis)
-- [Content Quality Auditor](https://github.com/aaron-he-zhu/aaron-marketing-skills/tree/bc7d62dd685b/seo-geo/tune/content-quality-auditor)
-- [Keyword Research](https://github.com/aaron-he-zhu/aaron-marketing-skills/tree/bc7d62dd685b/seo-geo/survey/keyword-research)
-- [SEO Content Brief](https://github.com/AgriciDaniel/claude-seo/tree/09d37c7b66ed/skills/seo-content-brief)
-- [SERP Analysis](https://github.com/aaron-he-zhu/aaron-marketing-skills/tree/bc7d62dd685b/seo-geo/survey/serp-analysis)
+公開方法經重新編排後，只保留可教學、可驗證且符合本 skill 邊界的部分，不整段搬運，也不搬入一次性交付 audit、固定分數或工具依賴。若公開模板與較新的官方說明或當下畫面衝突，以官方說明和本輪觀察為準：
 
 Google 官方校準來源：
 

@@ -4,7 +4,7 @@
 
 > 🇺🇸 English → [README.md](README.md) ｜ 🇨🇳 简体中文 → [README.zh-CN.md](README.zh-CN.md)
 
-> **目前版本：2.5.0**｜發布說明 → [RELEASE-2.5.0.md](RELEASE-2.5.0.md)｜逐版變更 → [CHANGELOG.md](CHANGELOG.md)
+> **目前版本：3.0.0**｜發布說明 → [RELEASE-2.5.0.md](RELEASE-2.5.0.md)｜逐版變更 → [CHANGELOG.md](CHANGELOG.md)
 > 想知道自己裝的是不是最新版，直接問教練「**有沒有新版？**」，它會去 GitHub 比對後告訴你。
 
 SEO Coach 是一套以公開、可驗證的 SEO 實務整理而成，並以新手學習路徑編排的開源 AI 教練 Skill。
@@ -90,6 +90,8 @@ SEO Coach 記錄的不是「上過第幾課」，而是你目前能否：
 
 健康結果也是結果。它不會為了顯得有價值而硬找問題，也不會把單一紅字、`site:` 結果或工具分數包裝成根因。
 
+實際判斷會留下證據範圍、不能推出的結論、下一個區分檢查，以及之後換題複測的入口；一次答對不會被誤記成已經熟練。
+
 ### 4. 修改後一定重驗
 
 修改前先留底，修改後重新開啟真實頁面確認，並在合適的時間回看 GSC／GA4。沒有重驗，就不宣稱完成；沒有足夠時間窗口，就不把短期波動說成 SEO 成效。
@@ -147,9 +149,9 @@ SEO Coach 記錄的不是「上過第幾課」，而是你目前能否：
 
 ### 本地 GSC 搜尋面板
 
-如果你已經接好 GSC API，可以直接開啟 `assets/gsc-dashboard/index.html`，面板會先自動載入目前／比較期間；沒有既有 connector 時，才匯入目前期間與比較期間的 CSV／TSV／JSON。面板會在瀏覽器內計算點擊、曝光、CTR、平均排名、`1–3／4–10／11–20／21–30` 分布、Query 前後期變化、異常／CTR 訊號，以及可先人工核對的重寫候選。每個 Query 可開啟目前／前期詳情、頁面承接與命中規則；重寫佇列可保存狀態與備註。
+接一次 Search Console，面板和教練就讀同一份資料，三步：（1）在 Google Cloud 啟用 Google Search Console API、建立服務帳戶並把 JSON 金鑰存成 `~/.seo-coach/gsc-service-account.json`；（2）到 Search Console → 設定 → 使用者和權限，把服務帳戶的 email 加為「受限」使用者；（3）執行 `node assets/gsc-tools/gsc.mjs check`，再執行 `node assets/gsc-tools/gsc.mjs serve` 並開啟 `http://127.0.0.1:8791/`。教練會一輪帶一步，而且不會要你把金鑰貼進對話（[`references/65-gsc-api-setup.md`](references/65-gsc-api-setup.md)）。還沒有網站？按「載入示範資料」，用明確標示的合成資料練判讀。
 
-這條面板路徑不處理登入／憑證、不直接呼叫外部 API 或網路服務，也不呼叫 Codex CLI／AI；既有 connector 負責連線，面板只在瀏覽器內計算並保存資料。它保留單一模板，支援繁中、簡中、英文、日文、韓文，第一次開啟會依瀏覽器語言選擇，之後的選擇只保存於本機。重寫佇列是透明的規則排序，不是自動改稿，也不把 GSC 平均排名當成即時 SERP 名次。完整格式、bridge 契約、公式與資料邊界見 [`references/59-gsc-dashboard.md`](references/59-gsc-dashboard.md)。
+面板有 13 個分頁（總覽、多站清單、12 個月衰退熱圖、新頁面、排名追蹤、黃金距離、蠶食檢測、語言版本、分組趨勢、索引檢查、變更筆記、資料匯出、教練的行動佇列），另有任一查詢或頁面的詳情抽屜、前一期間／去年同期比較、品牌詞與非品牌詞分組、Google 公布的排名更新標記，以及「複製證據卡」按鈕，讓你把看到的內容直接貼給教練、不必截圖。金鑰只由本機工具讀取（唯讀權限、只綁定 `127.0.0.1`）；面板頁面不處理憑證、不呼叫 AI，所有計算都在瀏覽器內 deterministic 完成。GSC 資料列不寫入本機儲存，只保存你自己的筆記與設定，並可匯出與匯入。內建繁中、簡中、英文三個語系；面板語言由教練以 `node assets/gsc-tools/locale.mjs --use <tag>` 設定，其他語言由教練生成一次。行動佇列列的是人工核對候選，不是指令，也不把 GSC 平均排名當成即時 SERP 名次。公式、宿主 connector 契約與資料邊界見 [`references/59-gsc-dashboard.md`](references/59-gsc-dashboard.md)。
 
 ## 一次 Session 會是什麼樣子
 
@@ -238,7 +240,7 @@ Codex:  ~/.codex/skills/seo-coach
 Claude: ~/.claude/skills/seo-coach
 ```
 
-Clone 下來的 repo 含有維護用的 `evals/` 與 `scripts/`，**它們不是執行必要的**，可以刪掉再放進 skills 目錄，留著也不影響運作。
+Clone 下來的 repo 含有維護用的 `evals/` 與 `scripts/`，**它們不是執行必要的**（你會自己執行的工具放在 `assets/gsc-tools/`，屬於執行套件），可以刪掉再放進 skills 目錄，留著也不影響運作。
 
 </details>
 
@@ -263,7 +265,8 @@ seo-coach/
 ├── SKILL.md                 # 核心教練行為與路由
 ├── FAILSAFE.md              # 失效模式與必須改變的行為
 ├── references/              # 學徒主線、實驗室、教材與教學協議
-├── assets/gsc-dashboard/    # 可直接開啟的本地 GSC 分析面板
+├── assets/gsc-dashboard/    # 本地 GSC 面板
+├── assets/gsc-tools/        # 執行期工具：接 GSC API（gsc.mjs）與面板語言（locale.mjs）
 ├── agents/                  # Agent 顯示與觸發 metadata
 ├── hooks/                   # 選用自動召喚 router（不裝也能用）
 │
@@ -274,8 +277,8 @@ seo-coach/
 ├── CHANGELOG.md             # 逐版變更
 │
 │  ── 維護用（安裝不需要）──
-├── evals/                   # 92 個教練行為 eval case 與判準
-└── scripts/                 # 驗證器、eval runner、建置與隱私測試
+├── evals/                   # 104 個教練行為 eval case 與判準
+└── scripts/                 # 維護工具：驗證器、eval runner、建置、面板與隱私測試
 ```
 
 ## 最後一句

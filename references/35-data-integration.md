@@ -8,7 +8,7 @@
 
 截圖貼數據只是「還沒接」時的暫時方案，不是長期建議；但不要讓新手以為沒接工具就不能開始。
 
-如果需求只是讓使用者自己在瀏覽器看 GSC 的成長、下降、排名分布與重寫候選，不必把資料接進教練或 Codex CLI。直接使用 `assets/gsc-dashboard/index.html`；若宿主已經有 GSC API connector，面板會啟動時自動接收目前／比較期間資料，否則再匯入 GSC CSV／TSV／JSON。面板會在本機完成計算，API bridge 的登入、property、日期窗與請求仍留在外部既有連線層，流程與教練的 MCP／API 讀取分開。面板規則與資料限制見 `references/59-gsc-dashboard.md`。
+GSC 的預設接法是一把唯讀的服務帳戶金鑰加上 skill 內建的本機工具：同一次設定同時接通瀏覽器面板與教練的讀數指令，逐步帶法、錯誤對照與安全規則 → `references/65-gsc-api-setup.md`；面板怎麼讀 → `references/59-gsc-dashboard.md`。
 
 接 MCP／API 之後，我可以直接讀：
 - GSC：查詢報告、頁面表現、Coverage／Indexing 狀態
@@ -29,19 +29,7 @@ MCP（Model Context Protocol）是讓 AI 能呼叫外部工具／資料來源的
 
 ## Google Search Console（GSC）
 
-### 路徑 A：找社群 GSC MCP
-搜尋 "Google Search Console MCP" 或 "GSC MCP"，社群有幾個版本。安裝後我可以直接抓：
-- 查詢報告（queries, clicks, impressions, CTR, position）
-- 頁面表現
-- Pages / Indexing 狀態
-
-### 路徑 B：直接用 Search Console API
-如果不想裝 MCP：
-1. Google Cloud Console 啟用 Search Console API
-2. 建立 service account 或 OAuth credentials
-3. 把 credentials 路徑給我，我可以用 curl／Python 直接呼叫
-
-API 文件：https://developers.google.com/webmaster-tools/v1/api_reference_index
+預設走 `references/65-gsc-api-setup.md`（Search Console API＋服務帳戶＋`assets/gsc-tools/gsc.mjs`），一輪帶一步。執行環境已有可用的 GSC MCP／connector 時也可以直接用，但仍要做 65 號檔的「接通的定義」：同一資源、同一段日期，和學員在 GSC 介面看到的數字對得起來。
 
 ---
 
@@ -109,6 +97,6 @@ API 文件：https://developers.google.com/analytics/devguides/reporting/data/v1
 1. 先確認用戶已經完成基礎檢查，且真的需要真實數據
 2. 用戶決定要接 GSC
 3. 我問目前環境（使用 Codex / Claude Code / 其他 agent？Mac / Windows？已有 GCP 帳號嗎？）
-4. 我給具體設定步驟
+4. 依 `references/65-gsc-api-setup.md` 一輪帶一步
 5. 用戶測試我能不能讀到資料
 6. 開始用

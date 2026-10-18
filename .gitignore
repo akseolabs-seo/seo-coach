@@ -9,3 +9,11 @@ __pycache__/
 
 # eval run artifacts
 evals/runs/
+
+# credentials — never commit keys
+*service-account*.json
+*service_account*.json
+*credentials*.json
+*.pem
+*.key
+.seo-coach/

@@ -1,957 +1,821 @@
 (function (root) {
   "use strict";
 
-  const BUCKETS = [
-    { id: "top3", label: "1–3", min: 1, max: 3 },
-    { id: "top10", label: "4–10", min: 4, max: 10 },
-    { id: "page2", label: "11–20", min: 11, max: 20 },
-    { id: "page3", label: "21–30", min: 21, max: 30 },
-    { id: "page4", label: "31–50", min: 31, max: 50 },
-    { id: "beyond50", label: "51+", min: 51, max: Infinity },
+  // Pure, deterministic calculations for the GSC panel. No DOM, no network, no storage.
+
+  const DAY_MS = 86400000;
+  const MAX_HISTORY_DAYS = 486; // Search Console keeps roughly 16 months of data.
+  const DATA_LAG_DAYS = 3; // Final data usually trails by two to three days.
+  const ROW_LIMIT = 25000;
+  const PAGE_MULTIPLE = "__multiple__";
+  const ROOT_LANGUAGE = "x-default";
+
+  const RANGE_PRESETS = [
+    { id: "7d", days: 7 },
+    { id: "28d", days: 28 },
+    { id: "3m", days: 91 },
+    { id: "6m", days: 182 },
+    { id: "12m", days: 364 },
+    { id: "16m", days: 480 },
   ];
 
-  const FIELD_ALIASES = {
-    query: [
-      "query",
-      "queries",
-      "top query",
-      "top queries",
-      "keyword",
-      "keywords",
-      "search query",
-      "search queries",
-      "查詢",
-      "搜尋查詢",
-      "關鍵字",
-      "關鍵詞",
-      "搜索查询",
-      "查询",
-    ],
-    page: [
-      "page",
-      "pages",
-      "top pages",
-      "landing page",
-      "url",
-      "網頁",
-      "頁面",
-      "網址",
-      "页面",
-    ],
-    date: ["date", "日期", "日", "日期（天）", "day"],
-    clicks: ["clicks", "click", "點擊次數", "點擊", "点击次数", "点击"],
-    impressions: [
-      "impressions",
-      "impression",
-      "曝光次數",
-      "曝光",
-      "展示次数",
-      "展示",
-    ],
-    ctr: ["ctr", "click through rate", "click-through rate", "點閱率", "点击率"],
-    position: [
-      "position",
-      "average position",
-      "avg position",
-      "平均排名",
-      "平均位置",
-      "平均排名位置",
-      "平均排名（位置）",
-    ],
-    country: ["country", "國家", "国家"],
-    device: ["device", "裝置", "设备"],
-    searchAppearance: ["search appearance", "搜尋外觀", "搜索外观"],
+  const BUCKETS = [
+    { id: "top3", min: 1, max: 3 },
+    { id: "top10", min: 4, max: 10 },
+    { id: "page2", min: 11, max: 20 },
+    { id: "page3", min: 21, max: 30 },
+    { id: "deep", min: 31, max: 50 },
+    { id: "far", min: 51, max: Infinity },
+  ];
+
+  const DEFAULT_OPTIONS = {
+    minImpressions: 20,
+    minRankDelta: 1,
+    lowCtrRatio: 0.75,
+    maxRecommendations: 30,
+    anomalyDropRatio: 0.3,
+    anomalyRankDelta: 3,
+    maxInsights: 8,
+    strikingMin: 3,
+    strikingMax: 20,
+    cannibalMinShare: 0.1,
+    decayDropRatio: 0.3,
+    decayMinClicks: 10,
   };
 
-  const ALIAS_INDEX = Object.keys(FIELD_ALIASES).reduce((index, field) => {
-    index[field] = new Set(FIELD_ALIASES[field].map(normalizeHeader));
-    return index;
-  }, {});
+  const FILTER_OPERATORS = {
+    contains: "contains",
+    notContains: "notContains",
+    equals: "equals",
+    notEquals: "notEquals",
+    regex: "includingRegex",
+    notRegex: "excludingRegex",
+  };
 
-  function normalizeHeader(value) {
-    return String(value == null ? "" : value)
-      .replace(/^\uFEFF/, "")
-      .normalize("NFKC")
-      .toLowerCase()
-      .replace(/[\s_\-\/()[\]{}:：%％]/g, "")
-      .trim();
+  const ISO_639_1 = new Set(
+    ("aa ab ae af ak am an ar as av ay az ba be bg bh bi bm bn bo br bs ca ce ch co cr cs cu cv cy da de dv dz ee el en eo es et eu " +
+      "fa ff fi fj fo fr fy ga gd gl gn gu gv ha he hi ho hr ht hu hy hz ia id ie ig ii ik io is it iu ja jv ka kg ki kj kk kl km kn " +
+      "ko kr ks ku kv kw ky la lb lg li ln lo lt lu lv mg mh mi mk ml mn mr ms mt my na nb nd ne ng nl nn no nr nv ny oc oj om or os " +
+      "pa pi pl ps pt qu rm rn ro ru rw sa sc sd se sg si sk sl sm sn so sq sr ss st su sv sw ta te tg th ti tk tl tn to tr ts tt tw " +
+      "ty ug uk ur uz ve vi vo wa wo xh yi yo za zh zu").split(" "),
+  );
+
+  function codedError(code, message) {
+    const error = new Error(message || code);
+    error.code = code;
+    return error;
   }
 
-  function normalizeQuery(value) {
-    return String(value == null ? "" : value)
-      .replace(/^\uFEFF/, "")
-      .normalize("NFKC")
-      .replace(/\s+/g, " ")
-      .trim()
-      .toLocaleLowerCase();
+  function pad2(value) {
+    return String(value).padStart(2, "0");
   }
 
-  function normalizePage(value) {
-    return String(value == null ? "" : value).trim();
+  function num(value) {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : 0;
   }
 
   function round(value, digits) {
-    if (!Number.isFinite(value)) return null;
-    const factor = 10 ** (digits == null ? 2 : digits);
+    if (!Number.isFinite(value)) return value;
+    const factor = 10 ** (digits || 0);
     return Math.round(value * factor) / factor;
   }
 
-  function parseMetric(value, kind) {
-    if (value == null || value === "") return null;
-    if (typeof value === "number") {
-      if (!Number.isFinite(value)) return null;
-      if (kind === "ctr" && value > 1) return value / 100;
-      return value;
-    }
-
-    let text = String(value).replace(/\u00A0/g, " ").trim();
-    if (!text || /^(n\/a|na|null|undefined|—|-|未提供)$/i.test(text)) return null;
-    const hasPercent = /[%％]/.test(text);
-    text = text.replace(/[%％]/g, "").replace(/\s/g, "");
-
-    if (text.includes(",") && text.includes(".")) {
-      text = text.replace(/,/g, "");
-    } else if (text.includes(",") && /,\d{1,2}$/.test(text)) {
-      text = text.replace(",", ".");
-    } else {
-      text = text.replace(/,/g, "");
-    }
-
-    const match = text.match(/[-+]?\d+(?:\.\d+)?/);
-    if (!match) return null;
-    const number = Number(match[0]);
-    if (!Number.isFinite(number)) return null;
-    if (kind === "ctr" && (hasPercent || number > 1)) return number / 100;
-    return number;
+  // --- dates ------------------------------------------------------------------
+  function toMs(iso) {
+    const parts = String(iso).split("-").map(Number);
+    return Date.UTC(parts[0], parts[1] - 1, parts[2]);
   }
 
-  function getField(record, field) {
-    if (!record || typeof record !== "object") return null;
-    const entries = Object.entries(record);
-    const direct = entries.find(([key]) => ALIAS_INDEX[field].has(normalizeHeader(key)));
-    return direct ? direct[1] : null;
+  function toIso(ms) {
+    return new Date(ms).toISOString().slice(0, 10);
   }
 
-  function sanitizeDate(value) {
-    if (value == null || value === "") return null;
-    const text = String(value).trim();
-    const iso = text.match(/\d{4}-\d{2}-\d{2}/);
-    return iso ? iso[0] : text;
+  function isIsoDate(value) {
+    return /^\d{4}-\d{2}-\d{2}$/.test(String(value || "")) && toIso(toMs(value)) === value;
   }
 
-  function normalizeDateRange(value) {
-    if (!value || typeof value !== "object") return null;
-    const start = sanitizeDate(value.start != null ? value.start : value.startDate);
-    const end = sanitizeDate(value.end != null ? value.end : value.endDate);
-    if (!start && !end) return null;
-    return { start: start || null, end: end || null };
+  function addDays(iso, count) {
+    return toIso(toMs(iso) + count * DAY_MS);
   }
 
-  function normalizeSourceMetadata(metadata, returnedRows) {
-    const source = metadata && typeof metadata === "object" ? metadata : {};
-    const numberOrNull = (value) => {
-      const number = Number(value);
-      return Number.isFinite(number) && number >= 0 ? number : null;
-    };
-    const propertyName = String(source.propertyName || source.property || source.siteName || "").trim();
-    const siteUrl = String(source.siteUrl || source.site || source.propertyUrl || "").trim();
-    const rowLimit = numberOrNull(source.rowLimit);
-    const totalRows = numberOrNull(source.totalRows != null ? source.totalRows : source.totalRowCount);
-    const partial = source.partial === true || source.truncated === true || (rowLimit != null && totalRows != null && totalRows > rowLimit);
-    const dimensions = Array.isArray(source.dimensions) ? source.dimensions.map((value) => String(value)).filter(Boolean) : [];
-    const syncedAt = source.syncedAt || source.fetchedAt || source.generatedAt || null;
+  function diffDays(from, to) {
+    return Math.round((toMs(to) - toMs(from)) / DAY_MS);
+  }
+
+  function localToday(now) {
+    const date = now || new Date();
+    return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`;
+  }
+
+  function oldestDate(today) {
+    return addDays(today, -MAX_HISTORY_DAYS);
+  }
+
+  // mode "year" compares with the same days one year earlier (364 days keeps weekdays aligned).
+  function resolveRange(presetId, today, lagDays, mode) {
+    const preset = RANGE_PRESETS.find((item) => item.id === presetId) || RANGE_PRESETS[2];
+    const lag = Number.isFinite(lagDays) ? lagDays : DATA_LAG_DAYS;
+    const oldest = oldestDate(today);
+    const end = addDays(today, -lag);
+    let start = addDays(end, -(preset.days - 1));
+    if (start < oldest) start = oldest;
+    const yearly = mode === "year";
+    const previousEnd = yearly ? addDays(end, -364) : addDays(start, -1);
+    const previousStart = yearly ? addDays(start, -364) : addDays(previousEnd, -(preset.days - 1));
     return {
-      propertyName,
-      siteUrl,
-      dimensions,
-      dataState: source.dataState ? String(source.dataState) : "",
-      rowLimit,
-      totalRows,
-      partial,
-      syncedAt: syncedAt ? String(syncedAt) : null,
-      scope: source.scope && typeof source.scope === "object" ? source.scope : null,
-      returnedRows: Number.isFinite(returnedRows) ? returnedRows : 0,
+      id: preset.id,
+      compare: yearly ? "year" : "previous",
+      days: diffDays(start, end) + 1,
+      start,
+      end,
+      previous: previousStart >= oldest ? { start: previousStart, end: previousEnd } : null,
     };
   }
 
-  function parseDelimited(text, delimiter) {
-    const rows = [];
-    let row = [];
-    let field = "";
-    let quoted = false;
+  // The last `count` complete calendar months, oldest first.
+  function monthWindows(today, count) {
+    const [year, month] = today.split("-").map(Number);
+    const oldest = oldestDate(today);
+    const windows = [];
+    for (let back = count || 12; back >= 1; back -= 1) {
+      const first = toIso(Date.UTC(year, month - 1 - back, 1));
+      const last = toIso(Date.UTC(year, month - back, 0));
+      if (first >= oldest) windows.push({ key: first.slice(0, 7), start: first, end: last });
+    }
+    return windows;
+  }
 
-    const pushRow = () => {
-      row.push(field);
-      field = "";
-      if (row.some((cell) => String(cell).trim() !== "")) rows.push(row);
-      row = [];
+  // --- API request helpers ----------------------------------------------------
+  function cleanFilter(filter) {
+    const source = filter || {};
+    const text = (entry) => {
+      const value = String((entry && entry.value) || "").trim();
+      const op = entry && FILTER_OPERATORS[entry.op] ? entry.op : "contains";
+      return value ? { op, value } : null;
     };
-
-    for (let index = 0; index < text.length; index += 1) {
-      const char = text[index];
-      if (quoted) {
-        if (char === '"' && text[index + 1] === '"') {
-          field += '"';
-          index += 1;
-        } else if (char === '"') {
-          quoted = false;
-        } else {
-          field += char;
-        }
-      } else if (char === '"' && field === "") {
-        quoted = true;
-      } else if (char === delimiter) {
-        row.push(field);
-        field = "";
-      } else if (char === "\n") {
-        pushRow();
-      } else if (char === "\r") {
-        if (text[index + 1] === "\n") index += 1;
-        pushRow();
-      } else {
-        field += char;
-      }
-    }
-    if (field !== "" || row.length) pushRow();
-    return rows;
-  }
-
-  function detectDelimiter(text) {
-    const sample = text.split(/\r?\n/).slice(0, 12).join("\n");
-    const candidates = [",", "\t", ";"];
-    return candidates.reduce((best, candidate) => {
-      const score = sample.split(candidate).length - 1;
-      const bestScore = sample.split(best).length - 1;
-      return score > bestScore ? candidate : best;
-    }, ",");
-  }
-
-  function headerHasField(row, field) {
-    return row.some((cell) => ALIAS_INDEX[field].has(normalizeHeader(cell)));
-  }
-
-  function csvToRecords(text) {
-    const delimiter = detectDelimiter(text);
-    const table = parseDelimited(text.replace(/^\uFEFF/, ""), delimiter);
-    const headerIndex = table.findIndex(
-      (row) => headerHasField(row, "query") && ["clicks", "impressions", "position"].some((field) => headerHasField(row, field)),
-    );
-    if (headerIndex < 0) {
-      throw new Error("找不到包含 Query／Clicks／Impressions／Position 的 GSC 標題列。");
-    }
-    const headers = table[headerIndex].map((header, index) => String(header || `column_${index}`).trim());
-    const records = table.slice(headerIndex + 1).map((cells) =>
-      headers.reduce((record, header, index) => {
-        record[header] = cells[index] == null ? "" : cells[index];
-        return record;
-      }, {}),
-    );
-    return { records, format: "csv", delimiter, headerIndex };
-  }
-
-  function unwrapJson(value) {
-    if (Array.isArray(value)) return { rows: value, dimensions: [] };
-    if (!value || typeof value !== "object") return { rows: [], dimensions: [] };
-
-    const dimensions = Array.isArray(value.dimensions) ? value.dimensions : [];
-    const candidates = ["rows", "data", "items", "records", "results", "queryData"];
-    for (const key of candidates) {
-      if (Array.isArray(value[key])) return { rows: value[key], dimensions };
-      if (value[key] && typeof value[key] === "object") {
-        const nested = unwrapJson(value[key]);
-        if (nested.rows.length) return { rows: nested.rows, dimensions: nested.dimensions.length ? nested.dimensions : dimensions };
-      }
-    }
-    return { rows: [], dimensions };
-  }
-
-  function jsonRowToRecord(row, dimensions) {
-    if (Array.isArray(row)) {
-      const keys = dimensions.length ? dimensions : ["query", "page", "date", "clicks", "impressions", "ctr", "position"];
-      return keys.reduce((record, key, index) => {
-        record[key] = row[index];
-        return record;
-      }, {});
-    }
-    if (row && typeof row === "object" && Array.isArray(row.keys)) {
-      const record = {};
-      const keys = dimensions.length ? dimensions : ["query", "page", "date"];
-      row.keys.forEach((value, index) => {
-        record[keys[index] || `dimension_${index}`] = value;
-      });
-      Object.keys(row).forEach((key) => {
-        if (key !== "keys") record[key] = row[key];
-      });
-      return record;
-    }
-    return row && typeof row === "object" ? row : {};
-  }
-
-  function jsonToRecords(text) {
-    let value;
-    try {
-      value = JSON.parse(text);
-    } catch (error) {
-      throw new Error(`JSON 無法解析：${error.message}`);
-    }
-    const unwrapped = unwrapJson(value);
-    if (!unwrapped.rows.length) throw new Error("JSON 找不到 rows／data／records 陣列。");
     return {
-      records: unwrapped.rows.map((row) => jsonRowToRecord(row, unwrapped.dimensions)),
-      format: "json",
-      delimiter: null,
-      metadata: {
-        ...(value && typeof value === "object" && !Array.isArray(value) ? value : {}),
-        dimensions: unwrapped.dimensions,
-        dateRange: normalizeDateRange(value && typeof value === "object" ? value.dateRange || value : null),
-      },
+      query: text(source.query),
+      page: text(source.page),
+      country: String(source.country || "").trim().toLowerCase(),
+      device: String(source.device || "").trim().toUpperCase(),
     };
   }
 
-  function parseText(text, filename) {
-    const clean = String(text || "").trim();
-    if (!clean) throw new Error("檔案內容是空的。");
-    const lowerName = String(filename || "").toLowerCase();
-    if (lowerName.endsWith(".json") || /^[\[{]/.test(clean)) return jsonToRecords(clean);
-    return csvToRecords(clean);
+  function isFilterEmpty(filter) {
+    const clean = cleanFilter(filter);
+    return !clean.query && !clean.page && !clean.country && !clean.device;
   }
 
-  function normalizeRows(records) {
-    const rows = [];
-    const skipped = { missingQuery: 0, invalidMetrics: 0 };
-    records.forEach((record, index) => {
-      const query = String(getField(record, "query") || "").trim();
-      if (!query) {
-        skipped.missingQuery += 1;
-        return;
-      }
-      const clicksValue = parseMetric(getField(record, "clicks"), "clicks");
-      const impressionsValue = parseMetric(getField(record, "impressions"), "impressions");
-      const ctrValue = parseMetric(getField(record, "ctr"), "ctr");
-      const positionValue = parseMetric(getField(record, "position"), "position");
-      if ([clicksValue, impressionsValue, ctrValue, positionValue].every((value) => value == null)) {
-        skipped.invalidMetrics += 1;
-        return;
-      }
-      rows.push({
-        id: `${index}-${normalizeQuery(query)}`,
-        query,
-        queryKey: normalizeQuery(query),
-        page: normalizePage(getField(record, "page")),
-        date: sanitizeDate(getField(record, "date")),
-        clicks: Math.max(0, clicksValue == null ? 0 : clicksValue),
-        impressions: Math.max(0, impressionsValue == null ? 0 : impressionsValue),
-        ctr: ctrValue == null ? null : Math.max(0, ctrValue),
-        position: positionValue != null && positionValue > 0 ? positionValue : null,
-        country: String(getField(record, "country") || "").trim(),
-        device: String(getField(record, "device") || "").trim(),
-        searchAppearance: String(getField(record, "searchAppearance") || "").trim(),
+  function buildFilterGroups(filter, extra) {
+    const clean = cleanFilter(filter);
+    const filters = [];
+    for (const dimension of ["query", "page"]) {
+      if (clean[dimension]) filters.push({ dimension, operator: FILTER_OPERATORS[clean[dimension].op], expression: clean[dimension].value });
+    }
+    if (clean.country) filters.push({ dimension: "country", operator: "equals", expression: clean.country });
+    if (clean.device) filters.push({ dimension: "device", operator: "equals", expression: clean.device });
+    for (const item of extra || []) filters.push(item);
+    return filters.length ? [{ groupType: "and", filters }] : undefined;
+  }
+
+  function rowsFromResponse(response, dimensions) {
+    const dims = dimensions || (response && response.dimensions) || [];
+    const list = Array.isArray(response) ? response : (response && response.rows) || [];
+    return list.map((raw) => {
+      const row = { clicks: num(raw.clicks), impressions: num(raw.impressions), position: num(raw.position) };
+      row.ctr = row.impressions ? row.clicks / row.impressions : 0;
+      dims.forEach((dimension, index) => {
+        row[dimension] = String(raw.keys && raw.keys[index] != null ? raw.keys[index] : raw[dimension] != null ? raw[dimension] : "");
       });
+      return row;
     });
-    return { rows, skipped };
   }
 
-  function createDatasetFromRecords(records, sourceName, metadata) {
-    const normalized = normalizeRows(records);
-    const inheritedSkipped = metadata && metadata.skipped ? metadata.skipped : {};
-    const metadataRange = metadata && metadata.dateRange ? metadata.dateRange : metadata;
-    const sourceMeta = normalizeSourceMetadata(metadata, normalized.rows.length);
-    return {
-      rows: normalized.rows,
-      sourceName: sourceName || "匯入資料",
-      skipped: {
-        missingQuery: (inheritedSkipped.missingQuery || 0) + normalized.skipped.missingQuery,
-        invalidMetrics: (inheritedSkipped.invalidMetrics || 0) + normalized.skipped.invalidMetrics,
-      },
-      format: metadata && metadata.format ? metadata.format : "records",
-      dateRange: normalizeDateRange(metadataRange) || getDateRange(normalized.rows),
-      propertyName: sourceMeta.propertyName,
-      siteUrl: sourceMeta.siteUrl,
-      dimensions: sourceMeta.dimensions,
-      dataState: sourceMeta.dataState,
-      rowLimit: sourceMeta.rowLimit,
-      totalRows: sourceMeta.totalRows,
-      partial: sourceMeta.partial,
-      syncedAt: sourceMeta.syncedAt,
-      scope: sourceMeta.scope,
-    };
+  // --- aggregation ------------------------------------------------------------
+  function normalizeKey(value) {
+    return String(value == null ? "" : value).trim().toLowerCase();
   }
 
-  function createDatasetFromText(text, filename, metadata) {
-    const parsed = parseText(text, filename);
-    const dataset = createDatasetFromRecords(parsed.records, filename || "匯入資料", {
-      ...(parsed.metadata || {}),
-      ...(metadata || {}),
-      format: metadata && metadata.format ? metadata.format : parsed.format,
-    });
-    dataset.delimiter = parsed.delimiter;
-    dataset.headerIndex = parsed.headerIndex == null ? null : parsed.headerIndex;
-    return dataset;
+  // Search Console reports a result's jump-to links (/a.html#sec-1) as their own page rows.
+  // They are the same page, so the fragment is dropped before pages are compared or summed.
+  // "#!" and "#/" are client-side routes, which are different pages, and stay as they are.
+  function pageKey(value) {
+    const url = String(value == null ? "" : value);
+    const hash = url.indexOf("#");
+    if (hash < 0) return url;
+    const next = url.charAt(hash + 1);
+    return next === "!" || next === "/" ? url : url.slice(0, hash);
   }
 
-  function combineDatasets(datasets, sourceName) {
-    const valid = datasets.filter(Boolean);
-    const rows = valid.flatMap((dataset) => dataset.rows || []);
-    const propertyNames = [...new Set(valid.map((dataset) => dataset.propertyName).filter(Boolean))];
-    const siteUrls = [...new Set(valid.map((dataset) => dataset.siteUrl).filter(Boolean))];
-    const dimensions = [...new Set(valid.flatMap((dataset) => dataset.dimensions || []))];
-    const totalRows = valid.some((dataset) => dataset.totalRows != null)
-      ? valid.reduce((sum, dataset) => sum + (dataset.totalRows == null ? dataset.rows.length : dataset.totalRows), 0)
-      : null;
-    const rowLimits = valid.map((dataset) => dataset.rowLimit).filter((value) => value != null);
-    return {
-      rows,
-      sourceName: sourceName || valid.map((dataset) => dataset.sourceName).join(" + ") || "匯入資料",
-      skipped: valid.reduce(
-        (sum, dataset) => ({
-          missingQuery: sum.missingQuery + (dataset.skipped && dataset.skipped.missingQuery ? dataset.skipped.missingQuery : 0),
-          invalidMetrics: sum.invalidMetrics + (dataset.skipped && dataset.skipped.invalidMetrics ? dataset.skipped.invalidMetrics : 0),
-        }),
-        { missingQuery: 0, invalidMetrics: 0 },
-      ),
-      format: valid.length > 1 ? "mixed" : valid[0] ? valid[0].format : "records",
-      dateRange: getDateRange(rows),
-      propertyName: propertyNames.length === 1 ? propertyNames[0] : propertyNames.join(" / "),
-      siteUrl: siteUrls.length === 1 ? siteUrls[0] : siteUrls.join(" / "),
-      dimensions,
-      dataState: valid.map((dataset) => dataset.dataState).find(Boolean) || "",
-      rowLimit: rowLimits.length ? Math.min(...rowLimits) : null,
-      totalRows,
-      partial: valid.some((dataset) => dataset.partial === true),
-      syncedAt: valid.map((dataset) => dataset.syncedAt).filter(Boolean).sort().pop() || null,
-      scope: valid.map((dataset) => dataset.scope).find(Boolean) || null,
-    };
+  function finalize(group) {
+    const position = group._weight ? group._positionSum / group._weight : 0;
+    const out = { ...group, ctr: group.impressions ? group.clicks / group.impressions : 0, position: round(position, 2) };
+    delete out._weight;
+    delete out._positionSum;
+    return out;
   }
 
-  function getDateRange(rows) {
-    const dates = rows.map((row) => row.date).filter(Boolean).sort();
-    return { start: dates[0] || null, end: dates[dates.length - 1] || null };
+  function accumulate(group, row) {
+    const weight = row.impressions > 0 ? row.impressions : row.position > 0 ? 1 : 0;
+    group.clicks += row.clicks;
+    group.impressions += row.impressions;
+    group._weight += weight;
+    group._positionSum += row.position * weight;
   }
 
-  function createGroup(key, row, labelField) {
-    return {
-      key,
-      label: labelField === "page" ? row.page : row.query,
-      clicks: 0,
-      impressions: 0,
-      positionSum: 0,
-      positionWeight: 0,
-      rowCount: 0,
-      pages: new Set(),
-      queries: new Set(),
-      dates: new Set(),
-    };
+  function emptyGroup(seed) {
+    return { ...seed, clicks: 0, impressions: 0, _weight: 0, _positionSum: 0 };
   }
 
-  function finalizeGroup(group, labelField) {
-    const position = group.positionWeight ? group.positionSum / group.positionWeight : null;
-    return {
-      key: group.key,
-      query: labelField === "query" ? group.label : "",
-      page: labelField === "page" ? group.label : "",
-      clicks: round(group.clicks, 3),
-      impressions: round(group.impressions, 3),
-      ctr: group.impressions > 0 ? round(group.clicks / group.impressions, 6) : null,
-      position: round(position, 2),
-      rowCount: group.rowCount,
-      pages: [...group.pages].filter(Boolean).sort(),
-      queries: [...group.queries].filter(Boolean).sort(),
-      dates: [...group.dates].filter(Boolean).sort(),
-    };
-  }
-
-  function aggregateRows(rows, labelField) {
+  // Sum clicks/impressions and impression-weight position for every distinct value of `fields`.
+  function group(rows, fields) {
+    const list = Array.isArray(fields) ? fields : [fields];
     const groups = new Map();
-    rows.forEach((row) => {
-      const label = labelField === "page" ? row.page : row.query;
-      const key = labelField === "page" ? normalizePage(label) : row.queryKey || normalizeQuery(label);
-      if (!key) return;
-      if (!groups.has(key)) groups.set(key, createGroup(key, row, labelField));
-      const group = groups.get(key);
-      group.clicks += row.clicks || 0;
-      group.impressions += row.impressions || 0;
-      const weight = row.impressions > 0 ? row.impressions : row.position != null ? 1 : 0;
-      if (row.position != null && weight) {
-        group.positionSum += row.position * weight;
-        group.positionWeight += weight;
+    for (const row of rows) {
+      const key = list.map((field) => (field === "query" ? normalizeKey(row[field]) : field === "page" ? pageKey(row[field]) : String(row[field] || ""))).join("\u0001");
+      let entry = groups.get(key);
+      if (!entry) {
+        const seed = { key };
+        for (const field of list) seed[field] = field === "page" ? pageKey(row[field]) : row[field] || "";
+        entry = emptyGroup(seed);
+        groups.set(key, entry);
       }
-      group.rowCount += 1;
-      if (row.page) group.pages.add(row.page);
-      if (row.query) group.queries.add(row.query);
-      if (row.date) group.dates.add(row.date);
-    });
-    return [...groups.values()]
-      .map((group) => finalizeGroup(group, labelField))
-      .sort((a, b) => (b.impressions - a.impressions) || a.key.localeCompare(b.key));
+      accumulate(entry, row);
+    }
+    return Array.from(groups.values()).map(finalize);
   }
 
-  function aggregateQueryPages(rows) {
-    const groups = new Map();
-    rows.filter((row) => row.page).forEach((row) => {
-      const key = `${row.queryKey || normalizeQuery(row.query)}\u0000${normalizePage(row.page)}`;
-      if (!groups.has(key)) {
-        groups.set(key, {
-          ...createGroup(key, row, "query"),
-          pageLabel: row.page,
-        });
-      }
-      const group = groups.get(key);
-      group.clicks += row.clicks || 0;
-      group.impressions += row.impressions || 0;
-      const weight = row.impressions > 0 ? row.impressions : row.position != null ? 1 : 0;
-      if (row.position != null && weight) {
-        group.positionSum += row.position * weight;
-        group.positionWeight += weight;
-      }
-      group.rowCount += 1;
-      if (row.page) group.pages.add(row.page);
-      if (row.query) group.queries.add(row.query);
-      if (row.date) group.dates.add(row.date);
-    });
-    return [...groups.values()].map((group) => {
-      const result = finalizeGroup(group, "query");
-      result.query = group.label;
-      result.page = group.pageLabel;
-      return result;
-    });
+  function summarize(rows) {
+    const total = emptyGroup({});
+    for (const row of rows) accumulate(total, row);
+    return finalize(total);
   }
 
-  function getBucket(position) {
-    if (!Number.isFinite(position) || position <= 0) return { id: "unknown", label: "未有平均排名", min: null, max: null };
-    return BUCKETS.find((bucket) => position >= bucket.min && position <= bucket.max) || { id: "unknown", label: "未有平均排名" };
+  function percentChange(current, previous) {
+    if (!previous) return current ? null : 0;
+    return (current - previous) / previous;
   }
 
-  function summarizeRows(rows) {
-    const clicks = rows.reduce((sum, row) => sum + (row.clicks || 0), 0);
-    const impressions = rows.reduce((sum, row) => sum + (row.impressions || 0), 0);
-    let positionSum = 0;
-    let positionWeight = 0;
-    rows.forEach((row) => {
-      const weight = row.impressions > 0 ? row.impressions : row.position != null ? 1 : 0;
-      if (row.position != null && weight) {
-        positionSum += row.position * weight;
-        positionWeight += weight;
-      }
-    });
-    return {
-      clicks: round(clicks, 3),
-      impressions: round(impressions, 3),
-      ctr: impressions > 0 ? round(clicks / impressions, 6) : null,
-      position: positionWeight ? round(positionSum / positionWeight, 2) : null,
-      rows: rows.length,
-    };
+  function bucketFor(position) {
+    if (!Number.isFinite(position) || position <= 0) return null;
+    const rounded = Math.max(1, Math.round(position));
+    return BUCKETS.find((bucket) => rounded >= bucket.min && rounded <= bucket.max) || null;
   }
 
-  function percentageChange(current, previous) {
-    if (!Number.isFinite(previous) || previous === 0) return current === 0 ? 0 : null;
-    return (current - previous) / Math.abs(previous);
+  function rankBuckets(items) {
+    const counts = BUCKETS.map((bucket) => ({ id: bucket.id, min: bucket.min, max: bucket.max, count: 0 }));
+    let unknown = 0;
+    for (const item of items) {
+      const bucket = bucketFor(item.position);
+      if (bucket) counts.find((entry) => entry.id === bucket.id).count += 1;
+      else unknown += 1;
+    }
+    return { buckets: counts, unknown, total: items.length };
   }
 
-  function direction(delta) {
-    if (delta == null || Math.abs(delta) < Number.EPSILON) return "stable";
-    return delta > 0 ? "up" : "down";
-  }
-
-  function compareDatasets(currentRows, previousRows, options) {
-    const config = Object.assign({ minRankDelta: 1 }, options || {});
-    const current = aggregateRows(currentRows, "query");
-    const previous = aggregateRows(previousRows || [], "query");
-    const currentMap = new Map(current.map((item) => [item.key, item]));
-    const previousMap = new Map(previous.map((item) => [item.key, item]));
-    const keys = new Set([...currentMap.keys(), ...previousMap.keys()]);
-
-    return [...keys].map((key) => {
-      const now = currentMap.get(key) || null;
-      const before = previousMap.get(key) || null;
-      const rankDelta = now && before && now.position != null && before.position != null ? round(before.position - now.position, 2) : null;
-      const clickDelta = now && before ? round(now.clicks - before.clicks, 3) : null;
-      const impressionDelta = now && before ? round(now.impressions - before.impressions, 3) : null;
-      const ctrDelta = now && before && now.ctr != null && before.ctr != null ? round(now.ctr - before.ctr, 6) : null;
-      let rankDirection = "stable";
-      if (!before) rankDirection = "new";
-      else if (!now) rankDirection = "lost";
-      else if (rankDelta != null && rankDelta >= config.minRankDelta) rankDirection = "improved";
-      else if (rankDelta != null && rankDelta <= -config.minRankDelta) rankDirection = "declined";
-
-      const clickDirection = !before ? "new" : !now ? "lost" : direction(clickDelta);
-      const impressionDirection = !before ? "new" : !now ? "lost" : direction(impressionDelta);
-      const filters = new Set(["all"]);
-      if (rankDirection === "improved") filters.add("rank-up");
-      if (rankDirection === "declined") filters.add("rank-down");
-      if (clickDirection === "up") filters.add("click-up");
-      if (clickDirection === "down") filters.add("click-down");
-      if (impressionDirection === "up") filters.add("impression-up");
-      if (impressionDirection === "down") filters.add("impression-down");
-      if (rankDirection === "new") filters.add("new");
-      if (rankDirection === "lost") filters.add("lost");
-      if (filters.size === 1) filters.add("stable");
-
-      let primary = rankDirection;
-      if (["stable", "new", "lost"].includes(primary) && clickDirection === "up") primary = "click-up";
-      if (["stable", "new", "lost"].includes(primary) && clickDirection === "down") primary = "click-down";
-      if (["stable", "new", "lost"].includes(primary) && clickDirection === "stable" && impressionDirection === "up") primary = "impression-up";
-      if (["stable", "new", "lost"].includes(primary) && clickDirection === "stable" && impressionDirection === "down") primary = "impression-down";
-
-      return {
-        key,
-        query: (now || before).query,
-        current: now,
-        previous: before,
-        rankDelta,
-        clickDelta,
-        impressionDelta,
-        ctrDelta,
-        clickPct: now && before ? percentageChange(now.clicks, before.clicks) : null,
-        impressionPct: now && before ? percentageChange(now.impressions, before.impressions) : null,
-        rankDirection,
-        clickDirection,
-        impressionDirection,
-        primary,
-        filters: [...filters],
+  // Period-over-period comparison of two grouped lists that share a key.
+  function compare(currentItems, previousItems, options) {
+    const settings = { ...DEFAULT_OPTIONS, ...(options || {}) };
+    const hasPrevious = Array.isArray(previousItems);
+    const previousByKey = new Map((previousItems || []).map((item) => [item.key, item]));
+    const seen = new Set();
+    const out = [];
+    const build = (current, previous) => {
+      const base = current || previous;
+      const item = {
+        ...base,
+        clicks: current ? current.clicks : 0,
+        impressions: current ? current.impressions : 0,
+        ctr: current ? current.ctr : 0,
+        position: current ? current.position : 0,
+        previous: previous || null,
+        clickDelta: null,
+        clickChange: null,
+        impressionDelta: null,
+        impressionChange: null,
+        rankDelta: null,
+        rankDirection: "flat",
+        status: "stable",
       };
-    }).sort((a, b) => (b.current ? b.current.impressions : 0) - (a.current ? a.current.impressions : 0) || a.key.localeCompare(b.key));
-  }
-
-  function scoreRecommendation(base, item, rankDown) {
-    const scale = Math.min(12, Math.log10(Math.max(1, item.impressions) + 1) * 3);
-    const declineBonus = rankDown ? 8 : 0;
-    return Math.min(100, Math.round(base + scale + declineBonus));
-  }
-
-  function buildRecommendations(comparisons, queryPages, summary, options) {
-    const config = Object.assign({ minImpressions: 20, lowCtrRatio: 0.75, maxRecommendations: 30 }, options || {});
-    const pageMap = new Map();
-    queryPages.forEach((item) => {
-      const queryKey = item.key.split("\u0000")[0] || item.queries[0] && normalizeQuery(item.queries[0]);
-      if (!queryKey) return;
-      if (!pageMap.has(queryKey)) pageMap.set(queryKey, []);
-      pageMap.get(queryKey).push(item);
-    });
-    const recommendations = [];
-    const add = (comparison, type, base, titleKey, actionKey, reasonData, title, action, reasons) => {
-      const item = comparison.current;
-      if (!item) return;
-      recommendations.push({
-        id: `${type}-${comparison.key}`,
-        type,
-        title,
-        query: comparison.query,
-        page: item.pages.length === 1 ? item.pages[0] : item.pages.length > 1 ? "多個頁面" : "未提供頁面維度",
-        position: item.position,
-        bucket: getBucket(item.position).label,
-        bucketId: getBucket(item.position).id,
-        clicks: item.clicks,
-        impressions: item.impressions,
-        ctr: item.ctr,
-        rankDelta: comparison.rankDelta,
-        score: scoreRecommendation(base, item, comparison.rankDirection === "declined"),
-        titleKey,
-        actionKey,
-        reasonData,
-        reasons,
-        action,
-        rule: type,
-      });
+      if (!hasPrevious) return item;
+      const prevClicks = previous ? previous.clicks : 0;
+      const prevImpressions = previous ? previous.impressions : 0;
+      item.clickDelta = item.clicks - prevClicks;
+      item.clickChange = percentChange(item.clicks, prevClicks);
+      item.impressionDelta = item.impressions - prevImpressions;
+      item.impressionChange = percentChange(item.impressions, prevImpressions);
+      if (current && previous && current.position > 0 && previous.position > 0) {
+        item.rankDelta = round(previous.position - current.position, 2);
+        if (item.rankDelta >= settings.minRankDelta) item.rankDirection = "improved";
+        else if (item.rankDelta <= -settings.minRankDelta) item.rankDirection = "declined";
+      }
+      if (!previous || !prevImpressions) item.status = item.impressions ? "new" : "stable";
+      else if (!current || !item.impressions) item.status = "lost";
+      else if (item.clickDelta > 0 || (item.clickDelta === 0 && item.impressionDelta > 0)) item.status = "growing";
+      else if (item.clickDelta < 0 || (item.clickDelta === 0 && item.impressionDelta < 0)) item.status = "decaying";
+      return item;
     };
+    for (const current of currentItems) {
+      seen.add(current.key);
+      out.push(build(current, previousByKey.get(current.key)));
+    }
+    for (const previous of previousItems || []) {
+      if (!seen.has(previous.key)) out.push(build(null, previous));
+    }
+    return out;
+  }
 
-    comparisons.forEach((comparison) => {
-      const item = comparison.current;
-      if (!item) return;
-      const enoughExposure = item.impressions >= config.minImpressions;
-      const position = item.position;
-      if (enoughExposure && position != null && position >= 11 && position <= 20) {
-        add(
-          comparison,
-          "rewrite-11-20",
-          82,
-          "recommendations.rewrite11.title",
-          "recommendations.rewrite11.action",
-          [
-            { key: "recommendation.rankRange", params: { position: position.toFixed(1), range: "11–20" } },
-            { key: "recommendation.exposure", params: { impressions: item.impressions, threshold: config.minImpressions } },
-          ],
-          "重寫候選 · 11–20",
-          "先用這個查詢核對當前承接頁與實際 SERP 任務，再決定補強哪個缺口；不要只為了加入關鍵字而整篇重寫。",
-          [
-            `平均排名 ${position.toFixed(1)}，位於 11–20 區間`,
-            `曝光 ${Math.round(item.impressions).toLocaleString()}，達到目前門檻 ${Math.round(config.minImpressions).toLocaleString()}`,
-          ],
-        );
-      } else if (enoughExposure && position != null && position >= 21 && position <= 30) {
-        add(
-          comparison,
-          "rewrite-21-30",
-          68,
-          "recommendations.rewrite21.title",
-          "recommendations.rewrite21.action",
-          [
-            { key: "recommendation.rankRange", params: { position: position.toFixed(1), range: "21–30" } },
-            { key: "recommendation.exposure", params: { impressions: item.impressions, threshold: config.minImpressions } },
-          ],
-          "補強候選 · 21–30",
-          "先確認是否已有相符頁面；再以 SERP 任務、第一方證據與內容缺口判斷要補強、合併或暫緩。",
-          [
-            `平均排名 ${position.toFixed(1)}，位於 21–30 區間`,
-            `曝光 ${Math.round(item.impressions).toLocaleString()}，達到目前門檻 ${Math.round(config.minImpressions).toLocaleString()}`,
-          ],
-        );
-      }
+  // Fill every date between start and end so charts never skip a day.
+  function dailySeries(rows, start, end) {
+    const byDate = new Map(group(rows, "date").map((item) => [item.date, item]));
+    const series = [];
+    for (let date = start; date <= end; date = addDays(date, 1)) {
+      const item = byDate.get(date);
+      series.push(item ? { date, clicks: item.clicks, impressions: item.impressions, ctr: item.ctr, position: item.position } : { date, clicks: 0, impressions: 0, ctr: 0, position: 0 });
+    }
+    return series;
+  }
 
-      if (comparison.rankDirection === "declined" && enoughExposure) {
-        add(
-          comparison,
-          "decline-review",
-          80,
-          "recommendations.decline.title",
-          "recommendations.decline.action",
-          [
-            { key: "recommendation.rankDecline", params: { delta: Math.abs(comparison.rankDelta || 0).toFixed(1) } },
-            { key: "recommendation.currentExposure", params: { impressions: item.impressions } },
-          ],
-          "下降檢查",
-          "先核對比較期間、頁面是否仍可索引，以及近期是否有內容／技術變更；確認原因後才決定是否重寫。",
-          [
-            `平均排名較前期下降 ${Math.abs(comparison.rankDelta || 0).toFixed(1)} 位`,
-            `目前曝光 ${Math.round(item.impressions).toLocaleString()}`,
-          ],
-        );
-      }
+  function sliceSeries(series, start, end) {
+    return series.filter((point) => point.date >= start && point.date <= end);
+  }
 
-      if (
-        enoughExposure &&
-        position != null &&
-        position >= 1 &&
-        position <= 10 &&
-        item.ctr != null &&
-        summary.ctr != null &&
-        item.ctr < summary.ctr * config.lowCtrRatio
-      ) {
-        add(
-          comparison,
-          "snippet-review",
-          60,
-          "recommendations.snippet.title",
-          "recommendations.snippet.action",
-          [
-            { key: "recommendation.topTen", params: { position: position.toFixed(1) } },
-            { key: "recommendation.lowCtr", params: { ctr: (item.ctr * 100).toFixed(2), reference: (summary.ctr * 100).toFixed(2), ratio: config.lowCtrRatio } },
-          ],
-          "摘要檢查 · 前 10",
-          "先檢查 title、主要承諾與頁面內容是否對得上搜尋任務；這是摘要／意圖檢查，不等於直接重寫。",
-          [
-            `平均排名 ${position.toFixed(1)}，已在前 10`,
-            `CTR ${(item.ctr * 100).toFixed(2)}%，低於目前站內參考 ${(summary.ctr * 100).toFixed(2)}% × ${config.lowCtrRatio}`,
-          ],
-        );
-      }
+  // Bucket a daily series into trailing 7-day blocks, oldest first.
+  function weeklyBuckets(series, weeks) {
+    const count = weeks || 13;
+    const out = [];
+    for (let index = count - 1; index >= 0; index -= 1) {
+      const endIndex = series.length - index * 7;
+      const block = series.slice(Math.max(0, endIndex - 7), Math.max(0, endIndex));
+      const total = summarize(block);
+      out.push({ start: block.length ? block[0].date : null, end: block.length ? block[block.length - 1].date : null, clicks: total.clicks, impressions: total.impressions });
+    }
+    return out;
+  }
 
-      const pages = pageMap.get(comparison.key) || [];
-      const materialPages = pages.filter((page) => page.impressions >= Math.max(1, config.minImpressions * 0.5));
-      if (enoughExposure && materialPages.length >= 2) {
-        add(
-          comparison,
-          "page-ownership-review",
-          72,
-          "recommendations.ownership.title",
-          "recommendations.ownership.action",
-          [
-            { key: "recommendation.multiplePages", params: { count: materialPages.length } },
-            { key: "recommendation.pageOverlap" },
-          ],
-          "頁面歸屬檢查",
-          "同一查詢先分開看各頁的曝光與平均排名，再判斷是否為正常多頁承接或需要整理頁面歸屬；不要只看全站合計。",
-          [`同一查詢有 ${materialPages.length} 個頁面帶來可見曝光`, "需要用頁面維度確認是否存在內容重疊"],
-        );
+  // --- page decay heatmap -----------------------------------------------------
+  // months: [{ key, rows: [{ page, clicks, impressions }] }], oldest first.
+  function buildDecayMap(months, options) {
+    const settings = { ...DEFAULT_OPTIONS, ...(options || {}) };
+    const pages = new Map();
+    months.forEach((month, index) => {
+      for (const row of month.rows) {
+        if (!row.page) continue;
+        const page = pageKey(row.page);
+        let entry = pages.get(page);
+        if (!entry) {
+          entry = { page, clicks: months.map(() => 0), impressions: months.map(() => 0) };
+          pages.set(page, entry);
+        }
+        entry.clicks[index] += row.clicks;
+        entry.impressions[index] += row.impressions;
       }
     });
+    const mean = (values) => (values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : 0);
+    const out = [];
+    for (const entry of pages.values()) {
+      const total = entry.clicks.reduce((sum, value) => sum + value, 0);
+      const peak = Math.max(...entry.clicks, 0);
+      const count = entry.clicks.length;
+      const recent = mean(entry.clicks.slice(Math.max(0, count - 3)));
+      let bestPrior = 0;
+      for (let end = 3; end <= count - 3; end += 1) bestPrior = Math.max(bestPrior, mean(entry.clicks.slice(end - 3, end)));
+      const activeMonths = entry.impressions.filter((value) => value > 0).length;
+      const firstActive = entry.impressions.findIndex((value) => value > 0);
+      let status = "steady";
+      let change = null;
+      if (count < 6 || firstActive > count - 6) status = "young";
+      else if (bestPrior * 3 < settings.decayMinClicks) status = "quiet";
+      else {
+        change = (recent - bestPrior) / bestPrior;
+        if (change <= -settings.decayDropRatio) status = "decaying";
+        else if (change >= settings.decayDropRatio) status = "rising";
+      }
+      out.push({
+        page: entry.page,
+        clicks: entry.clicks,
+        impressions: entry.impressions,
+        levels: entry.clicks.map((value) => (peak > 0 && value > 0 ? Math.max(1, Math.ceil((value / peak) * 4)) : 0)),
+        total,
+        peak,
+        recent: round(recent, 1),
+        bestPrior: round(bestPrior, 1),
+        lost: round(Math.max(0, bestPrior - recent), 1),
+        change,
+        status,
+        activeMonths,
+      });
+    }
+    const rank = { decaying: 0, steady: 1, rising: 1, young: 2, quiet: 3 };
+    return out.sort((a, b) => rank[a.status] - rank[b.status] || b.lost - a.lost || b.total - a.total);
+  }
 
-    return recommendations
-      .sort((a, b) => b.score - a.score || b.impressions - a.impressions || a.query.localeCompare(b.query) || a.type.localeCompare(b.type))
-      .slice(0, config.maxRecommendations);
+  // --- new pages --------------------------------------------------------------
+  // earlierPages: pages that already had impressions before the window.
+  // recentRows: [{ page, date, clicks, impressions }] inside the window.
+  function findNewPages(earlierPages, recentRows, window) {
+    const known = new Set(Array.from(earlierPages, pageKey));
+    const pages = new Map();
+    for (const row of recentRows) {
+      const page = pageKey(row.page);
+      if (!page || known.has(page) || row.impressions <= 0) continue;
+      let entry = pages.get(page);
+      if (!entry) {
+        entry = { page, firstSeen: row.date, clicks: 0, impressions: 0, byDate: new Map() };
+        pages.set(page, entry);
+      }
+      if (row.date < entry.firstSeen) entry.firstSeen = row.date;
+      entry.clicks += row.clicks;
+      entry.impressions += row.impressions;
+      entry.byDate.set(row.date, (entry.byDate.get(row.date) || 0) + row.impressions);
+    }
+    return Array.from(pages.values())
+      .map((entry) => {
+        const series = [];
+        for (let date = entry.firstSeen; date <= window.end; date = addDays(date, 1)) series.push({ date, impressions: entry.byDate.get(date) || 0 });
+        return { page: entry.page, firstSeen: entry.firstSeen, ageDays: diffDays(entry.firstSeen, window.end) + 1, clicks: entry.clicks, impressions: entry.impressions, series };
+      })
+      .sort((a, b) => (a.firstSeen < b.firstSeen ? 1 : a.firstSeen > b.firstSeen ? -1 : b.impressions - a.impressions));
+  }
+
+  // --- striking distance and cannibalization ----------------------------------
+  function pagesByQuery(queryPageRows) {
+    const map = new Map();
+    for (const item of group(queryPageRows, ["query", "page"])) {
+      if (!item.page) continue;
+      const key = normalizeKey(item.query);
+      if (!map.has(key)) map.set(key, []);
+      map.get(key).push({ page: item.page, clicks: item.clicks, impressions: item.impressions, ctr: item.ctr, position: item.position });
+    }
+    for (const pages of map.values()) pages.sort((a, b) => b.clicks - a.clicks || b.impressions - a.impressions || a.position - b.position);
+    return map;
+  }
+
+  function findStrikingDistance(queryItems, queryPageRows, options) {
+    const settings = { ...DEFAULT_OPTIONS, ...(options || {}) };
+    const pages = pagesByQuery(queryPageRows || []);
+    return queryItems
+      .filter((item) => item.position >= settings.strikingMin && item.position <= settings.strikingMax && item.impressions >= settings.minImpressions)
+      .map((item) => ({ ...item, pages: pages.get(item.key) || [] }))
+      .sort((a, b) => b.impressions - a.impressions || a.position - b.position);
+  }
+
+  function findCannibalization(queryPageRows, options) {
+    const settings = { ...DEFAULT_OPTIONS, ...(options || {}) };
+    const out = [];
+    for (const [key, pages] of pagesByQuery(queryPageRows || [])) {
+      const impressions = pages.reduce((sum, page) => sum + page.impressions, 0);
+      if (impressions < settings.minImpressions) continue;
+      const floor = Math.max(settings.minImpressions / 2, impressions * settings.cannibalMinShare);
+      const contenders = pages.filter((page) => page.impressions >= floor).map((page) => ({ ...page, share: page.impressions / impressions }));
+      if (contenders.length < 2) continue;
+      const keep = contenders[0];
+      const runnerUp = contenders[1];
+      const reason = keep.clicks > runnerUp.clicks ? "clicks" : keep.impressions > runnerUp.impressions ? "impressions" : "position";
+      out.push({ key, query: key, clicks: pages.reduce((sum, page) => sum + page.clicks, 0), impressions, pages: contenders, keep: keep.page, reason });
+    }
+    return out.sort((a, b) => b.impressions - a.impressions);
+  }
+
+  // --- language versions ------------------------------------------------------
+  const LANGUAGE_SEGMENT = /^([a-z]{2})(?:[-_]([a-z]{2}|[a-z]{4}|\d{3}))?$/;
+
+  function languageOfUrl(url) {
+    const match = String(url || "").trim().match(/^https?:\/\/([^/?#]+)(\/[^?#]*)?/i);
+    if (!match) return { code: ROOT_LANGUAGE, kind: "root" };
+    const segment = ((match[2] || "/").split("/")[1] || "").toLowerCase();
+    const bySegment = segment.match(LANGUAGE_SEGMENT);
+    if (bySegment && ISO_639_1.has(bySegment[1])) return { code: segment.replace("_", "-"), kind: "subdir" };
+    const labels = match[1].toLowerCase().split(".");
+    const byHost = labels.length >= 3 ? labels[0].match(LANGUAGE_SEGMENT) : null;
+    if (byHost && ISO_639_1.has(byHost[1])) return { code: labels[0].replace("_", "-"), kind: "subdomain" };
+    return { code: ROOT_LANGUAGE, kind: "root" };
+  }
+
+  function groupByLanguage(currentPageRows, previousPageRows) {
+    const tag = (rows) =>
+      rows.map((row) => {
+        const language = languageOfUrl(row.page);
+        return { ...row, language: language.code, kind: language.kind };
+      });
+    const collect = (rows) => {
+      const tagged = tag(rows);
+      const kinds = new Map();
+      const counts = new Map();
+      for (const row of tagged) {
+        kinds.set(row.language, row.kind);
+        counts.set(row.language, (counts.get(row.language) || 0) + 1);
+      }
+      return group(tagged, "language").map((item) => ({ ...item, key: item.language, kind: kinds.get(item.language), pages: counts.get(item.language) || 0 }));
+    };
+    const compared = compare(collect(currentPageRows), previousPageRows ? collect(previousPageRows) : undefined);
+    return compared.sort((a, b) => b.clicks - a.clicks || b.impressions - a.impressions);
+  }
+
+  function escapeRegex(value) {
+    return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  // Page filter that isolates one detected language version; every other detected
+  // version is excluded when asking for the root (no language marker) group.
+  function languageFilter(target, all) {
+    const part = (item) => (item.kind === "subdomain" ? `${escapeRegex(item.code)}\\.[^/]+` : `[^/]+/${escapeRegex(item.code)}(/|\\?|#|$)`);
+    if (target.kind !== "root") return { dimension: "page", operator: "includingRegex", expression: `^https?://${part(target)}` };
+    const others = (all || []).filter((item) => item.kind !== "root");
+    if (!others.length) return null;
+    return { dimension: "page", operator: "excludingRegex", expression: `^https?://(${others.map(part).join("|")})` };
+  }
+
+  // Expected CTR by position, measured from this site's own queries. Comparing a
+  // position-12 query with the whole-site CTR would flag nearly everything, because
+  // brand and top-1 queries pull the site average up.
+  const CTR_BANDS = [[1, 1], [2, 2], [3, 3], [4, 5], [6, 10], [11, 20], [21, Infinity]];
+  function ctrBaseline(queryItems) {
+    const live = queryItems.filter((item) => item.impressions > 0 && item.position > 0);
+    const overall = summarize(live);
+    const bands = CTR_BANDS.map(([min, max]) => {
+      const total = summarize(live.filter((item) => Math.round(item.position) >= min && Math.round(item.position) <= max));
+      return { min, max, ctr: total.impressions >= 100 ? total.ctr : overall.ctr };
+    });
+    return (position) => {
+      const rounded = Math.max(1, Math.round(position));
+      return (bands.find((band) => rounded >= band.min && rounded <= band.max) || { ctr: overall.ctr }).ctr;
+    };
+  }
+
+  // --- action queue (deterministic review candidates) -------------------------
+  const RULE_BASE = { "decline-review": 50, "rewrite-11-20": 40, "page-ownership-review": 35, "snippet-review": 30, "rewrite-21-30": 20 };
+
+  function buildQueue(comparisons, queryPageRows, summary, options) {
+    const settings = { ...DEFAULT_OPTIONS, ...(options || {}) };
+    const pages = pagesByQuery(queryPageRows || []);
+    const expected = ctrBaseline(comparisons);
+    const out = [];
+    for (const item of comparisons) {
+      if (item.impressions < settings.minImpressions) continue;
+      const rules = [];
+      const rounded = Math.round(item.position);
+      if (item.position > 0 && rounded >= 11 && rounded <= 20) rules.push("rewrite-11-20");
+      if (item.position > 0 && rounded >= 21 && rounded <= 30) rules.push("rewrite-21-30");
+      if (item.rankDelta != null && item.rankDelta <= -settings.minRankDelta) rules.push("decline-review");
+      if (item.position > 0 && rounded <= 10 && item.ctr < expected(item.position) * settings.lowCtrRatio) rules.push("snippet-review");
+      const owners = (pages.get(item.key) || []).filter((page) => page.impressions >= settings.minImpressions / 2);
+      if (owners.length >= 2) rules.push("page-ownership-review");
+      if (!rules.length) continue;
+      rules.sort((a, b) => RULE_BASE[b] - RULE_BASE[a]);
+      const drop = item.rankDelta != null && item.rankDelta < 0 ? Math.min(20, -item.rankDelta * 2) : 0;
+      const ownerPages = pages.get(item.key) || [];
+      out.push({
+        id: item.key,
+        query: item.query,
+        rule: rules[0],
+        rules,
+        page: owners.length >= 2 ? PAGE_MULTIPLE : ownerPages.length ? ownerPages[0].page : "",
+        pageCount: ownerPages.length,
+        position: item.position,
+        impressions: item.impressions,
+        clicks: item.clicks,
+        ctr: item.ctr,
+        rankDelta: item.rankDelta,
+        score: round(RULE_BASE[rules[0]] + Math.log10(Math.max(item.impressions, 1)) * 10 + drop, 1),
+      });
+    }
+    return out.sort((a, b) => b.score - a.score || b.impressions - a.impressions).slice(0, settings.maxRecommendations);
   }
 
   function buildAnomalies(comparisons, options) {
-    const config = Object.assign({ minImpressions: 20, anomalyDropRatio: 0.3, anomalyRankDelta: 3, maxInsights: 8 }, options || {});
-    return comparisons
-      .filter((item) => item.current && item.previous)
-      .map((item) => {
-        const now = item.current;
-        const before = item.previous;
-        const enoughExposure = Math.max(now.impressions || 0, before.impressions || 0) >= config.minImpressions;
-        if (!enoughExposure) return null;
-        const signals = [];
-        if (item.rankDelta != null && item.rankDelta <= -config.anomalyRankDelta) {
-          signals.push({ key: "rank", value: round(Math.abs(item.rankDelta), 1) });
-        }
-        if (item.clickPct != null && item.clickPct <= -config.anomalyDropRatio) {
-          signals.push({ key: "clicks", value: round(Math.abs(item.clickPct), 3) });
-        }
-        if (item.impressionPct != null && item.impressionPct <= -config.anomalyDropRatio) {
-          signals.push({ key: "impressions", value: round(Math.abs(item.impressionPct), 3) });
-        }
-        if (!signals.length) return null;
-        return {
-          id: `anomaly-${item.key}`,
-          query: item.query,
-          current: now,
-          previous: before,
-          rankDelta: item.rankDelta,
-          clickPct: item.clickPct,
-          impressionPct: item.impressionPct,
-          signals,
-          severity: signals.length > 1 ? "high" : "watch",
-        };
-      })
-      .filter(Boolean)
-      .sort((a, b) => b.signals.length - a.signals.length || (b.current.impressions || 0) - (a.current.impressions || 0))
-      .slice(0, config.maxInsights);
+    const settings = { ...DEFAULT_OPTIONS, ...(options || {}) };
+    const out = [];
+    for (const item of comparisons) {
+      const previous = item.previous;
+      if (!previous || Math.max(item.impressions, previous.impressions) < settings.minImpressions) continue;
+      const signals = [];
+      if (item.rankDelta != null && item.rankDelta <= -settings.anomalyRankDelta) signals.push({ type: "rank", value: item.rankDelta });
+      if (previous.clicks >= 5 && item.clickChange != null && item.clickChange <= -settings.anomalyDropRatio) signals.push({ type: "clicks", value: item.clickChange });
+      if (item.impressionChange != null && item.impressionChange <= -settings.anomalyDropRatio) signals.push({ type: "impressions", value: item.impressionChange });
+      if (signals.length) out.push({ ...item, signals, weight: signals.length * 1000 + previous.impressions });
+    }
+    return out.sort((a, b) => b.weight - a.weight).slice(0, settings.maxInsights);
   }
 
-  function buildCtrOpportunities(currentQueries, summary, options) {
-    const config = Object.assign({ minImpressions: 20, lowCtrRatio: 0.75, maxInsights: 8 }, options || {});
-    const referenceCtr = summary && Number.isFinite(summary.ctr) ? summary.ctr * config.lowCtrRatio : null;
-    if (!Number.isFinite(referenceCtr) || referenceCtr <= 0) return [];
-    return currentQueries
-      .filter((item) => item.position != null && item.position >= 4 && item.position <= 20 && item.impressions >= config.minImpressions && item.ctr != null && item.ctr < referenceCtr)
-      .map((item) => ({
-        id: `ctr-opportunity-${item.key}`,
-        query: item.query,
-        page: item.pages.length === 1 ? item.pages[0] : item.pages.length > 1 ? "多個頁面" : "未提供頁面維度",
-        position: item.position,
-        bucket: getBucket(item.position).label,
-        impressions: item.impressions,
-        clicks: item.clicks,
-        ctr: item.ctr,
-        ctrGap: round(referenceCtr - item.ctr, 6),
-        referenceCtr: round(referenceCtr, 6),
-      }))
-      .sort((a, b) => b.impressions - a.impressions || b.ctrGap - a.ctrGap || a.query.localeCompare(b.query))
-      .slice(0, config.maxInsights);
+  function buildCtrOpportunities(queryItems, summary, options) {
+    const settings = { ...DEFAULT_OPTIONS, ...(options || {}) };
+    const expected = ctrBaseline(queryItems);
+    return queryItems
+      .filter((item) => item.position >= 4 && item.position <= 20 && item.impressions >= settings.minImpressions)
+      .map((item) => ({ ...item, referenceCtr: expected(item.position) * settings.lowCtrRatio }))
+      .filter((item) => item.ctr < item.referenceCtr)
+      .map((item) => ({ ...item, missedClicks: round(item.impressions * (item.referenceCtr - item.ctr), 1) }))
+      .sort((a, b) => b.missedClicks - a.missedClicks)
+      .slice(0, settings.maxInsights);
   }
 
-  function buildModel(currentDataset, previousDataset, options) {
-    const config = Object.assign(
-      { minImpressions: 20, minRankDelta: 1, lowCtrRatio: 0.75, maxRecommendations: 30, anomalyDropRatio: 0.3, anomalyRankDelta: 3, maxInsights: 8 },
-      options || {},
-    );
-    const currentRows = currentDataset && currentDataset.rows ? currentDataset.rows : [];
-    const previousRows = previousDataset && previousDataset.rows ? previousDataset.rows : [];
-    const currentQueries = aggregateRows(currentRows, "query");
-    const previousQueries = aggregateRows(previousRows, "query");
-    const currentPages = aggregateRows(currentRows.filter((row) => row.page), "page");
-    const queryPages = aggregateQueryPages(currentRows);
-    const comparisons = previousRows.length
-      ? compareDatasets(currentRows, previousRows, config)
-      : currentQueries.map((item) => ({
-          key: item.key,
-          query: item.query,
-          current: item,
-          previous: null,
-          rankDelta: null,
-          clickDelta: null,
-          impressionDelta: null,
-          ctrDelta: null,
-          clickPct: null,
-          impressionPct: null,
-          rankDirection: "stable",
-          clickDirection: "stable",
-          impressionDirection: "stable",
-          primary: "stable",
-          filters: ["all", "stable"],
-        }));
-    const summary = summarizeRows(currentRows);
-    const previousSummary = previousRows.length ? summarizeRows(previousRows) : null;
-    const distribution = BUCKETS.map((bucket) => ({
-      ...bucket,
-      count: currentQueries.filter((query) => getBucket(query.position).id === bucket.id).length,
-    }));
-    const unknownCount = currentQueries.filter((query) => getBucket(query.position).id === "unknown").length;
-    const rankedQueryCount = distribution.reduce((sum, bucket) => sum + bucket.count, 0);
-    const movementSummary = {
-      rankUp: comparisons.filter((item) => item.rankDirection === "improved").length,
-      rankDown: comparisons.filter((item) => item.rankDirection === "declined").length,
-      clickUp: comparisons.filter((item) => item.clickDirection === "up").length,
-      clickDown: comparisons.filter((item) => item.clickDirection === "down").length,
-      impressionUp: comparisons.filter((item) => item.impressionDirection === "up").length,
-      impressionDown: comparisons.filter((item) => item.impressionDirection === "down").length,
-      new: comparisons.filter((item) => item.rankDirection === "new").length,
-      lost: comparisons.filter((item) => item.rankDirection === "lost").length,
-      stable: comparisons.filter((item) => item.primary === "stable").length,
-    };
-
+  // --- change notes -----------------------------------------------------------
+  // Equal-length windows before and after a change. When the after window is not
+  // complete yet, both sides shrink to the number of days that already have data.
+  function noteWindows(date, days, lastDataDate) {
+    const wanted = Math.max(1, Math.round(days) || 28);
+    const available = lastDataDate >= date ? Math.min(wanted, diffDays(date, lastDataDate) + 1) : 0;
+    if (!available) return { wanted, days: 0, complete: false, before: null, after: null, readyOn: addDays(date, wanted - 1) };
     return {
-      config,
-      hasComparison: previousRows.length > 0,
-      summary,
-      previousSummary,
-      queryCount: currentQueries.length,
-      pageCount: currentPages.length,
-      rankedQueryCount,
-      unknownPositionCount: unknownCount,
-      distribution,
-      comparisons,
-      recommendations: buildRecommendations(comparisons, queryPages, summary, config),
-      anomalies: buildAnomalies(comparisons, config),
-      ctrOpportunities: buildCtrOpportunities(currentQueries, summary, config),
-      currentQueries,
-      currentPages,
-      queryPages,
-      movementSummary,
-      metadata: {
-        current: currentDataset
-          ? {
-              sourceName: currentDataset.sourceName,
-              format: currentDataset.format,
-              dateRange: currentDataset.dateRange || getDateRange(currentRows),
-              rows: currentRows.length,
-              skipped: currentDataset.skipped || { missingQuery: 0, invalidMetrics: 0 },
-              propertyName: currentDataset.propertyName || "",
-              siteUrl: currentDataset.siteUrl || "",
-              dimensions: currentDataset.dimensions || [],
-              dataState: currentDataset.dataState || "",
-              rowLimit: currentDataset.rowLimit == null ? null : currentDataset.rowLimit,
-              totalRows: currentDataset.totalRows == null ? null : currentDataset.totalRows,
-              partial: currentDataset.partial === true,
-              syncedAt: currentDataset.syncedAt || null,
-              scope: currentDataset.scope || null,
-            }
-          : null,
-        previous: previousDataset
-          ? {
-              sourceName: previousDataset.sourceName,
-              format: previousDataset.format,
-              dateRange: previousDataset.dateRange || getDateRange(previousRows),
-              rows: previousRows.length,
-              skipped: previousDataset.skipped || { missingQuery: 0, invalidMetrics: 0 },
-              propertyName: previousDataset.propertyName || "",
-              siteUrl: previousDataset.siteUrl || "",
-              dimensions: previousDataset.dimensions || [],
-              dataState: previousDataset.dataState || "",
-              rowLimit: previousDataset.rowLimit == null ? null : previousDataset.rowLimit,
-              totalRows: previousDataset.totalRows == null ? null : previousDataset.totalRows,
-              partial: previousDataset.partial === true,
-              syncedAt: previousDataset.syncedAt || null,
-              scope: previousDataset.scope || null,
-            }
-          : null,
-      },
+      wanted,
+      days: available,
+      complete: available >= wanted,
+      before: { start: addDays(date, -available), end: addDays(date, -1) },
+      after: { start: date, end: addDays(date, available - 1) },
+      readyOn: addDays(date, wanted - 1),
     };
+  }
+
+  function compareNote(series, windows) {
+    if (!windows.days) return null;
+    const before = summarize(sliceSeries(series, windows.before.start, windows.before.end));
+    const after = summarize(sliceSeries(series, windows.after.start, windows.after.end));
+    return {
+      before,
+      after,
+      clickChange: percentChange(after.clicks, before.clicks),
+      impressionChange: percentChange(after.impressions, before.impressions),
+      rankDelta: before.position > 0 && after.position > 0 ? round(before.position - after.position, 2) : null,
+    };
+  }
+
+  // --- rank tracking ----------------------------------------------------------
+  function parseKeywordList(text) {
+    const seen = new Set();
+    const out = [];
+    String(text || "")
+      .replace(/^﻿/, "")
+      .split(/\r?\n/)
+      .forEach((line, index) => {
+        const cell = line.split(/[\t;,]/)[0].trim().replace(/^"(.*)"$/, "$1").replace(/""/g, '"').trim();
+        if (!cell) return;
+        if (index === 0 && /^(keywords?|quer(y|ies)|search terms?|關鍵[詞字]|关键[词字]|查詢|查询词?)$/i.test(cell)) return;
+        const key = normalizeKey(cell);
+        if (seen.has(key)) return;
+        seen.add(key);
+        out.push(cell);
+      });
+    return out.slice(0, 500);
+  }
+
+  // rows: [{ date, page, clicks, impressions, position }] for one exact query.
+  function summarizeTracked(rows, range) {
+    const within = (window) => (window ? rows.filter((row) => row.date >= window.start && row.date <= window.end) : []);
+    const describe = (list) => {
+      if (!list.length) return null;
+      const total = summarize(list);
+      const pages = group(list, "page").sort((a, b) => b.impressions - a.impressions || b.clicks - a.clicks);
+      return { clicks: total.clicks, impressions: total.impressions, ctr: total.ctr, position: total.position, page: pages.length ? pages[0].page : "", pageCount: pages.length };
+    };
+    const current = describe(within(range));
+    const previous = describe(within(range.previous));
+    const start = range.previous ? range.previous.start : range.start;
+    const series = dailySeries(rows, start, range.end).map((point) => ({ date: point.date, position: point.impressions > 0 ? point.position : null, clicks: point.clicks }));
+    return {
+      current,
+      previous,
+      rankDelta: current && previous && current.position > 0 && previous.position > 0 ? round(previous.position - current.position, 2) : null,
+      pageChanged: Boolean(current && previous && current.page && previous.page && current.page !== previous.page),
+      series,
+    };
+  }
+
+  // --- export -----------------------------------------------------------------
+  function compileMatcher(rule) {
+    const value = String(rule.value || "");
+    if (rule.op === "regex" || rule.op === "notRegex") {
+      let pattern;
+      try {
+        pattern = new RegExp(value, "i");
+      } catch (error) {
+        throw codedError("badRegex", `Invalid regular expression: ${value}`);
+      }
+      return rule.op === "regex" ? (text) => pattern.test(text) : (text) => !pattern.test(text);
+    }
+    const needle = value.toLowerCase();
+    if (rule.op === "equals") return (text) => text.toLowerCase() === needle;
+    if (rule.op === "notEquals") return (text) => text.toLowerCase() !== needle;
+    if (rule.op === "notContains") return (text) => !text.toLowerCase().includes(needle);
+    return (text) => text.toLowerCase().includes(needle);
+  }
+
+  // spec.text: [{ field, op, value }]; spec.ranges: { clicks: [min, max], ctr: [min, max] (ratio), ... }
+  function filterRows(rows, spec) {
+    const matchers = ((spec && spec.text) || []).filter((rule) => String(rule.value || "").trim()).map((rule) => ({ field: rule.field, test: compileMatcher(rule) }));
+    const ranges = Object.entries((spec && spec.ranges) || {}).filter(([, bounds]) => bounds && (Number.isFinite(bounds[0]) || Number.isFinite(bounds[1])));
+    return rows.filter((row) => {
+      for (const matcher of matchers) if (!matcher.test(String(row[matcher.field] || ""))) return false;
+      for (const [field, bounds] of ranges) {
+        const value = row[field];
+        if (Number.isFinite(bounds[0]) && value < bounds[0]) return false;
+        if (Number.isFinite(bounds[1]) && value > bounds[1]) return false;
+      }
+      return true;
+    });
+  }
+
+  function csvCell(value) {
+    if (value == null) return "";
+    if (typeof value === "number") return Number.isFinite(value) ? String(value) : "";
+    let text = String(value);
+    if (/^[=+\-@\t\r]/.test(text)) text = `'${text}`; // keep spreadsheets from running a query as a formula
+    return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+  }
+
+  function toCsv(headers, rows) {
+    return [headers, ...rows].map((line) => line.map(csvCell).join(",")).join("\r\n");
+  }
+
+  // --- URL inspection ---------------------------------------------------------
+  function normalizeInspection(response) {
+    const result = (response && (response.inspectionResult || response)) || {};
+    const index = result.indexStatusResult || {};
+    const google = index.googleCanonical || "";
+    const user = index.userCanonical || "";
+    const verdict = String(index.verdict || "VERDICT_UNSPECIFIED").toUpperCase();
+    return {
+      verdict,
+      indexed: verdict === "PASS",
+      coverageState: index.coverageState || "",
+      indexingState: index.indexingState || "",
+      robotsTxtState: index.robotsTxtState || "",
+      pageFetchState: index.pageFetchState || "",
+      crawledAs: index.crawledAs || "",
+      lastCrawlTime: index.lastCrawlTime || "",
+      googleCanonical: google,
+      userCanonical: user,
+      canonicalMismatch: Boolean(google && user && google !== user),
+      sitemaps: Array.isArray(index.sitemap) ? index.sitemap : [],
+      inspectionLink: result.inspectionResultLink || "",
+    };
+  }
+
+  function parseUrlList(text) {
+    const seen = new Set();
+    const out = [];
+    for (const piece of String(text || "").split(/[\s,]+/)) {
+      const url = piece.trim();
+      if (!/^https?:\/\/[^\s]+$/i.test(url) || seen.has(url)) continue;
+      seen.add(url);
+      out.push(url);
+    }
+    return out;
   }
 
   root.SEOCoachGscEngine = {
+    ROW_LIMIT,
+    MAX_HISTORY_DAYS,
+    DATA_LAG_DAYS,
+    RANGE_PRESETS,
     BUCKETS,
-    parseText,
-    createDatasetFromText,
-    createDatasetFromRecords,
-    combineDatasets,
-    aggregateRows,
-    compareDatasets,
-    buildRecommendations,
+    DEFAULT_OPTIONS,
+    PAGE_MULTIPLE,
+    ROOT_LANGUAGE,
+    codedError,
+    round,
+    isIsoDate,
+    addDays,
+    diffDays,
+    localToday,
+    oldestDate,
+    resolveRange,
+    monthWindows,
+    cleanFilter,
+    isFilterEmpty,
+    buildFilterGroups,
+    rowsFromResponse,
+    normalizeKey,
+    pageKey,
+    group,
+    summarize,
+    percentChange,
+    bucketFor,
+    rankBuckets,
+    compare,
+    dailySeries,
+    sliceSeries,
+    weeklyBuckets,
+    buildDecayMap,
+    findNewPages,
+    pagesByQuery,
+    findStrikingDistance,
+    findCannibalization,
+    languageOfUrl,
+    groupByLanguage,
+    languageFilter,
+    ctrBaseline,
+    buildQueue,
     buildAnomalies,
     buildCtrOpportunities,
-    buildModel,
-    getBucket,
-    normalizeQuery,
-    percentageChange,
+    noteWindows,
+    compareNote,
+    parseKeywordList,
+    summarizeTracked,
+    filterRows,
+    toCsv,
+    normalizeInspection,
+    parseUrlList,
   };
 })(typeof window !== "undefined" ? window : globalThis);

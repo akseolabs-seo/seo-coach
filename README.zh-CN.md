@@ -4,7 +4,7 @@
 
 > 🇹🇼 繁體中文 → [README.zh-TW.md](README.zh-TW.md) ｜ 🇺🇸 English → [README.md](README.md)
 
-> **当前版本：2.5.0**｜发布说明 → [RELEASE-2.5.0.md](RELEASE-2.5.0.md)｜逐版变更 → [CHANGELOG.md](CHANGELOG.md)
+> **当前版本：3.0.0**｜发布说明 → [RELEASE-2.5.0.md](RELEASE-2.5.0.md)｜逐版变更 → [CHANGELOG.md](CHANGELOG.md)
 > 想知道自己装的是不是最新版，直接问教练「**有没有新版？**」，它会去 GitHub 比对后告诉你。
 
 SEO Coach 是一套基于公开、可验证的 SEO 实务整理，并按新手学习路径编排的开源 AI 教练 Skill。
@@ -59,7 +59,7 @@ SEO Coach 会带你完成一条真实闭环：
 
 ### 证据优先
 
-教练会区分本轮真实观察、Google 官方说明、第三方估值、你授权的数据，以及尚未观察的部分。网站健康也是有效结果；它不会为了显得有价值而硬找问题。
+教练会区分本轮真实观察、Google 官方说明、第三方估值、你授权的数据，以及尚未观察的部分。网站健康也是有效结果；它不会为了显得有价值而硬找问题。实际判断会保留证据范围、不能推出的结论、下一个区分检查，以及之后换题复测的入口。
 
 ### 修改后必须复验
 
@@ -117,9 +117,9 @@ SEO Coach 会带你完成一条真实闭环：
 
 ### 本地 GSC 搜索面板
 
-如果你已经接好 GSC API，可以直接打开 `assets/gsc-dashboard/index.html`，面板会先自动载入当前／比较期间；没有既有 connector 时，才手动导入 CSV／TSV／JSON。面板会在浏览器内计算点击、展示、CTR、平均排名、`1–3／4–10／11–20／21–30` 分布、查询变化、异常／CTR 信号，以及透明的重写复核候选。每个 Query 都可以打开当前／前期详情、页面承接和命中规则；重写队列可以保存状态和备注。
+接一次 Search Console，面板和教练就读同一份数据，三步：（1）在 Google Cloud 启用 Google Search Console API、创建服务账号并把 JSON 密钥存为 `~/.seo-coach/gsc-service-account.json`；（2）到 Search Console → 设置 → 用户和权限，把服务账号的 email 添加为“受限”用户；（3）运行 `node assets/gsc-tools/gsc.mjs check`，再运行 `node assets/gsc-tools/gsc.mjs serve` 并打开 `http://127.0.0.1:8791/`。教练会一轮带一步，而且不会要你把密钥贴进对话（[`references/65-gsc-api-setup.md`](references/65-gsc-api-setup.md)）。还没有网站？点“加载演示数据”，用明确标示的合成数据练判读。
 
-这条面板路径不处理登录／凭证、不直接调用外部 API 或网络服务，也不调用 Codex CLI／AI；既有 connector 负责连接，面板只在浏览器内计算并保存返回数据。一个模板支持繁体中文、简体中文、英文、日文、韩文；第一次打开会跟随浏览器语言，之后手动选择只保存在本地。重写队列是可检查的确定性规则列表，不会自动改稿；GSC 平均排名也不是实时 SERP 名次。bridge 契约、格式、公式和边界见 [`references/59-gsc-dashboard.md`](references/59-gsc-dashboard.md)。
+面板有 13 个分页（总览、多站列表、12 个月衰退热图、新页面、排名追踪、排名机会、蚕食检测、语言版本、分组趋势、索引检查、变更笔记、数据导出、教练的行动队列），另有任一查询或页面的详情抽屉、前一期间／去年同期比较、品牌词与非品牌词分组、Google 公布的排名更新标记，以及“复制证据卡”按钮，让你把看到的内容直接贴给教练、不必截图。密钥只由本机工具读取（只读权限、只绑定 `127.0.0.1`）；面板页面不处理凭证、不调用 AI，所有计算都在浏览器内确定性完成。GSC 数据行不写入本地存储，只保存你自己的笔记和设置，并可导出与导入。内置繁体中文、简体中文、英文三个语言；面板语言由教练用 `node assets/gsc-tools/locale.mjs --use <tag>` 设置，其他语言由教练生成一次。行动队列列的是人工核对候选，不是指令，也不把 GSC 平均排名当成实时 SERP 名次。公式、宿主 connector 契约和数据边界见 [`references/59-gsc-dashboard.md`](references/59-gsc-dashboard.md)。
 
 ## 可以这样开始
 
@@ -206,7 +206,7 @@ Codex:  ~/.codex/skills/seo-coach
 Claude: ~/.claude/skills/seo-coach
 ```
 
-Clone 下来的 repo 含有维护用的 `evals/` 和 `scripts/`，**它们不是运行必需的**，可以删掉再放进 skills 目录，留着也不影响运行。
+Clone 下来的 repo 含有维护用的 `evals/` 和 `scripts/`，**它们不是运行必需的**（你会自己运行的工具放在 `assets/gsc-tools/`，属于运行包），可以删掉再放进 skills 目录，留着也不影响运行。
 
 </details>
 
@@ -231,7 +231,8 @@ seo-coach/
 ├── SKILL.md                 # 核心教练行为与路由
 ├── FAILSAFE.md              # 失效模式与必须改变的行为
 ├── references/              # 学徒主线、实验室与教学资料
-├── assets/gsc-dashboard/    # 可直接打开的本地 GSC 分析面板
+├── assets/gsc-dashboard/    # 本地 GSC 面板
+├── assets/gsc-tools/        # 运行期工具：接 GSC API（gsc.mjs）与面板语言（locale.mjs）
 ├── agents/                  # Agent 展示与触发 metadata
 ├── hooks/                   # 可选自动加载 router（不装也能用）
 │
@@ -242,8 +243,8 @@ seo-coach/
 ├── CHANGELOG.md             # 逐版变更
 │
 │  ── 维护用（安装不需要）──
-├── evals/                   # 92 个教练行为 eval case 与判准
-└── scripts/                 # 验证器、eval runner、构建与隐私测试
+├── evals/                   # 104 个教练行为 eval case 与判准
+└── scripts/                 # 维护工具：验证器、eval runner、构建、面板与隐私测试
 ```
 
 ## 最后一句

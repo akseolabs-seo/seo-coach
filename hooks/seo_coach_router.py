@@ -43,6 +43,8 @@ STRONG = re.compile(
     r"|robots\.txt|sitemap\.xml|canonical|noindex|core web vitals"
     r"|search console|(?<![a-z])gsc(?![a-z])|(?<![a-z])ga4(?![a-z])|google analytics"
     r"|site:\s*\S|收錄|索引|自然搜尋|自然流量|排名掉|流量掉|流量下降|網站健檢"
+    r"|(google|搜尋|網站|排名|流量).{0,20}(演算法|核心)\s*更新|(演算法|核心)\s*更新.{0,20}(流量|排名|網站)"
+    r"|google.{0,20}core update|core update.{0,40}(site|traffic|rank)"
     rf"|learn {SEO}|{SEO} for beginners|{SEO} basics|why is my site not ranking)",
     re.I,
 )

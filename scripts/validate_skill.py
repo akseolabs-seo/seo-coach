@@ -45,6 +45,18 @@ REQUIRED_EVALS = {
     "writing-a4-unprompted-capstone",
     "writing-portfolio-state-diff",
     "writing-public-basics-firewall",
+    "evidence-card-unknown-not-fail",
+    "intent-page-fit-drill",
+    "gsc-striking-distance-candidate",
+    "gsc-decay-equal-window",
+    "gsc-cannibalization-confirmation",
+    "research-card-no-fabrication",
+    "decision-writing-tradeoffs",
+    "delayed-transfer-cousin-case",
+    "portable-resume-no-invention",
+    "gsc-api-setup-one-step-no-key-in-chat",
+    "algorithm-update-three-layer-reading",
+    "panel-evidence-card-is-observation",
 }
 
 
@@ -72,6 +84,15 @@ def runtime_files(skill_dir: Path) -> dict[str, bytes]:
 
 def validate_source(skill_dir: Path, require_evals: bool = False) -> list[str]:
     errors: list[str] = []
+
+    # Credentials must never ship: refuse to validate a tree that contains key material.
+    key_marker = "-----BEGIN " + "PRIVATE KEY-----"
+    for path in skill_dir.rglob("*"):
+        if not path.is_file() or {".git", "runs", "__pycache__"} & set(path.parts) or path.stat().st_size > 2_000_000:
+            continue
+        text = path.read_text(encoding="utf-8", errors="ignore")
+        if key_marker in text or re.search(r'"type"\s*:\s*"service_account"', text):
+            errors.append(f"credential material found, remove before publishing: {path.relative_to(skill_dir)}")
     skill_file = skill_dir / "SKILL.md"
     if not skill_file.is_file():
         return ["SKILL.md is missing"]
@@ -91,9 +112,13 @@ def validate_source(skill_dir: Path, require_evals: bool = False) -> list[str]:
         "references/52-public-source-policy.md",
         "references/53-zero-to-first-result-apprenticeship.md",
         "references/54-four-article-writing-apprenticeship.md",
+        "references/65-gsc-api-setup.md",
+        "references/66-algorithm-update-reading.md",
+        "assets/gsc-tools/gsc.mjs",
+        "assets/gsc-tools/locale.mjs",
     ):
         if not (skill_dir / required).is_file():
-            errors.append(f"required 2.0 runtime file is missing: {required}")
+            errors.append(f"required runtime file is missing: {required}")
 
     for rel in sorted(set(re.findall(r"`(references/[A-Za-z0-9._/-]+\.md)`", text))):
         if not (skill_dir / PurePosixPath(rel)).is_file():

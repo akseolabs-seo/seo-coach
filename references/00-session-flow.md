@@ -41,10 +41,14 @@
 
 | 症狀 | 入口模組 | 之後回補 |
 |------|----------|----------|
-| 流量／排名突然掉 | M16 Scenarios（`12-scenarios.md`；先對照 `46-core-update-timeline.md`） | 依診斷結果 |
+| 流量／排名突然掉 | M16 Scenarios（`12-scenarios.md`；先對照 `46-core-update-timeline.md`），再用 `62-gsc-diagnosis-drills.md` 做資料範圍與假設分流 | 依診斷結果 |
+| 最近是不是有更新／我是不是被更新打到 | 先對日期（`46-core-update-timeline.md`），再走 `66-algorithm-update-reading.md` 的三層共讀，一輪一步 | 等推出結束後回看；回 `62-gsc-diagnosis-drills.md` |
+| 想接 GSC／不想一直截圖 | `65-gsc-api-setup.md`，一輪一步；完全新手第一輪先留在 GSC 介面 | 接通後回到原本的 Gate |
 | `site:` 零收錄／新站沒被收錄 | M1 → M2 | Tier 1 順走 |
 | 有收錄沒流量／發文很多沒人看 | M7 Content + M10 Keywords | M6 On-Page |
 | 有曝光沒點擊 | M6 On-Page（title／meta） | M7 |
+| GSC 查詢／頁面上升下降、接近首頁 | M18 成效衡量 + `62-gsc-diagnosis-drills.md` | 回到 SERP、承接頁與修改前基準 |
+| 同一查詢出現多個頁面 | M7 + M10；先讀 `61-search-intent-and-page-fit-drills.md` 與 `62-gsc-diagnosis-drills.md` | 先確認任務，再決定差異化／合併複核／暫緩 |
 | 網站很慢 | M4 Speed | Tier 1 補完 |
 | 想知道 SEO 有沒有效／哪一篇有用／進來的人有沒有下單 | M18 成效衡量（`21-seo-measurement.md`）；要看 GA4 就走 `50-ga4-coaching-track.md` 一次一張指路卡 | 回補 Tier 1 缺項 |
 | 被廠商報價、不知道值不值 | `34-darkseoking-threads.md` + `41-spam-policies-plain.md` | 回主線 |
@@ -56,7 +60,7 @@
 
 ## Step 1 — 讀進度（完整陪跑才執行）
 
-先讀取當前資料夾的 `seo-progress.md`。如果檔案存在，再讀取 `seo-actions.md`；有 `seo-ga4-log.md` 或 `seo-writing-portfolio.md` 時，只在本輪問題相關時讀取。
+先讀取當前資料夾的 `seo-progress.md`。如果檔案存在，再讀取 `seo-actions.md`；有 `seo-ga4-log.md`、`seo-writing-portfolio.md`、`seo-strategy-workbook.md` 時，只在本輪問題相關時讀取。進入實際診斷或學習遷移時，依需要讀 `60-evidence-and-judgment-cards.md` 與 `64-coach-retro-and-transfer.md`。
 - 如果只有 `seo-progress.md`、還沒有 `seo-actions.md`，不要卡住；先照 progress 開場，這次結束時再補建 actions 檔。
 
 ### 檔案存在 → 依序執行
@@ -136,7 +140,7 @@
 - GA4 沒有 → 建議安裝 `references/23-ga4-basics.md`，可跳過
 - GA4 已在收資料，且用戶想看「SEO 有沒有效」→ 走 `references/50-ga4-coaching-track.md`，**一輪只給一張指路卡**，不要一次帶完整個 GA4
 - **完全新手不要第一輪推 MCP／API**；先完成 `references/36-beginner-practical-playbooks.md` 的 5 分鐘檢查
-- **GSC／GA4／CMS 已設定，且用戶要長期陪跑或反覆貼截圖 → 主動提議接 MCP／API 讓教練直接讀**（見 `references/35-data-integration.md`；GA4 的逐步設定 → `references/51-ga4-api-connection.md`）
+- **GSC／GA4／CMS 已設定，且用戶要長期陪跑或反覆貼截圖 → 主動提議接 MCP／API 讓教練直接讀**（見 `references/35-data-integration.md`；GSC 的逐步設定 → `references/65-gsc-api-setup.md`；GA4 的逐步設定 → `references/51-ga4-api-connection.md`）
 
 **④ 了解背景**（在 audit 過程中自然問，不集中在開場）
 
@@ -172,7 +176,8 @@
 1. 目標、證據與退出條件清楚嗎？
 2. 這一輪能否先示範 1 個安全唯讀檢查？
 3. 這一輪只教**一個**核心概念
-4. 能否當場完成並重驗？不能才給功課或轉介
+4. 這次的觀察、限制與下一個區分檢查是否分開？
+5. 能否當場完成並重驗？不能才給功課或轉介
 
 讓對話像陪跑，不像跑表單。
 
@@ -206,7 +211,8 @@ G6 完成後進 G7 陌生案例與延遲複測；18 模組只作知識庫。遇�
 3. 更新 `seo-progress.md`（先讀取比對 schema）→ `references/sys-file-templates.md`
 4. 這次有出現 GA4 數字 → 確認已寫進 `seo-ga4-log.md`（**當輪就該寫過**，這裡只是補漏與補「當時發生什麼」）→ `references/50-ga4-coaching-track.md`
 5. 這次有推進寫作軌道 → 先讀取再更新 `seo-writing-portfolio.md` 的當篇階段、Gate 與版本引用 → `references/54-four-article-writing-apprenticeship.md`
-6. 只有無法當場安全完成時才指派 1 個功課 → `references/sys-session-system.md`
+6. 這次有實際診斷、搜尋機會或研究判斷 → 留下最小的證據／假設／行動卡；要做能力更新時再加一張遷移卡 → `references/60-evidence-and-judgment-cards.md`、`references/64-coach-retro-and-transfer.md`
+7. 只有無法當場安全完成時才指派 1 個功課 → `references/sys-session-system.md`
 
 存完後告訴用戶：
 
