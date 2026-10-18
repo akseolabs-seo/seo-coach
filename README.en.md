@@ -6,7 +6,7 @@
 
 > Built by **AK** ([@darkseoking](https://www.threads.com/@darkseoking)). SEO Coach is a virtual SEO coach developed by AK.
 
-> **Current version: 3.0.0**｜What's new in 3.0 → [CHANGELOG.md](CHANGELOG.md)｜Earlier release notes → [RELEASE-2.5.0.md](RELEASE-2.5.0.md)
+> **Current version: 3.0.0**｜What's new in 3.0 → [CHANGELOG.md](CHANGELOG.md)｜Release notes → [GitHub Releases](https://github.com/akseolabs-seo/seo-coach/releases)
 > To check whether your copy is current, just ask the coach "**is there a new version?**" — it compares against GitHub and tells you.
 
 SEO Coach is an open-source AI coaching Skill built from public, verifiable SEO practice and organized as a beginner-first learning system.
@@ -240,8 +240,6 @@ seo-coach/
 │
 │  ── Documentation ──
 ├── README.md                # Overview and learning model
-├── RELEASE-2.5.0.md         # Public marketing release notes
-├── RELEASE-2.0.md           # Major release notes
 ├── CHANGELOG.md             # Release history
 │
 │  ── Maintainer only (not needed to install) ──

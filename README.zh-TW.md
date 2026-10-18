@@ -6,7 +6,7 @@
 
 > 由 **AK**（[@darkseoking](https://www.threads.com/@darkseoking)）開發。SEO Coach 是 AK 開發的虛擬 SEO 陪跑教練。
 
-> **目前版本：3.0.0**｜發布說明 → [RELEASE-2.5.0.md](RELEASE-2.5.0.md)｜逐版變更 → [CHANGELOG.md](CHANGELOG.md)
+> **目前版本：3.0.0**｜發布說明 → [GitHub Releases](https://github.com/akseolabs-seo/seo-coach/releases)｜逐版變更 → [CHANGELOG.md](CHANGELOG.md)
 > 想知道自己裝的是不是最新版，直接問教練「**有沒有新版？**」，它會去 GitHub 比對後告訴你。
 
 SEO Coach 是一套以公開、可驗證的 SEO 實務整理而成，並以新手學習路徑編排的開源 AI 教練 Skill。
@@ -274,8 +274,6 @@ seo-coach/
 │
 │  ── 說明文件 ──
 ├── README.md                # 使用說明與教學理念
-├── RELEASE-2.5.0.md         # 公開行銷版發布說明
-├── RELEASE-2.0.md           # 大版本更新介紹
 ├── CHANGELOG.md             # 逐版變更
 │
 │  ── 維護用（安裝不需要）──
