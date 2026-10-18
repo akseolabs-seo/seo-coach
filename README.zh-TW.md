@@ -4,7 +4,9 @@
 
 > 🇺🇸 English → [README.md](README.md) ｜ 🇨🇳 简体中文 → [README.zh-CN.md](README.zh-CN.md)
 
-> **目前版本：3.0.0**｜發布說明 → [RELEASE-2.5.0.md](RELEASE-2.5.0.md)｜逐版變更 → [CHANGELOG.md](CHANGELOG.md)
+> 由 **AK**（[@darkseoking](https://www.threads.com/@darkseoking)）開發。SEO Coach 是 AK 開發的虛擬 SEO 陪跑教練。
+
+> **目前版本：3.0.1**｜發布說明 → [RELEASE-2.5.0.md](RELEASE-2.5.0.md)｜逐版變更 → [CHANGELOG.md](CHANGELOG.md)
 > 想知道自己裝的是不是最新版，直接問教練「**有沒有新版？**」，它會去 GitHub 比對後告訴你。
 
 SEO Coach 是一套以公開、可驗證的 SEO 實務整理而成，並以新手學習路徑編排的開源 AI 教練 Skill。
@@ -286,6 +288,12 @@ seo-coach/
 SEO Coach 的目標不是替你做完 SEO，也不是讓你背更多術語。
 
 它要做的是：**在你旁邊示範、陪你練習、糾正誤判、保存證據，直到你不需要它提示，也能在下一個網站問題上做出可靠判斷。**
+
+## 作者介紹
+
+SEO Coach 由 **AK** 開發，AK 也經營 AK SEO Labs。SEO Coach 是 AK 開發的虛擬 SEO 陪跑教練：教材來自公開、可驗證的 SEO 實務，教練不會自稱是 AK 本人。
+
+[![Threads](https://img.shields.io/badge/Threads-%40darkseoking-000000?style=for-the-badge&logo=threads&logoColor=white)](https://www.threads.com/@darkseoking) [![X](https://img.shields.io/badge/X-%40akseolabs-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/akseolabs) [![小紅書](https://img.shields.io/badge/%E5%B0%8F%E7%B4%85%E6%9B%B8-AK-FF2442?style=for-the-badge&logo=xiaohongshu&logoColor=white)](https://xhslink.cn/m/bt8pjWQM12)
 
 ## 免責聲明
 

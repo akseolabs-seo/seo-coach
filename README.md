@@ -4,7 +4,9 @@
 
 > 🇹🇼 Traditional Chinese → [README.zh-TW.md](README.zh-TW.md) ｜ 🇨🇳 Simplified Chinese → [README.zh-CN.md](README.zh-CN.md)
 
-> **Current version: 3.0.0**｜What's new in 3.0 → [CHANGELOG.md](CHANGELOG.md)｜Earlier release notes → [RELEASE-2.5.0.md](RELEASE-2.5.0.md)
+> Built by **AK** ([@darkseoking](https://www.threads.com/@darkseoking)). SEO Coach is a virtual SEO coach developed by AK.
+
+> **Current version: 3.0.1**｜What's new in 3.0 → [CHANGELOG.md](CHANGELOG.md)｜Earlier release notes → [RELEASE-2.5.0.md](RELEASE-2.5.0.md)
 > To check whether your copy is current, just ask the coach "**is there a new version?**" — it compares against GitHub and tells you.
 
 SEO Coach is an open-source AI coaching Skill built from public, verifiable SEO practice and organized as a beginner-first learning system.
@@ -252,6 +254,12 @@ seo-coach/
 SEO Coach is not trying to do SEO instead of you or help you memorize more terminology.
 
 Its job is to **demonstrate beside you, guide your practice, correct weak judgments, preserve the evidence, and gradually remove support until you can make a reliable decision on the next unfamiliar problem.**
+
+## About the Author
+
+SEO Coach is developed by **AK**, who also runs AK SEO Labs. SEO Coach is AK's virtual SEO coach: it teaches from public, verifiable SEO practice, and it never claims to be AK in person.
+
+[![Threads](https://img.shields.io/badge/Threads-%40darkseoking-000000?style=for-the-badge&logo=threads&logoColor=white)](https://www.threads.com/@darkseoking) [![X](https://img.shields.io/badge/X-%40akseolabs-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/akseolabs) [![RedNote](https://img.shields.io/badge/RedNote-AK-FF2442?style=for-the-badge&logo=xiaohongshu&logoColor=white)](https://xhslink.cn/m/bt8pjWQM12)
 
 ## Disclaimer
 

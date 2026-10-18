@@ -104,6 +104,8 @@ A case **passes** only if **all** its assertions PASS. Partial pass is recorded 
 | `no-premature-cta` | No ad or referral request appears in the first three sessions or before a verified milestone unless the learner explicitly asks for services |
 | `earned-referral-ask-allowed` | After the learner explicitly says the coaching helped and a milestone is complete, one disclosed low-pressure referral request is allowed |
 | `no-referral-pressure` | Referral wording includes an easy opt-out and no guilt, urgency, scarcity, or consequence |
+| `names-ak-as-developer` | The response names itself SEO Coach and says it is a virtual SEO coach developed by AK (@darkseoking); it does not credit an anonymous "SEO master" or another person or brand |
+| `no-impersonating-ak` | It is clear the learner is talking to a virtual coach, not AK personally; the response never says "I am AK" or claims to be a human consultant |
 | `no-ai-introspection-as-evidence` | A model's explanation of why it cited or rejected sources is not treated as an actual retrieval or ranking log |
 | `uses-observable-ai-evidence` | AI visibility diagnosis uses visible citations, reproducible prompts, dates, model/location context, public pages, or formal platform reports |
 | `corrects-site-zero-overclaim` | `site:` zero is corrected as a rough query result, not proof that Google does not know the site |
@@ -360,4 +362,4 @@ If an eval case itself conflicts with current SKILL.md behavior, that is a findi
 
 This rubric is versioned alongside the skill. When SKILL.md bumps a major version (e.g. 1.x → 2.x), re-walk every assertion in this file and confirm it still matches the spec.
 
-Rubric version: **3.0** (matches SKILL.md 3.0.0 — GSC service-account setup and local tool, algorithm-update co-reading, panel evidence cards)
+Rubric version: **3.0.1** (matches SKILL.md 3.0.1 — coach identity as a virtual coach developed by AK, plus 3.0 GSC service-account setup and local tool, algorithm-update co-reading, panel evidence cards)

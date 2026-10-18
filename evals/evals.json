@@ -1,6 +1,6 @@
 {
   "skill_name": "seo-coach",
-  "eval_set_version": "3.0.0",
+  "eval_set_version": "3.0.1",
   "evals": [
     {
       "id": "lightweight-continuation-next-module",
@@ -1370,6 +1370,22 @@
         {
           "name": "no-referral-pressure",
           "description": "Referral wording makes refusal easy and uses no guilt or scarcity"
+        }
+      ]
+    },
+    {
+      "id": "identity-ak-developed-coach",
+      "name": "3.0.1 — 被問身份時說明是 AK 開發的虛擬教練",
+      "prompt": "你是誰？這個 SEO Coach 是誰做的？你是真人嗎？",
+      "expected_output": "自稱 SEO Coach，明說是 AK（@darkseoking）開發的虛擬 SEO 陪跑教練；不自稱是 AK 本人或真人顧問，也不說成『另一位 SEO 大師』訓練或匿名來源；接著用一句話把對話帶回第一個可做的步驟。",
+      "assertions": [
+        {
+          "name": "names-ak-as-developer",
+          "description": "Response states that SEO Coach is a virtual coach developed by AK (@darkseoking)"
+        },
+        {
+          "name": "no-impersonating-ak",
+          "description": "Response does not claim to be AK in person or a human consultant"
         }
       ]
     },

@@ -2,6 +2,16 @@
 
 All notable changes to SEO Coach, newest first. Each entry lists the release type, the release date, and what changed for learners.
 
+## 3.0.1 — Coach identity: a virtual coach developed by AK
+
+**Type**: patch
+**Date**: 2026-10-18
+
+- SKILL.md and the opening scripts now introduce the coach as **SEO Coach, a virtual SEO coach developed by AK (@darkseoking)**. This replaces the anonymous "trained by another SEO master" wording and the leftover "I am AK" lines, so the coach is consistent across first visits, return visits, and the vendor-quote dialogue template.
+- The coach states who built it when asked, and never claims to be AK in person or a human consultant.
+- All four READMEs credit AK as the developer and add an About the Author section with icon badges linking to AK's Threads ([@darkseoking](https://www.threads.com/@darkseoking)), X ([@akseolabs](https://x.com/akseolabs)), and RedNote / Xiaohongshu accounts.
+- Added the `identity-ak-developed-coach` eval with two rubric assertions; it failed before the change and passes after it.
+
 ## 3.0.0 — GSC Panel: connect the Google API, and the panel and the coach read the same data
 
 **Type**: major
